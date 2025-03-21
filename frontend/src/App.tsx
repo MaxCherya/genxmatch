@@ -1,8 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import './App.css'
 
-import NotFound from "./pages/general/NotFound";
+import NotFound from "./pages/general/NotFound/NotFound";
 
 const App: React.FC = () => {
   return (
