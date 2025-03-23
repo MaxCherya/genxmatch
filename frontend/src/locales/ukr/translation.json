@@ -2,5 +2,12 @@
     "404_not_found": "Ой... Сторінка, яку ви шукаєте, не існує.",
     "just_ordered_this_item": "щойно замовив цей товар!",
     "latest_orders_live": "Останні замовлення",
-    "low_stock_warning": "Залишилось лише {{count}} штук — поспішайте з замовленням!"
+    "low_stock_warning": "Залишилось лише {{count}} штук — поспішайте з замовленням!",
+    "countdown_timer_left_to_grab": "залишилось, щоб скористатися цією пропозицією!",
+    "limited_time": "Обмежений час",
+    "live_visitors_message": "{{count}} людей зараз переглядають цей товар",
+    "apply": "Застосувати",
+    "coupon_applied_success": "Купон успішно застосовано!",
+    "coupon_applied_no_success": "Недійсний код купона.",
+    "enter_promo": "Введіть промокод"
 }

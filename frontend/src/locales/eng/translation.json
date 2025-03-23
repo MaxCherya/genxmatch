@@ -2,5 +2,12 @@
     "404_not_found": "Oops...The page you are looking for does not exist.",
     "just_ordered_this_item": "just ordered this item!",
     "latest_orders_live": "Recent orders",
-    "low_stock_warning": "Only {{count}} left in stock — order soon!"
+    "low_stock_warning": "Only {{count}} left in stock — order soon!",
+    "countdown_timer_left_to_grab": "left to grab this deal!",
+    "limited_time": "Limited Time",
+    "live_visitors_message": "{{count}} people are viewing this right now",
+    "apply": "Apply",
+    "coupon_applied_success": "Coupon applied successfully!",
+    "coupon_applied_no_success": "Invalid coupon code.",
+    "enter_promo": "Enter promo code"
 }

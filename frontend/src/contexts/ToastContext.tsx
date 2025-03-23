@@ -7,11 +7,12 @@ export interface Toast {
     id: string;
     message: string;
     type: ToastType;
+    duration?: number;
 }
 
 interface ToastContextType {
     toasts: Toast[];
-    addToast: (message: string, type?: ToastType) => void;
+    addToast: (message: string, type?: ToastType, duration?: number) => void;
     removeToast: (id: string) => void;
 }
 
@@ -32,14 +33,14 @@ interface ToastProviderProps {
 export const ToastProvider: React.FC<ToastProviderProps> = ({ children }) => {
     const [toasts, setToasts] = useState<Toast[]>([]);
 
-    const addToast = (message: string, type: ToastType = 'info') => {
+    const addToast = (message: string, type: ToastType = 'info', duration: number = 4000) => {
         const id = Math.random().toString(36).substr(2, 9);
-        setToasts((prev) => [...prev, { id, message, type }]);
+        setToasts((prev) => [...prev, { id, message, type, duration }]);
 
-        // Auto-remove toast after 5 seconds
+        const timeoutDuration = duration || 4000;
         setTimeout(() => {
             removeToast(id);
-        }, 5000);
+        }, timeoutDuration);
     };
 
     const removeToast = (id: string) => {
