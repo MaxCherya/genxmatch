@@ -1,0 +1,115 @@
+.bubble-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #000;
+    overflow: hidden;
+    z-index: -1;
+}
+
+.bubble-background::before,
+.bubble-background::after,
+.bubble-background .bubble {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    animation: float 10s infinite ease-in-out;
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+    filter: blur(80px);
+}
+
+.bubble-background::before {
+    width: 80px;
+    height: 80px;
+    top: 10%;
+    left: 20%;
+    background-color: #8b5cf6;
+    /* Neon purple */
+    animation-duration: 12s;
+    animation-delay: 0s;
+}
+
+.bubble-background::after {
+    width: 60px;
+    height: 60px;
+    top: 50%;
+    left: 70%;
+    background-color: #22d3ee;
+    /* Neon cyan */
+    animation-duration: 15s;
+    animation-delay: 3s;
+}
+
+.bubble-background .bubble:nth-child(1) {
+    width: 50px;
+    height: 50px;
+    top: 30%;
+    left: 40%;
+    background-color: #d946ef;
+    /* Neon pink */
+    animation-duration: 10s;
+    animation-delay: 1s;
+}
+
+.bubble-background .bubble:nth-child(2) {
+    width: 70px;
+    height: 70px;
+    top: 70%;
+    left: 10%;
+    background-color: #1e3a8a;
+    /* Deep blue */
+    animation-duration: 13s;
+    animation-delay: 5s;
+}
+
+.bubble-background .bubble:nth-child(3) {
+    width: 40px;
+    height: 40px;
+    top: 20%;
+    left: 80%;
+    background-color: #10b981;
+    /* Neon green */
+    animation-duration: 11s;
+    animation-delay: 2s;
+}
+
+.bubble-background .bubble:nth-child(4) {
+    width: 90px;
+    height: 90px;
+    top: 60%;
+    left: 50%;
+    background-color: #ff6b6b;
+    /* Neon red */
+    animation-duration: 14s;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+    }
+
+    25% {
+        transform: translate(20px, -20px) scale(1.2);
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(-15px, 15px) scale(0.8);
+        opacity: 0.6;
+    }
+
+    75% {
+        transform: translate(10px, -10px) scale(1.1);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translate(0, 0) scale(1);
+        opacity: 0.8;
+    }
+}
