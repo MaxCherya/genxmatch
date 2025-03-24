@@ -1,0 +1,11 @@
+.clip-curve {
+    border-radius: 30% 70% 68% 32% / 30% 30% 70% 70%;
+}
+
+.clip-curve-reversed {
+    border-radius: 78% 22% 27% 73% / 30% 30% 70% 70%;
+}
+
+.clip-curve-carousel {
+    border-radius: 17% 60% 40% 25% / 10% 18% 45% 9%;
+}
