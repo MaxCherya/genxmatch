@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTranslation } from "react-i18next";
+import clsx from 'clsx';
+
+type Theme = 'light' | 'dark' | 'auto';
 
 const generateUsername = (): string => {
     const consonants = 'bcdfghjklmnpqrstvwxyz';
@@ -23,13 +26,19 @@ type OrderMessage = {
     username: string;
 };
 
+type Props = {
+    theme?: Theme;
+};
+
 let messageId = 0;
 
-const OrderFeed: React.FC = () => {
+const OrderFeed: React.FC<Props> = ({ theme = 'auto' }) => {
     const [messages, setMessages] = useState<OrderMessage[]>([]);
     const { t } = useTranslation();
 
     const MAX_MESSAGES = 5;
+
+    const isDark = theme === 'dark' || (theme === 'auto' && window.matchMedia?.('(prefers-color-scheme: dark)').matches);
 
     const addMessage = () => {
         const newMessage: OrderMessage = {
@@ -63,7 +72,12 @@ const OrderFeed: React.FC = () => {
     }, []);
 
     return (
-        <div className="bg-white rounded-xl p-4 shadow w-full max-w-[100%]">
+        <div
+            className={clsx(
+                'rounded-xl p-4 shadow w-full max-w-[100%]',
+                isDark ? 'bg-[#111] text-white' : 'bg-white text-gray-800'
+            )}
+        >
             <h3 className="font-bold text-lg mb-3">{t('latest_orders_live')}</h3>
             <div className="space-y-2 min-h-[15.5rem] max-h-[15.5rem] overflow-hidden">
                 <AnimatePresence initial={false}>
@@ -75,7 +89,10 @@ const OrderFeed: React.FC = () => {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
                             transition={{ duration: 0.3 }}
-                            className="text-sm text-gray-800 bg-gray-100 rounded px-3 py-2 h-[2.5rem]"
+                            className={clsx(
+                                'text-sm rounded px-3 py-2 h-[2.5rem]',
+                                isDark ? 'bg-[#222] text-white' : 'bg-gray-100 text-gray-800'
+                            )}
                         >
                             <span className="font-medium">{msg.username}</span> {t('just_ordered_this_item')}
                         </motion.div>

@@ -14,6 +14,7 @@ import CTAButton from '../../components/btns/CTAButton';
 import ReviewStars from '../../components/item-page/ReviewStars';
 import FeatureCard from "../../components/item-page/FeatureCard";
 import SpecItem from "../../components/item-page/SpecItem";
+import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 
 
 const FloorLampRGB: React.FC = () => {
@@ -43,6 +44,8 @@ const FloorLampRGB: React.FC = () => {
         { src: 'https://ae01.alicdn.com/kf/Sc3267ad41343454aa4b8ecc626ad1427d.jpg', alt: 'Hero 7' },
     ]
 
+    const productVideo = 'https://gv-vod-cdn.aliexpress-media.com/ae_sg_gmc/video_target/gv91-2bfa8819-a1d168e5-91275174-506d/trans/2ee6bd40-6019-4f21-956d-2bcd8290e2e9-hd.mp4?auth_key=1742898115-0-0-aa5455236668eea2a605c9f4bad4f077'
+
     return (
         <div className="relative w-full min-h-screen h-auto overflow-x-hidden bg-black">
             {/* Live Viewers */}
@@ -59,7 +62,7 @@ const FloorLampRGB: React.FC = () => {
                 {/* Background */}
                 <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 {/* Hero Section */}
-                <div className="w-full flex flex-col lg:flex-row items-center justify-center px-4 py-8 gap-10 min-h-screen">
+                <div className="w-full flex flex-col lg:flex-row mt-7 lg:mt-0 items-center justify-center px-4 py-8 gap-10 min-h-screen">
                     <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-between gap-10">
 
                         {/* Left: Image Carousel */}
@@ -103,14 +106,16 @@ const FloorLampRGB: React.FC = () => {
 
                     {/* Title */}
                     <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
-                        Характеристики та особливості
+                        {t('specifications_and_features')}
                     </h2>
 
-                    {/* Feature Highlights */}
-                    <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-                        <FeatureCard icon="💡" title="Регулювання яскравості" />
-                        <FeatureCard icon="🎵" title="Синхронізація з музикою" />
-                        <FeatureCard icon="🎨" title="RGB-кольори з пульта" />
+                    <div className="h-auto max-w-3xl">
+                        <p className="text-gray-500 mb-4">
+                            {t('description_floor_rgb_lamp_part_1')}
+                        </p>
+                        <p className="text-gray-500 mb-12">
+                            {t('description_floor_rgb_lamp_part_2')}
+                        </p>
                     </div>
 
                     {/* Divider */}
@@ -118,16 +123,50 @@ const FloorLampRGB: React.FC = () => {
 
                     {/* Technical Specs */}
                     <div className="w-full max-w-3xl bg-gray-100 rounded-xl p-6 sm:p-8 shadow-md space-y-4">
-                        <SpecItem label="Матеріал" value="Метал" />
-                        <SpecItem label="Стиль" value="Мінімалістичний" />
-                        <SpecItem label="Колір" value="Чорний" />
-                        <SpecItem label="Форма" value="Кутова" />
-                        <SpecItem label="Висота" value="1.2 м" />
-                        <SpecItem label="Потужність" value="30 Вт" />
-                        <SpecItem label="Світлодіоди" value="90 шт" />
-                        <SpecItem label="Управління" value="Пульт ДУ" />
+                        <SpecItem label={t('material')} value={t('metal')} />
+                        <SpecItem label={t('style')} value={t('minimalist')} />
+                        <SpecItem label={t('color')} value={t('black')} />
+                        <SpecItem label={t('shape')} value={t('corner_shape')} />
+                        <SpecItem label={t('height')} value={`1.2 ${t('m')}`} />
+                        <SpecItem label={t('power')} value={`30 ${t('W')}`} />
+                        <SpecItem label={t('leds')} value={`90 ${t('pcs')}`} />
+                        <SpecItem label={t('control')} value={t('remote_control')} />
+                    </div>
+
+                </div>
+                <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-black">
+                    {/* Title */}
+                    <h2 className="text-3xl text-white sm:text-4xl font-bold text-center mb-12">
+                        Video Demo
+                    </h2>
+
+                    {/* Video */}
+                    <div className="w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl mb-12">
+                        <video
+                            autoPlay
+                            loop
+                            muted
+                            playsInline
+                            className="w-full h-auto rounded-xl"
+                        >
+                            <source src={productVideo} type="video/mp4" />
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    {/* CTA */}
+                    <div className="w-full max-w-4xl space-y-4">
+                        <OrderFeed theme="dark" />
+                        <CTAButton size="md" fullWidth />
                     </div>
                 </div>
+
+
+                {/* Feature Highlights */}
+                {/* <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
+                    <FeatureCard icon="💡" title={t('brightness_regulation')} />
+                    <FeatureCard icon="🎵" title={t('sync_with_music')} />
+                    <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
+                </div> */}
             </div>
 
         </div>
