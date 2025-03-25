@@ -9,5 +9,10 @@
     "apply": "Применить",
     "coupon_applied_success": "Купон успешно применён!",
     "coupon_applied_no_success": "Недействительный код купона.",
-    "enter_promo": "Введите промокод"
+    "enter_promo": "Введите промокод",
+    "CTAButton": "Заказать сейчас",
+    "corner_floor_light_lamp_name": "Напольная угловая RGB-лампа с пультом управления – 1,2 м <br />Угловой напольный ночник / светильник",
+    "ratings": "оценки",
+    "delivery_by_new_post_with_their_prices": "Доставка наложенным платежом по тарифам Новой Почты",
+    "uah": "грн"
 }

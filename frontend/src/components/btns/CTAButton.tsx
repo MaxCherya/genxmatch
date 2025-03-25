@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
     label?: string;
@@ -10,12 +11,13 @@ type Props = {
 };
 
 const CTAButton: React.FC<Props> = ({
-    label = 'Order Now',
+    label,
     onClick,
     icon,
     size = 'md',
     fullWidth = false,
 }) => {
+    const { t } = useTranslation();
     const sizeClasses = {
         sm: 'text-sm px-4 py-2',
         md: 'text-base px-6 py-3',
@@ -32,7 +34,7 @@ const CTAButton: React.FC<Props> = ({
             )}
         >
             {icon && <span className="text-xl">{icon}</span>}
-            {label}
+            {label ?? t('CTAButton')}
         </button>
     );
 };

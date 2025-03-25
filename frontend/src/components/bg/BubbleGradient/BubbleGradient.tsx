@@ -8,7 +8,7 @@ interface BubbleBackgroundProps {
 
 const BubbleBackground: React.FC<BubbleBackgroundProps> = ({ className = '', style }) => {
     return (
-        <div className={`bubble-background ${className}`} style={style}>
+        <div className={`overflow-x-hidden bubble-background ${className}`} style={style}>
             {/* Bubbles */}
             <div className="bubble" />
             <div className="bubble" />

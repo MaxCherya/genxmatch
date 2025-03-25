@@ -1,3 +1,6 @@
+import { useTranslation } from "react-i18next";
+import { Trans } from 'react-i18next';
+
 // styles
 import '../../components/styles/AnimatedBGGradient.css'
 
@@ -5,15 +8,17 @@ import '../../components/styles/AnimatedBGGradient.css'
 import BubbleBackground from '../../components/bg/BubbleGradient/BubbleGradient';
 import LanguageSwitcher from '../../components/general/LanguageSwitcher';
 import LiveVisitorsCounter from '../../components/item-page/LiveVisitorsCounter';
-import ProductHeroImages from '../../components/imgs/ProductHeroImages/ProductHeroImages';
 import HeroImagesCarousel from '../../components/imgs/HeroImagesCarousel/HeroImagesCarousel';
 import PriceTag from '../../components/item-page/PriceTag';
 import CTAButton from '../../components/btns/CTAButton';
 import ReviewStars from '../../components/item-page/ReviewStars';
-import LowStockWarning from '../../components/item-page/LowStockWarning';
-import CountdownTimer from '../../components/item-page/CountdownTimer';
+import FeatureCard from "../../components/item-page/FeatureCard";
+import SpecItem from "../../components/item-page/SpecItem";
+
 
 const FloorLampRGB: React.FC = () => {
+
+    const { t } = useTranslation();
 
     const productImages = [
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6423223073_napolnaya-uglovaya-rgb.jpg', alt: 'Image 1' },
@@ -39,9 +44,9 @@ const FloorLampRGB: React.FC = () => {
     ]
 
     return (
-        <div className="relative w-screen min-h-screen h-auto overflow-x-hidden flex flex-col items-center justify-center p-16 md:p-16 sm:p-2">
+        <div className="relative w-full min-h-screen h-auto overflow-x-hidden bg-black">
             {/* Live Viewers */}
-            <div className="fixed bottom-4 right-4 z-50">
+            <div className="fixed bottom-4 right-8 overflow-x-hidden z-50">
                 <LiveVisitorsCounter min={10} max={30} refreshInterval={5} size="sm" theme="dark" />
             </div>
 
@@ -50,51 +55,81 @@ const FloorLampRGB: React.FC = () => {
                 <LanguageSwitcher />
             </div>
 
-            {/* Background */}
-            <BubbleBackground className="fixed inset-0 z-0" />
+            <div className="relative w-full z-10 flex flex-col">
+                {/* Background */}
+                <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
+                {/* Hero Section */}
+                <div className="w-full flex flex-col lg:flex-row items-center justify-center px-4 py-8 gap-10 min-h-screen">
+                    <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-between gap-10">
 
-            {/* Content Container */}
-            <div className="relative z-10 w-full h-full flex items-center justify-center px-4">
-                <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-between gap-10">
-
-                    {/* Left: Image Carousel */}
-                    <div className="w-[90svw] xs:w-1/2 flex justify-center">
-                        <HeroImagesCarousel visibleCount={5} images={productImagesHero} />
-                    </div>
-
-                    {/* Right: Product Info */}
-                    <div className="w-[90svw] xs:w-1/2 rounded-2xl bg-[#111] max-w-xl p-6 flex flex-col gap-4 shadow-lg">
-                        {/* Title */}
-                        <h1 className="text-orange-500 text-2xl sm:text-3xl font-semibold text-center leading-snug">
-                            Напольная угловая RGB лампа торшер с пультом управления 1,2м <br />
-                            Угловой напольный ночник светильник
-                        </h1>
-
-                        {/* Divider */}
-                        <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
-
-                        {/* Rating */}
-                        <div className="flex items-center justify-center gap-3">
-                            <ReviewStars rating={4.5} />
-                            <p className="text-white text-sm">4.57 | 1034 оцінки</p>
+                        {/* Left: Image Carousel */}
+                        <div className="w-[90svw] xs:w-1/2 flex justify-center">
+                            <HeroImagesCarousel visibleCount={5} images={productImagesHero} />
                         </div>
 
-                        {/* Shipping Info */}
-                        <p className="text-white text-center text-sm">
-                            🚚 Доставка наложеним платежем за тарифами Нової Пошти
-                        </p>
+                        {/* Right: Product Info */}
+                        <div className="w-[90svw] xs:w-1/2 rounded-2xl bg-[#111] max-w-xl p-6 flex flex-col gap-4 shadow-lg">
+                            {/* Title */}
+                            <h1 className="text-orange-500 text-xl sm:text-3xl font-semibold text-center leading-snug">
+                                <Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />
+                            </h1>
 
-                        {/* Divider */}
-                        <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
+                            {/* Divider */}
+                            <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
 
-                        {/* Price */}
-                        <PriceTag current={520} old={699} currency="грн" size="md" />
+                            {/* Rating */}
+                            <div className="flex items-center justify-center gap-3">
+                                <ReviewStars rating={4.5} />
+                                <p className="text-white text-sm">4.57 | 1034 {t('ratings')}</p>
+                            </div>
 
-                        {/* CTA */}
-                        <CTAButton label="Order now" size="md" fullWidth />
+                            {/* Shipping Info */}
+                            <p className="text-white text-center text-sm">
+                                🚚 {t('delivery_by_new_post_with_their_prices')}
+                            </p>
+
+                            {/* Divider */}
+                            <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
+
+                            {/* Price */}
+                            <PriceTag current={589} old={899} currency={t('uah')} size="md" />
+
+                            {/* CTA */}
+                            <CTAButton size="md" fullWidth />
+                        </div>
+                    </div>
+                </div>
+                <div className="w-full bg-white py-12 flex flex-col items-center px-4 text-black">
+
+                    {/* Title */}
+                    <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+                        Характеристики та особливості
+                    </h2>
+
+                    {/* Feature Highlights */}
+                    <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+                        <FeatureCard icon="💡" title="Регулювання яскравості" />
+                        <FeatureCard icon="🎵" title="Синхронізація з музикою" />
+                        <FeatureCard icon="🎨" title="RGB-кольори з пульта" />
+                    </div>
+
+                    {/* Divider */}
+                    <hr className="w-full max-w-3xl h-[3px] bg-black border-none rounded-full mb-12" />
+
+                    {/* Technical Specs */}
+                    <div className="w-full max-w-3xl bg-gray-100 rounded-xl p-6 sm:p-8 shadow-md space-y-4">
+                        <SpecItem label="Матеріал" value="Метал" />
+                        <SpecItem label="Стиль" value="Мінімалістичний" />
+                        <SpecItem label="Колір" value="Чорний" />
+                        <SpecItem label="Форма" value="Кутова" />
+                        <SpecItem label="Висота" value="1.2 м" />
+                        <SpecItem label="Потужність" value="30 Вт" />
+                        <SpecItem label="Світлодіоди" value="90 шт" />
+                        <SpecItem label="Управління" value="Пульт ДУ" />
                     </div>
                 </div>
             </div>
+
         </div>
     );
 }

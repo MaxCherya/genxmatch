@@ -9,5 +9,10 @@
     "apply": "Застосувати",
     "coupon_applied_success": "Купон успішно застосовано!",
     "coupon_applied_no_success": "Недійсний код купона.",
-    "enter_promo": "Введіть промокод"
+    "enter_promo": "Введіть промокод",
+    "CTAButton": "Замовити зараз",
+    "corner_floor_light_lamp_name": "Підлогова кутова RGB-лампа з пультом керування – 1,2 м <br />Кутовий підлоговий нічник / світильник",
+    "ratings": "оцінки",
+    "delivery_by_new_post_with_their_prices": "Доставка накладеним платежем за тарифами Нової Пошти",
+    "uah": "грн"
 }
