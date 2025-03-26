@@ -19,7 +19,7 @@ const LiveVisitorsCounter: React.FC<Props> = ({
 }) => {
     const { t } = useTranslation();
     const [displayedCount, setDisplayedCount] = useState(() => getRandom(min, max));
-    const [targetCount, setTargetCount] = useState(displayedCount);
+    const [_targetCount, setTargetCount] = useState(displayedCount);
     const animationFrameRef = useRef<number | null>(null);
     const startTimeRef = useRef<number | null>(null);
 

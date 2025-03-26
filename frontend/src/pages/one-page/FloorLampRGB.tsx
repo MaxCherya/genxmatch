@@ -14,13 +14,17 @@ import CTAButton from '../../components/btns/CTAButton';
 import ReviewStars from '../../components/item-page/ReviewStars';
 import FeatureCard from "../../components/item-page/FeatureCard";
 import SpecItem from "../../components/item-page/SpecItem";
-import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
+// import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 import ReviewSlider from "../../components/item-page/ReviewSlider";
+import OrderForm from "../../components/order-form/OrderForm";
 
 
 const FloorLampRGB: React.FC = () => {
 
     const { t } = useTranslation();
+
+    const productOldPrice: number = 899;
+    const productNewPrice: number = 589;
 
     const productImages = [
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6423223073_napolnaya-uglovaya-rgb.jpg', alt: 'Image 1' },
@@ -34,6 +38,8 @@ const FloorLampRGB: React.FC = () => {
         { src: 'https://ae01.alicdn.com/kf/Sc3267ad41343454aa4b8ecc626ad1427d.jpg', alt: 'Image 9' },
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/ezgif.com-video-to-gif_1_480x480_60688bf3-472c-47e1-8e42-867b36901351_480x480.webp', alt: 'Image 10' }
     ];
+
+    console.log(productImages)
 
     const productImagesHero = [
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/ezgif.com-video-to-gif_1_480x480_60688bf3-472c-47e1-8e42-867b36901351_480x480.webp', alt: 'Hero 1' },
@@ -112,7 +118,7 @@ const FloorLampRGB: React.FC = () => {
                             <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
 
                             {/* Price */}
-                            <PriceTag current={589} old={899} currency={t('uah')} size="md" />
+                            <PriceTag current={productNewPrice} old={productOldPrice} currency={t('uah')} size="md" />
 
                             {/* CTA */}
                             <CTAButton size="md" fullWidth />
@@ -154,7 +160,7 @@ const FloorLampRGB: React.FC = () => {
                 <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-black">
                     {/* Title */}
                     <h2 className="text-3xl text-white sm:text-4xl font-bold text-center mb-12">
-                        Video Demo
+                        {t('video_demo')}
                     </h2>
 
                     {/* Video */}
@@ -167,7 +173,7 @@ const FloorLampRGB: React.FC = () => {
                             className="w-full h-auto rounded-xl"
                         >
                             <source src={productVideo} type="video/mp4" />
-                            Your browser does not support the video tag.
+                            {t('your_browser_does_not_support_video_tag')}
                         </video>
                     </div>
 
@@ -176,7 +182,7 @@ const FloorLampRGB: React.FC = () => {
                         <FeatureCard icon="💡" title={t('brightness_regulation')} />
                         <FeatureCard icon="🎵" title={t('sync_with_music')} />
                         <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
-                        <FeatureCard icon="🖼️" title="Стильний дизайн" />
+                        <FeatureCard icon="🖼️" title={t('stylish_design')} />
                     </div>
 
 
@@ -187,14 +193,10 @@ const FloorLampRGB: React.FC = () => {
 
                 <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-white">
                     {/* CTA */}
-                    <div className="w-full max-w-3xl space-y-4">
-                        <OrderFeed theme="dark" />
-                        <CTAButton size="md" fullWidth />
+                    <div className="w-full max-w-xl space-y-4">
+                        {/* <OrderFeed theme="dark" /> */}
+                        <OrderForm productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />} productImage={productImagesHero[0].src} oldPrice={productOldPrice} currentPrice={productNewPrice} theme="dark" />
                     </div>
-                </div>
-
-                <div className="w-full bg-white py-12 flex flex-col items-center px-4 text-black">
-
                 </div>
 
             </div>

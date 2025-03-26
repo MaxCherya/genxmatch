@@ -1,6 +1,7 @@
 import ReviewCard from './ReviewCard'
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Autoplay, Pagination } from 'swiper/modules'
+import { useTranslation } from "react-i18next";
 import 'swiper/css'
 import 'swiper/css/pagination'
 
@@ -8,6 +9,7 @@ interface Review {
     name: string
     rating: number
     text: string
+    avatar?: string
 }
 
 interface ReviewSliderProps {
@@ -15,7 +17,12 @@ interface ReviewSliderProps {
     reviews: Review[]
 }
 
-const ReviewSlider: React.FC<ReviewSliderProps> = ({ title = 'Відгуки клієнтів 💬', reviews }) => {
+const ReviewSlider: React.FC<ReviewSliderProps> = ({ title, reviews }) => {
+
+    const { t } = useTranslation();
+
+    title = title || `${t('customers_review')} 💬`;
+
     return (
         <div className="w-full bg-white py-16 px-4 text-black">
             <h2 className="text-2xl md:text-3xl font-semibold text-center mb-8">
@@ -42,7 +49,7 @@ const ReviewSlider: React.FC<ReviewSliderProps> = ({ title = 'Відгуки к�
                                 name={review.name}
                                 rating={review.rating}
                                 text={review.text}
-                                avatarUrl={review.avatar ? review.avatar : null}
+                                avatarUrl={review.avatar}
                             />
                         </div>
                     </SwiperSlide>
