@@ -15,6 +15,7 @@ import ReviewStars from '../../components/item-page/ReviewStars';
 import FeatureCard from "../../components/item-page/FeatureCard";
 import SpecItem from "../../components/item-page/SpecItem";
 import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
+import ReviewSlider from "../../components/item-page/ReviewSlider";
 
 
 const FloorLampRGB: React.FC = () => {
@@ -42,6 +43,22 @@ const FloorLampRGB: React.FC = () => {
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6423223075_napolnaya-uglovaya-rgb.jpg', alt: 'Hero 5' },
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6423223074_napolnaya-uglovaya-rgb.jpg', alt: 'Hero 6' },
         { src: 'https://ae01.alicdn.com/kf/Sc3267ad41343454aa4b8ecc626ad1427d.jpg', alt: 'Hero 7' },
+    ]
+
+    const reviews = [
+        { name: "Олександр К.", rating: 5, text: "Дуже стильна лампа! Ідеально доповнила мій ігровий сетап. Яскравість і кольори — супер!", avatar: "https://i.pravatar.cc/150?img=3" },
+        { name: "Марина Л.", rating: 4, text: "Гарна лампа, створює затишну атмосферу ввечері. Трохи не вистачає мобільного додатку.", avatar: "https://i.pravatar.cc/150?img=5" },
+        { name: "Ігор С.", rating: 5, text: "Люблю, як вона синхронізується з музикою! Проста в керуванні та дуже ефектна в кімнаті.", avatar: "https://i.pravatar.cc/150?img=12" },
+        { name: "Наталя Р.", rating: 4.5, text: "Мінімалістичний дизайн ідеально вписався в інтер’єр. Дуже задоволена!", avatar: "https://i.pravatar.cc/150?img=47" },
+        { name: "Денис П.", rating: 5, text: "Виглядає круто, легко зібрати. Часто використовую як нічник." },
+        { name: "Аліна Ж.", rating: 5, text: "Обожнюю зміну кольорів! Дуже приємне світло і зручно керувати.", avatar: "https://i.pravatar.cc/150?img=53" },
+        { name: "Влад М.", rating: 4, text: "Монтаж швидкий, пульт працює чітко. Хотілось би ще мобільний застосунок." },
+        { name: "Катерина Б.", rating: 5, text: "Подарувала хлопцю — не відпускає її з рук 😄 реально крута річ!", avatar: "https://i.pravatar.cc/150?img=9" },
+        { name: "Роман І.", rating: 4.5, text: "Світить потужно, якісна збірка. Трохи зависокий кабель, але не критично." },
+        { name: "Інна Ч.", rating: 5, text: "Ідеальна для вечірніх фільмів! Атмосфера просто вау 🌈", avatar: "https://i.pravatar.cc/150?img=21" },
+        { name: "Тарас Н.", rating: 5, text: "Міксуємо кольори під настрій. Особливо круто виглядає з музикою!" },
+        { name: "Юлія С.", rating: 4.5, text: "Купила як декор — вийшло краще, ніж очікувала. Легка, але стабільна.", avatar: "https://i.pravatar.cc/150?img=36" },
+        { name: "Максим Г.", rating: 5, text: "Працює чудово. Більше не уявляю кімнату без неї." }
     ]
 
     const productVideo = 'https://gv-vod-cdn.aliexpress-media.com/ae_sg_gmc/video_target/gv91-2bfa8819-a1d168e5-91275174-506d/trans/2ee6bd40-6019-4f21-956d-2bcd8290e2e9-hd.mp4?auth_key=1742898115-0-0-aa5455236668eea2a605c9f4bad4f077'
@@ -141,7 +158,7 @@ const FloorLampRGB: React.FC = () => {
                     </h2>
 
                     {/* Video */}
-                    <div className="w-full max-w-4xl rounded-xl overflow-hidden shadow-2xl mb-12">
+                    <div className="w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl mb-12">
                         <video
                             autoPlay
                             loop
@@ -153,20 +170,33 @@ const FloorLampRGB: React.FC = () => {
                             Your browser does not support the video tag.
                         </video>
                     </div>
+
+                    {/* Feature Highlights */}
+                    <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                        <FeatureCard icon="💡" title={t('brightness_regulation')} />
+                        <FeatureCard icon="🎵" title={t('sync_with_music')} />
+                        <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
+                        <FeatureCard icon="🖼️" title="Стильний дизайн" />
+                    </div>
+
+
+                </div>
+                <div className="w-full bg-white py-12 px-4 text-black">
+                    <ReviewSlider reviews={reviews} />
+                </div>
+
+                <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-white">
                     {/* CTA */}
-                    <div className="w-full max-w-4xl space-y-4">
+                    <div className="w-full max-w-3xl space-y-4">
                         <OrderFeed theme="dark" />
                         <CTAButton size="md" fullWidth />
                     </div>
                 </div>
 
+                <div className="w-full bg-white py-12 flex flex-col items-center px-4 text-black">
 
-                {/* Feature Highlights */}
-                {/* <div className="w-full max-w-5xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
-                    <FeatureCard icon="💡" title={t('brightness_regulation')} />
-                    <FeatureCard icon="🎵" title={t('sync_with_music')} />
-                    <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
-                </div> */}
+                </div>
+
             </div>
 
         </div>

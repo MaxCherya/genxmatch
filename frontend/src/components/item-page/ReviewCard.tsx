@@ -10,8 +10,8 @@ type Props = {
 
 const ReviewCard: React.FC<Props> = ({ name, text, rating, avatarUrl }) => {
     return (
-        <div className="bg-white p-4 rounded-xl shadow text-gray-800 max-w-md w-full">
-            {/* Header: Avatar + Name */}
+        <div className="bg-white p-4 rounded-xl shadow text-gray-800 max-w-md w-full h-full flex flex-col justify-between">
+            {/* Header */}
             <div className="flex items-center gap-3 mb-2">
                 {avatarUrl ? (
                     <img
@@ -31,7 +31,9 @@ const ReviewCard: React.FC<Props> = ({ name, text, rating, avatarUrl }) => {
             </div>
 
             {/* Review text */}
-            <p className="text-sm text-gray-700 leading-relaxed">{text}</p>
+            <div className="text-sm text-gray-700 leading-relaxed flex-grow min-h-[50px]">
+                {text}
+            </div>
         </div>
     );
 };
