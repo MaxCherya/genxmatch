@@ -17,6 +17,9 @@ import SpecItem from "../../components/item-page/SpecItem";
 // import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 import ReviewSlider from "../../components/item-page/ReviewSlider";
 import OrderForm from "../../components/order-form/OrderForm";
+import FeatureSection from "../../components/item-page/FeaturesSection";
+import PicturesSlider from "../../components/item-page/PicturesSlider";
+import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 
 
 const FloorLampRGB: React.FC = () => {
@@ -40,6 +43,13 @@ const FloorLampRGB: React.FC = () => {
     ];
 
     console.log(productImages)
+
+    const productImagesWide = [
+        { src: 'https://ae01.alicdn.com/kf/S93e21a9ca1774d1ca5569c9f9c4e2c4bH.jpg', alt: "Image 5" },
+        { src: 'https://ae01.alicdn.com/kf/S9952a643f0bf41279f3482ce245ed31d2.png', alt: "Image 4" },
+        { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6423223073_napolnaya-uglovaya-rgb.jpg', alt: 'Image 1' },
+        { src: 'https://ae01.alicdn.com/kf/Sc3267ad41343454aa4b8ecc626ad1427d.jpg', alt: 'Image 9' },
+    ]
 
     const productImagesHero = [
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/ezgif.com-video-to-gif_1_480x480_60688bf3-472c-47e1-8e42-867b36901351_480x480.webp', alt: 'Hero 1' },
@@ -67,6 +77,18 @@ const FloorLampRGB: React.FC = () => {
         { name: "Максим Г.", rating: 5, text: "Працює чудово. Більше не уявляю кімнату без неї." }
     ]
 
+    const features = [
+        { header: t('brightness_regulation'), description: t('brightness_regulation_description') },
+        { header: t('sync_with_music'), description: t('sync_with_music_description') },
+        { header: t('rgb_colors_from_remote'), description: t('rgb_colors_from_remote_description') },
+        { header: t('stylish_design'), description: t('stylish_design_description') }
+    ]
+
+    // <FeatureCard icon="💡" title={t('brightness_regulation')} />
+    //                     <FeatureCard icon="🎵" title={t('sync_with_music')} />
+    //                     <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
+    //                     <FeatureCard icon="🖼️" title={t('stylish_design')} />
+
     const productVideo = 'https://gv-vod-cdn.aliexpress-media.com/ae_sg_gmc/video_target/gv91-2bfa8819-a1d168e5-91275174-506d/trans/2ee6bd40-6019-4f21-956d-2bcd8290e2e9-hd.mp4?auth_key=1742898115-0-0-aa5455236668eea2a605c9f4bad4f077'
 
     return (
@@ -85,16 +107,16 @@ const FloorLampRGB: React.FC = () => {
                 {/* Background */}
                 <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 {/* Hero Section */}
-                <div className="w-full flex flex-col lg:flex-row mt-7 lg:mt-0 items-center justify-center px-4 py-8 gap-10 min-h-screen">
-                    <div className="w-full max-w-6xl flex flex-col lg:flex-row items-center justify-between gap-10">
+                <div className="xl:flex-row mt-7 xl:mt-0 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
+                    <div className="w-full flex flex-col xl:flex-row gap-4 xl:gap-12 items-center justify-evenly">
 
                         {/* Left: Image Carousel */}
-                        <div className="w-[90svw] xs:w-1/2 flex justify-center">
+                        <div className="xs:w-1/2 flex justify-center">
                             <HeroImagesCarousel visibleCount={5} images={productImagesHero} />
                         </div>
 
                         {/* Right: Product Info */}
-                        <div className="w-[90svw] xs:w-1/2 rounded-2xl bg-[#111] max-w-xl p-6 flex flex-col gap-4 shadow-lg">
+                        <div className="w-full xs:w-1/2 rounded-2xl max-w-2xl p-6 flex flex-col gap-4 shadow-lg">
                             {/* Title */}
                             <h1 className="text-orange-500 text-xl sm:text-3xl font-semibold text-center leading-snug">
                                 <Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />
@@ -111,7 +133,7 @@ const FloorLampRGB: React.FC = () => {
 
                             {/* Shipping Info */}
                             <p className="text-white text-center text-sm">
-                                🚚 {t('delivery_by_new_post_with_their_prices')}
+                                🚚 <Trans i18nKey="deliveryNovaPoshtaInfo" components={{ 1: <strong /> }} />
                             </p>
 
                             {/* Divider */}
@@ -178,16 +200,30 @@ const FloorLampRGB: React.FC = () => {
                     </div>
 
                     {/* Feature Highlights */}
-                    <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                    {/* <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
                         <FeatureCard icon="💡" title={t('brightness_regulation')} />
                         <FeatureCard icon="🎵" title={t('sync_with_music')} />
                         <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
                         <FeatureCard icon="🖼️" title={t('stylish_design')} />
-                    </div>
+                    </div> */}
 
 
                 </div>
-                <div className="w-full bg-white py-12 px-4 text-black">
+
+                <div className="w-full bg-white py-12 px-4 text-black flex flex-col items-center">
+                    <div className="w-full max-w-3xl bg-white py-12 px-4 text-black">
+                        <FeatureSection features={features} />
+                    </div>
+                </div>
+
+                <div className="relative w-screen h-screen bg-black text-black overflow-hidden flex flex-col items-center justify-center">
+                    <PicturesSlider asBG={true} images={productImagesWide} />
+                    <div className="w-3xl max-w-[90%]">
+                        <OrderFeed theme="dark" />
+                    </div>
+                </div>
+
+                <div className="w-full bg-white py-12 px-4 text-black flex flex-col items-center">
                     <ReviewSlider reviews={reviews} />
                 </div>
 

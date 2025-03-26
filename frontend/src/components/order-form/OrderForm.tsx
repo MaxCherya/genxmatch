@@ -106,7 +106,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
             {/* Delivery note */}
             <p className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-600')}>
                 <Trans i18nKey="deliveryNovaPoshtaInfo" components={{ 1: <strong /> }} />
-
             </p>
 
             {/* Total Price */}
