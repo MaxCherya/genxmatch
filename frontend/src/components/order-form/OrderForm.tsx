@@ -73,20 +73,36 @@ const OrderForm: React.FC<OrderFormProps> = ({
             </div>
 
             {/* Quantity */}
-            <div>
-                <label className="block mb-1 font-medium">{t('quantity')} <span className="text-red-500">*</span></label>
-                <input
-                    type="number"
-                    min={1}
-                    value={quantity}
-                    onChange={(e) => setQuantity(Number(e.target.value))}
-                    className={clsx(
-                        'w-full border px-3 rounded',
-                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
-                        submitted && !isValid.quantity && errorBorder
-                    )}
-                />
-            </div>
+            <input
+                type="number"
+                min={1}
+                step={1}
+                inputMode="numeric"
+                value={quantity === 0 ? '' : quantity}
+                onChange={(e) => {
+                    const val = e.target.value;
+
+                    // Allow clearing temporarily
+                    if (val === '') {
+                        setQuantity(0); // temporary value while field is cleared
+                        return;
+                    }
+
+                    const num = parseInt(val, 10);
+
+                    if (!isNaN(num)) {
+                        setQuantity(num);
+                    }
+                }}
+                onBlur={() => {
+                    if (quantity < 1) setQuantity(1); // enforce minimum on blur
+                }}
+                className={clsx(
+                    'w-full border px-3 rounded',
+                    isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
+                    submitted && !isValid.quantity && errorBorder
+                )}
+            />
 
             {/* Name */}
             <div>

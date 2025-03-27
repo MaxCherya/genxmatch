@@ -82,7 +82,7 @@ const FeatureSection: React.FC<Props> = ({ features }) => {
                         </p>
                         <div
                             className={clsx(
-                                'w-12 h-1 mt-3 bg-blue-500 rounded-full md:w-16 md:mt-4',
+                                'w-12 h-1 mt-3 bg-orange-400 rounded-full md:w-16 md:mt-4',
                                 index % 2 === 0 ? 'mr-auto' : 'ml-auto'
                             )}
                         />

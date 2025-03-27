@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import LanguageSwitcher from "../general/LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
 
-const Navbar: React.FC = () => {
+interface NavbarProps {
+    isFullscreen?: boolean;
+}
+
+const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
     const [show, setShow] = useState(true);
     const [lastScrollY, setLastScrollY] = useState(0);
 
@@ -20,11 +24,11 @@ const Navbar: React.FC = () => {
         };
 
         window.addEventListener("scroll", handleScroll);
-
-        return () => {
-            window.removeEventListener("scroll", handleScroll);
-        };
+        return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollY]);
+
+    // Hide navbar if fullscreen is active
+    if (isFullscreen) return null;
 
     return (
         <AnimatePresence>

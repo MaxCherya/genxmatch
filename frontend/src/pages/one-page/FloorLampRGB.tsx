@@ -21,8 +21,12 @@ import PicturesSlider from "../../components/item-page/PicturesSlider";
 import DeliveryInfo from "../../components/infos/DeliveryInfo";
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
 
+interface Props {
+    setIsFullscreen?: (value: boolean) => void;
+    isFullscreen?: boolean;
+}
 
-const FloorLampRGB: React.FC = () => {
+const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }) => {
 
     const { t } = useTranslation();
 
@@ -87,13 +91,15 @@ const FloorLampRGB: React.FC = () => {
     const productVideo = 'https://gv-vod-cdn.aliexpress-media.com/ae_sg_gmc/video_target/gv91-2bfa8819-a1d168e5-91275174-506d/trans/2ee6bd40-6019-4f21-956d-2bcd8290e2e9-hd.mp4?auth_key=1742898115-0-0-aa5455236668eea2a605c9f4bad4f077'
 
     return (
-        <div className="relative w-full min-h-screen h-auto overflow-x-hidden bg-black">
+        <div className="relative w-full min-h-screen overflow-hidden bg-black">
             {/* Live Viewers */}
-            <div className="fixed bottom-4 right-4 overflow-x-hidden z-50">
-                <LiveVisitorsCounter min={10} max={30} refreshInterval={5} size="sm" theme="dark" />
-            </div>
+            {!isFullscreen ?
+                <div className="fixed bottom-4 right-4 overflow-x-hidden z-50">
+                    <LiveVisitorsCounter min={10} max={30} refreshInterval={5} size="sm" theme="dark" />
+                </div>
+                : null}
 
-            <ScrollProgressCircle />
+            <ScrollProgressCircle isFullscreen={isFullscreen} />
 
 
             <div className="relative w-full z-10 flex flex-col">
@@ -101,42 +107,42 @@ const FloorLampRGB: React.FC = () => {
                 <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 {/* Hero Section */}
                 <div className="xl:flex-row mt-7 xl:mt-0 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
-                    <div className="w-full flex flex-col xl:flex-row gap-4 xl:gap-12 items-center justify-evenly">
+                    <div className="w-full flex flex-col xl:flex-col gap-4 xl:gap-12 items-center justify-center">
 
                         {/* Left: Image Carousel */}
                         <div className="xs:w-1/2 flex justify-center">
-                            <HeroImagesCarousel images={productImagesHero} />
+                            <HeroImagesCarousel images={productImagesHero} setIsFullscreen={setIsFullscreen} />
                         </div>
 
                         {/* Right: Product Info */}
-                        <div className="w-full xs:w-1/2 rounded-2xl max-w-2xl p-6 flex flex-col gap-4 shadow-lg">
+                        <div className="w-full xs:w-1/2 max-w-2xl p-2 sm:p-8 rounded-3xl bg-gradient-to-b from-orange-950/30 to-orange-900/30 shadow-xl flex flex-col gap-5 sm:gap-6">
+
                             {/* Title */}
-                            <h1 className="text-orange-500 text-xl sm:text-3xl font-semibold text-center leading-snug">
+                            <h1 className="text-orange-400 text-2xl sm:text-4xl font-bold text-center leading-snug tracking-tight">
                                 <Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />
                             </h1>
 
                             {/* Divider */}
-                            <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
+                            <div className="w-20 h-1 rounded-full mx-auto bg-orange-500" />
+
+                            {/* Price */}
+                            <PriceTag
+                                current={productNewPrice}
+                                old={productOldPrice}
+                                currency={t('uah')}
+                                size="md"
+                            />
 
                             {/* Rating */}
                             <div className="flex items-center justify-center gap-3">
                                 <ReviewStars rating={4.5} />
-                                <p className="text-white text-sm">4.57 | 1034 {t('ratings')}</p>
+                                <p className="text-stone-300 text-sm sm:text-base">4.93 | 1034 {t('ratings')}</p>
                             </div>
 
-                            {/* Shipping Info */}
-                            <p className="text-white text-center text-sm">
-                                🚚 <Trans i18nKey="deliveryNovaPoshtaInfo" components={{ 1: <strong /> }} />
-                            </p>
-
-                            {/* Divider */}
-                            <hr className="w-full h-[4px] bg-orange-600 border-none rounded-full" />
-
-                            {/* Price */}
-                            <PriceTag current={productNewPrice} old={productOldPrice} currency={t('uah')} size="md" />
-
                             {/* CTA */}
-                            <CTAButton size="md" fullWidth />
+                            <div className="mt-4">
+                                <CTAButton size="md" fullWidth />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -160,29 +166,21 @@ const FloorLampRGB: React.FC = () => {
                     <div
                         className="h-auto max-w-3xl">
                         <motion.p
-                            initial={{
-                                filter: 'blur(8px)',
-                            }}
-                            whileInView={{
-                                filter: 'blur(0px)',
-                            }}
-                            viewport={{
-                                margin: '-15%'
-                            }}
-                            className="text-gray-500 mb-4">
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            viewport={{ margin: '-15%' }}
+                            className="text-gray-500 mb-4"
+                        >
                             {t('description_floor_rgb_lamp_part_1')}
                         </motion.p >
                         <motion.p
-                            initial={{
-                                filter: 'blur(8px)',
-                            }}
-                            whileInView={{
-                                filter: 'blur(0px)',
-                            }}
-                            viewport={{
-                                margin: '-30%'
-                            }}
-                            className="text-gray-500 mb-12">
+                            initial={{ opacity: 0, y: 20 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                            viewport={{ margin: '-15%' }}
+                            className="text-gray-500 mb-12"
+                        >
                             {t('description_floor_rgb_lamp_part_2')}
                         </motion.p >
                     </div>

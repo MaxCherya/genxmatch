@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // general
@@ -9,12 +9,14 @@ import FloorLampRGB from "./pages/one-page/FloorLampRGB";
 import Navbar from "./components/navbar/Navbar";
 
 const App: React.FC = () => {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
   return (
     <Router>
-      <Navbar />
+      <Navbar isFullscreen={isFullscreen} />
       <Routes>
         <Route path="*" element={<NotFound />} />
-        <Route path="/one-page/floor-lamp-rgb" element={<FloorLampRGB />} />
+        <Route path="/one-page/floor-lamp-rgb" element={<FloorLampRGB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
       </Routes>
     </Router>
   );

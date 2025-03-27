@@ -32,7 +32,7 @@ const DeliveryInfo: React.FC = () => {
             >
                 {t('delivery_information')}
                 <motion.span
-                    className="absolute left-1/2 transform -translate-x-1/2 bottom-[-15px] w-16 h-1 bg-blue-500 rounded-full"
+                    className="absolute left-1/2 transform -translate-x-1/2 bottom-[-15px] w-16 h-1 bg-orange-400 rounded-full"
                     initial={{ scaleX: 0 }}
                     whileInView={{ scaleX: 1 }}
                     transition={{ duration: 0.6, ease: 'easeOut', delay: 0.4 }}
@@ -47,8 +47,8 @@ const DeliveryInfo: React.FC = () => {
                     <motion.div
                         key={index}
                         className="flex flex-col items-center justify-center p-4 bg-gradient-to-b from-gray-800 to-black bg-opacity-50 rounded-xl shadow-md hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
                         transition={{
                             duration: 0.6,
                             ease: 'easeOut',

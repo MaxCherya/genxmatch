@@ -3,10 +3,12 @@ import { motion, AnimatePresence } from "framer-motion";
 
 type ScrollProgressCircleProps = {
     scrollContainerId?: string; // Optional scrollable container
+    isFullscreen?: boolean;
 };
 
 const ScrollProgressCircle: React.FC<ScrollProgressCircleProps> = ({
     scrollContainerId,
+    isFullscreen = false,
 }) => {
     const [progress, setProgress] = useState(0);
     const [visible, setVisible] = useState(false);
@@ -58,6 +60,11 @@ const ScrollProgressCircle: React.FC<ScrollProgressCircleProps> = ({
     const strokeDashoffset =
         circumference - (progress / 100) * circumference;
 
+
+    if (isFullscreen) {
+        return null
+    }
+
     return (
         <AnimatePresence>
             {visible && (
@@ -78,7 +85,7 @@ const ScrollProgressCircle: React.FC<ScrollProgressCircleProps> = ({
                             cy={radius}
                         />
                         <circle
-                            stroke="#10b981"
+                            stroke="#e69112"
                             fill="transparent"
                             strokeWidth={stroke}
                             strokeLinecap="round"
