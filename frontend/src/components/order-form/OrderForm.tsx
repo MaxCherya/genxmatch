@@ -4,6 +4,7 @@ import NovaPoshtaSelector from './NovaPoshtaSelector'
 import clsx from 'clsx'
 import UkrainianPhoneInput from './UkrainianPhoneInput'
 import { useTranslation, Trans } from 'react-i18next'
+import { isValidPhoneNumber } from 'react-phone-number-input'
 
 type OrderFormProps = {
     productName: string | ReactNode
@@ -25,27 +26,46 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [quantity, setQuantity] = useState(1)
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
-    const [phone, setPhone] = useState<string | undefined>();
+    const [phone, setPhone] = useState<string | undefined>()
+    const [submitted, setSubmitted] = useState(false)
+
+    // Nova Poshta
+    const [selectedCity, setSelectedCity] = useState<any | null>(null)
+    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null)
 
     const total = currentPrice * quantity
-
-    const { t } = useTranslation();
-
+    const { t } = useTranslation()
     const isDark = theme === 'dark'
-    console.log(phone)
+
+    const isValid = {
+        name: name.trim() !== '',
+        surname: surname.trim() !== '',
+        phone: typeof phone === 'string' && phone.trim() !== '' && isValidPhoneNumber(phone, 'UA'),
+        quantity: quantity > 0,
+        city: selectedCity !== null,
+        warehouse: selectedWarehouse !== null,
+    };
+
+    const handleSubmit = () => {
+        setSubmitted(true)
+        const allValid = Object.values(isValid).every(Boolean)
+        if (!allValid) return
+
+        console.log({ name, surname, phone, quantity, selectedCity, selectedWarehouse })
+    }
+
+    const errorBorder = 'border-red-500'
 
     return (
-        <div
-            className={clsx(
-                'rounded-xl shadow p-4 space-y-4 max-w-xl mx-auto',
-                isDark ? 'bg-[#111] text-white' : 'bg-white text-black'
-            )}
-        >
+        <div className={clsx(
+            'rounded-xl shadow p-4 space-y-4 max-w-xl mx-auto',
+            isDark ? 'bg-[#111] text-white' : 'bg-white text-black'
+        )}>
             <h2 className="text-xl font-semibold text-center mb-4">{t('checkout')}</h2>
 
-            {/* Product Summary */}
+            {/* Product */}
             <div className="flex flex-col items-center gap-4">
-                <img src={productImage} alt={productAlt} className="w-[10%] rounded-lg object-cover" />
+                <img src={productImage} alt={productAlt} className="w-[30%] rounded-lg object-cover" />
                 <div>
                     <h3 className="font-medium text-base mb-4">{productName}</h3>
                     <PriceTag current={currentPrice} old={oldPrice} currency="₴" size="sm" />
@@ -54,7 +74,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
             {/* Quantity */}
             <div>
-                <label className="block mb-1 font-medium">{t('quantity')}</label>
+                <label className="block mb-1 font-medium">{t('quantity')} <span className="text-red-500">*</span></label>
                 <input
                     type="number"
                     min={1}
@@ -62,21 +82,23 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     onChange={(e) => setQuantity(Number(e.target.value))}
                     className={clsx(
                         'w-full border px-3 rounded',
-                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'
+                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
+                        submitted && !isValid.quantity && errorBorder
                     )}
                 />
             </div>
 
             {/* Name */}
             <div>
-                <label className="block mb-1 font-medium">{t('name')}</label>
+                <label className="block mb-1 font-medium">{t('name')} <span className="text-red-500">*</span></label>
                 <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className={clsx(
                         'w-full border px-3 rounded',
-                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'
+                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
+                        submitted && !isValid.name && errorBorder
                     )}
                     placeholder={t('your_name')}
                 />
@@ -84,38 +106,50 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
             {/* Surname */}
             <div>
-                <label className="block mb-1 font-medium">{t('surname')}</label>
+                <label className="block mb-1 font-medium">{t('surname')} <span className="text-red-500">*</span></label>
                 <input
                     type="text"
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
                     className={clsx(
                         'w-full border px-3 rounded',
-                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'
+                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
+                        submitted && !isValid.surname && errorBorder
                     )}
                     placeholder={t('your_surname')}
                 />
             </div>
 
             {/* Phone */}
-            <UkrainianPhoneInput value={phone} onChange={setPhone} theme="dark" />
+            <UkrainianPhoneInput value={phone} onChange={setPhone} theme={theme} showError={submitted} />
 
-            {/* Nova Poshta Fields */}
-            <NovaPoshtaSelector theme={theme} />
+            {/* Nova Poshta */}
+            <NovaPoshtaSelector
+                excludePoshtomats={true}
+                theme={theme}
+                selectedCity={selectedCity}
+                setSelectedCity={setSelectedCity}
+                selectedWarehouse={selectedWarehouse}
+                setSelectedWarehouse={setSelectedWarehouse}
+            />
+
+            {submitted && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>}
+            {submitted && !isValid.warehouse && <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>}
 
             {/* Delivery note */}
             <p className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-600')}>
                 <Trans i18nKey="deliveryNovaPoshtaInfo" components={{ 1: <strong /> }} />
             </p>
 
-            {/* Total Price */}
+            {/* Total */}
             <div className="text-center">
                 <div className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-500')}>{t('amount_due')}:</div>
                 <PriceTag current={total} currency="₴" size="md" />
             </div>
 
-            {/* Submit button (not wired yet) */}
+            {/* Submit */}
             <button
+                onClick={handleSubmit}
                 className="w-full bg-green-600 text-white rounded py-1 font-medium hover:bg-green-700 transition"
             >
                 {t('confirm_order')}

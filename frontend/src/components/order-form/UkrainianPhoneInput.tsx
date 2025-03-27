@@ -16,13 +16,11 @@ const UkrainianPhoneInput: React.FC<Props> = ({
     theme = 'light',
     showError = true,
 }) => {
-    const [touched, setTouched] = useState(false);
-
+    const [_touched, setTouched] = useState(false);
     const { t } = useTranslation();
 
     const isInvalid =
-        touched &&
-        (!value || !value.startsWith('+380') || !isValidPhoneNumber(value, 'UA'));
+        showError && (!value || !value.startsWith('+380') || !isValidPhoneNumber(value, 'UA'));
 
     return (
         <div className="w-full">
@@ -32,7 +30,7 @@ const UkrainianPhoneInput: React.FC<Props> = ({
                     theme === 'dark' ? 'text-white' : 'text-gray-800'
                 )}
             >
-                {t('phone_number')}
+                {t('phone_number')} <span className="text-red-500">*</span>
             </label>
 
             <PhoneInput
@@ -52,7 +50,7 @@ const UkrainianPhoneInput: React.FC<Props> = ({
                 )}
             />
 
-            {isInvalid && showError && (
+            {isInvalid && (
                 <p className="mt-1 text-sm text-red-500">{t('enter_correct_ukrainian_phone_number')}</p>
             )}
         </div>

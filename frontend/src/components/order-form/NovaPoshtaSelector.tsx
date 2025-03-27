@@ -5,15 +5,24 @@ import { useTranslation, Trans } from "react-i18next";
 
 type NovaPoshtaSelectorProps = {
     theme?: 'light' | 'dark';
-    excludePoshtomats?: boolean
+    excludePoshtomats?: boolean;
+    selectedCity: any | null;
+    setSelectedCity: (value: any) => void;
+    selectedWarehouse: any | null;
+    setSelectedWarehouse: (value: any) => void;
 };
 
-const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({ theme = 'light', excludePoshtomats = false }) => {
+const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
+    theme = 'light',
+    excludePoshtomats = false,
+    selectedCity,
+    setSelectedCity,
+    selectedWarehouse,
+    setSelectedWarehouse,
+}) => {
     const [cityQuery, setCityQuery] = useState('');
     const [cities, setCities] = useState<any[]>([]);
-    const [selectedCity, setSelectedCity] = useState<any | null>(null);
     const [warehouses, setWarehouses] = useState<any[]>([]);
-    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null);
 
     const { t } = useTranslation();
 
@@ -32,6 +41,8 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({ theme = 'light'
     useEffect(() => {
         if (selectedCity?.Ref) {
             fetchWarehouses(selectedCity.Ref, excludePoshtomats).then(setWarehouses);
+        } else {
+            setWarehouses([]);
         }
     }, [selectedCity]);
 
@@ -72,12 +83,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({ theme = 'light'
                     }}
                 />
                 {cities.length > 0 && !selectedCity && (
-                    <ul
-                        className={clsx(
-                            'border mt-2 rounded-lg max-h-48 overflow-y-auto',
-                            currentTheme.dropdown
-                        )}
-                    >
+                    <ul className={clsx('border mt-2 rounded-lg max-h-48 overflow-y-auto', currentTheme.dropdown)}>
                         {cities.map((city, idx) => (
                             <li
                                 key={idx}

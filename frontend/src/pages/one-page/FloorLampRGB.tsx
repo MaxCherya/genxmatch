@@ -1,26 +1,23 @@
 import { useTranslation } from "react-i18next";
 import { Trans } from 'react-i18next';
-import { AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 // styles
 import '../../components/styles/AnimatedBGGradient.css'
 
 // components
 import BubbleBackground from '../../components/bg/BubbleGradient/BubbleGradient';
-import LanguageSwitcher from '../../components/general/LanguageSwitcher';
 import LiveVisitorsCounter from '../../components/item-page/LiveVisitorsCounter';
 import HeroImagesCarousel from '../../components/imgs/HeroImagesCarousel/HeroImagesCarousel';
 import PriceTag from '../../components/item-page/PriceTag';
 import CTAButton from '../../components/btns/CTAButton';
 import ReviewStars from '../../components/item-page/ReviewStars';
-import FeatureCard from "../../components/item-page/FeatureCard";
 import SpecItem from "../../components/item-page/SpecItem";
-// import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 import ReviewSlider from "../../components/item-page/ReviewSlider";
 import OrderForm from "../../components/order-form/OrderForm";
 import FeatureSection from "../../components/item-page/FeaturesSection";
 import PicturesSlider from "../../components/item-page/PicturesSlider";
-import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
+// import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 import DeliveryInfo from "../../components/infos/DeliveryInfo";
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
 
@@ -108,7 +105,7 @@ const FloorLampRGB: React.FC = () => {
 
                         {/* Left: Image Carousel */}
                         <div className="xs:w-1/2 flex justify-center">
-                            <HeroImagesCarousel visibleCount={5} images={productImagesHero} />
+                            <HeroImagesCarousel images={productImagesHero} />
                         </div>
 
                         {/* Right: Product Info */}
@@ -146,24 +143,72 @@ const FloorLampRGB: React.FC = () => {
                 <div className="w-full bg-white py-12 flex flex-col items-center px-4 text-black">
 
                     {/* Title */}
-                    <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12">
+                    <motion.h2
+                        initial={{
+                            opacity: 0,
+                        }}
+                        whileInView={{
+                            opacity: 1,
+                        }}
+                        viewport={{
+                            margin: '-10%'
+                        }}
+                        className="text-3xl sm:text-4xl font-bold text-center mb-12">
                         {t('specifications_and_features')}
-                    </h2>
+                    </motion.h2>
 
-                    <div className="h-auto max-w-3xl">
-                        <p className="text-gray-500 mb-4">
+                    <div
+                        className="h-auto max-w-3xl">
+                        <motion.p
+                            initial={{
+                                filter: 'blur(8px)',
+                            }}
+                            whileInView={{
+                                filter: 'blur(0px)',
+                            }}
+                            viewport={{
+                                margin: '-15%'
+                            }}
+                            className="text-gray-500 mb-4">
                             {t('description_floor_rgb_lamp_part_1')}
-                        </p>
-                        <p className="text-gray-500 mb-12">
+                        </motion.p >
+                        <motion.p
+                            initial={{
+                                filter: 'blur(8px)',
+                            }}
+                            whileInView={{
+                                filter: 'blur(0px)',
+                            }}
+                            viewport={{
+                                margin: '-30%'
+                            }}
+                            className="text-gray-500 mb-12">
                             {t('description_floor_rgb_lamp_part_2')}
-                        </p>
+                        </motion.p >
                     </div>
 
                     {/* Divider */}
                     <hr className="w-full max-w-3xl h-[3px] bg-black border-none rounded-full mb-12" />
 
                     {/* Technical Specs */}
-                    <div className="w-full max-w-3xl bg-gray-100 rounded-xl p-6 sm:p-8 shadow-md space-y-4">
+                    <motion.div
+                        className="w-full max-w-3xl bg-gray-100 rounded-xl p-6 sm:p-8 shadow-md space-y-4"
+                        initial={{
+                            opacity: 0,
+                            y: 30,
+                            filter: 'blur(6px)',
+                        }}
+                        whileInView={{
+                            opacity: 1,
+                            y: 0,
+                            filter: 'blur(0px)',
+                        }}
+                        transition={{
+                            duration: 0.8,
+                            ease: 'easeOut',
+                        }}
+                        viewport={{ margin: '-20%' }}
+                    >
                         <SpecItem label={t('material')} value={t('metal')} />
                         <SpecItem label={t('style')} value={t('minimalist')} />
                         <SpecItem label={t('color')} value={t('black')} />
@@ -172,17 +217,45 @@ const FloorLampRGB: React.FC = () => {
                         <SpecItem label={t('power')} value={`30 ${t('W')}`} />
                         <SpecItem label={t('leds')} value={`90 ${t('pcs')}`} />
                         <SpecItem label={t('control')} value={t('remote_control')} />
-                    </div>
+                    </motion.div>
 
                 </div>
                 <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-black">
                     {/* Title */}
-                    <h2 className="text-3xl text-white sm:text-4xl font-bold text-center mb-12">
+                    <motion.h2
+                        initial={{
+                            opacity: 0,
+                        }}
+                        whileInView={{
+                            opacity: 1,
+                        }}
+                        viewport={{
+                            margin: '-10%'
+                        }}
+                        className="text-3xl text-white sm:text-4xl font-bold text-center mb-12">
                         {t('video_demo')}
-                    </h2>
+                    </motion.h2>
 
                     {/* Video */}
-                    <div className="w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl mb-12">
+                    <motion.div
+                        className="w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl mb-12"
+                        initial={{
+                            opacity: 0,
+                            scale: 0.95,
+                            filter: 'blur(8px)',
+                        }}
+                        whileInView={{
+                            opacity: 1,
+                            scale: 1,
+                            filter: 'blur(0px)',
+                        }}
+                        transition={{
+                            duration: 1,
+                            ease: 'easeOut',
+                            delay: 0.1
+                        }}
+                        viewport={{ margin: '-20%' }}
+                    >
                         <video
                             autoPlay
                             loop
@@ -193,16 +266,7 @@ const FloorLampRGB: React.FC = () => {
                             <source src={productVideo} type="video/mp4" />
                             {t('your_browser_does_not_support_video_tag')}
                         </video>
-                    </div>
-
-                    {/* Feature Highlights */}
-                    {/* <div className="w-full max-w-3xl grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
-                        <FeatureCard icon="💡" title={t('brightness_regulation')} />
-                        <FeatureCard icon="🎵" title={t('sync_with_music')} />
-                        <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
-                        <FeatureCard icon="🖼️" title={t('stylish_design')} />
-                    </div> */}
-
+                    </motion.div>
 
                 </div>
 
