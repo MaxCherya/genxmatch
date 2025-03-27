@@ -20,6 +20,8 @@ import OrderForm from "../../components/order-form/OrderForm";
 import FeatureSection from "../../components/item-page/FeaturesSection";
 import PicturesSlider from "../../components/item-page/PicturesSlider";
 import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
+import DeliveryInfo from "../../components/infos/DeliveryInfo";
+import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
 
 
 const FloorLampRGB: React.FC = () => {
@@ -84,24 +86,17 @@ const FloorLampRGB: React.FC = () => {
         { header: t('stylish_design'), description: t('stylish_design_description') }
     ]
 
-    // <FeatureCard icon="💡" title={t('brightness_regulation')} />
-    //                     <FeatureCard icon="🎵" title={t('sync_with_music')} />
-    //                     <FeatureCard icon="🎨" title={t('rgb_colors_from_remote')} />
-    //                     <FeatureCard icon="🖼️" title={t('stylish_design')} />
-
     const productVideo = 'https://gv-vod-cdn.aliexpress-media.com/ae_sg_gmc/video_target/gv91-2bfa8819-a1d168e5-91275174-506d/trans/2ee6bd40-6019-4f21-956d-2bcd8290e2e9-hd.mp4?auth_key=1742898115-0-0-aa5455236668eea2a605c9f4bad4f077'
 
     return (
         <div className="relative w-full min-h-screen h-auto overflow-x-hidden bg-black">
             {/* Live Viewers */}
-            <div className="fixed bottom-4 right-8 overflow-x-hidden z-50">
+            <div className="fixed bottom-4 right-4 overflow-x-hidden z-50">
                 <LiveVisitorsCounter min={10} max={30} refreshInterval={5} size="sm" theme="dark" />
             </div>
 
-            {/* Language Switcher */}
-            <div className="absolute top-4 right-4 z-50">
-                <LanguageSwitcher />
-            </div>
+            <ScrollProgressCircle />
+
 
             <div className="relative w-full z-10 flex flex-col">
                 {/* Background */}
@@ -218,8 +213,8 @@ const FloorLampRGB: React.FC = () => {
 
                 <div className="relative w-screen h-screen bg-black text-black overflow-hidden flex flex-col items-center justify-center">
                     <PicturesSlider asBG={true} images={productImagesWide} />
-                    <div className="w-3xl max-w-[90%]">
-                        <OrderFeed theme="dark" />
+                    <div className="w-3xl max-w-[95%] z-50">
+                        <DeliveryInfo />
                     </div>
                 </div>
 

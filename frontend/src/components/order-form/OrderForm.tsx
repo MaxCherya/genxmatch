@@ -37,18 +37,18 @@ const OrderForm: React.FC<OrderFormProps> = ({
     return (
         <div
             className={clsx(
-                'rounded-xl shadow p-6 space-y-6 max-w-xl mx-auto',
+                'rounded-xl shadow p-4 space-y-4 max-w-xl mx-auto',
                 isDark ? 'bg-[#111] text-white' : 'bg-white text-black'
             )}
         >
-            <h2 className="text-2xl font-semibold text-center mb-4">{t('checkout')}</h2>
+            <h2 className="text-xl font-semibold text-center mb-4">{t('checkout')}</h2>
 
             {/* Product Summary */}
             <div className="flex flex-col items-center gap-4">
-                <img src={productImage} alt={productAlt} className="w-[30%] rounded-lg object-cover" />
+                <img src={productImage} alt={productAlt} className="w-[10%] rounded-lg object-cover" />
                 <div>
-                    <h3 className="font-medium text-lg mb-4">{productName}</h3>
-                    <PriceTag current={currentPrice} old={oldPrice} currency="₴" size="md" />
+                    <h3 className="font-medium text-base mb-4">{productName}</h3>
+                    <PriceTag current={currentPrice} old={oldPrice} currency="₴" size="sm" />
                 </div>
             </div>
 
@@ -61,7 +61,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     value={quantity}
                     onChange={(e) => setQuantity(Number(e.target.value))}
                     className={clsx(
-                        'w-full border px-3 py-2 rounded',
+                        'w-full border px-3 rounded',
                         isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'
                     )}
                 />
@@ -75,7 +75,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     className={clsx(
-                        'w-full border px-3 py-2 rounded',
+                        'w-full border px-3 rounded',
                         isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'
                     )}
                     placeholder={t('your_name')}
@@ -90,7 +90,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     value={surname}
                     onChange={(e) => setSurname(e.target.value)}
                     className={clsx(
-                        'w-full border px-3 py-2 rounded',
+                        'w-full border px-3 rounded',
                         isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black'
                     )}
                     placeholder={t('your_surname')}
@@ -116,7 +116,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
             {/* Submit button (not wired yet) */}
             <button
-                className="w-full bg-green-600 text-white rounded py-2 font-medium hover:bg-green-700 transition"
+                className="w-full bg-green-600 text-white rounded py-1 font-medium hover:bg-green-700 transition"
             >
                 {t('confirm_order')}
             </button>
