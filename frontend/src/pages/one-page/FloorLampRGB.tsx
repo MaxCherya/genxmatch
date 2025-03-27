@@ -1,5 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Trans } from 'react-i18next';
+import { AnimatePresence } from "framer-motion";
 
 // styles
 import '../../components/styles/AnimatedBGGradient.css'

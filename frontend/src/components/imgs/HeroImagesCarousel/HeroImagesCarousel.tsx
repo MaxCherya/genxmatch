@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import clsx from 'clsx';
-import '../../styles/BubbleImage.css';
 
 type Image = {
     src: string;
@@ -9,147 +9,86 @@ type Image = {
 
 type Props = {
     images: Image[];
-    visibleCount?: number;
     className?: string;
 };
 
-const HeroImagesCarousel: React.FC<Props> = ({ images, visibleCount = 6, className = '' }) => {
-    if (images.length < 3) {
-        return <div className="text-red-500">Please provide at least 3 images for the layout.</div>;
-    }
+const HeroImagesCarousel: React.FC<Props> = ({ images, className = '' }) => {
+    const [emblaRef, emblaApi] = useEmblaCarousel({ axis: 'x', align: 'center', loop: false });
+    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [canScrollPrev, setCanScrollPrev] = useState(false);
+    const [canScrollNext, setCanScrollNext] = useState(false);
 
-    const [currentlySelected, setCurrentlySelected] = useState(0);
-    const [startIndex, setStartIndex] = useState(0);
+    const updateScrollState = useCallback(() => {
+        if (!emblaApi) return;
+        setCanScrollPrev(emblaApi.canScrollPrev());
+        setCanScrollNext(emblaApi.canScrollNext());
+    }, [emblaApi]);
 
-    const canScrollBack = startIndex > 0;
-    const canScrollForward = startIndex + visibleCount < images.length;
+    const scrollTo = useCallback(
+        (index: number) => {
+            if (emblaApi) {
+                emblaApi.scrollTo(index);
+                setSelectedIndex(index);
+                updateScrollState();
+            }
+        },
+        [emblaApi, updateScrollState]
+    );
 
-    const handleNext = () => {
-        if (canScrollForward) {
-            setStartIndex(startIndex + 1);
-        }
-    };
+    useEffect(() => {
+        if (!emblaApi) return;
 
-    const handlePrev = () => {
-        if (canScrollBack) {
-            setStartIndex(startIndex - 1);
-        }
-    };
+        emblaApi.on('scroll', updateScrollState);
+        emblaApi.on('select', updateScrollState);
 
-    const visibleImages = images.slice(startIndex, startIndex + visibleCount);
+        updateScrollState(); // Initial call
+
+        return () => {
+            emblaApi.off('scroll', updateScrollState);
+            emblaApi.off('select', updateScrollState);
+        };
+    }, [emblaApi, updateScrollState]);
 
     return (
-        <div className={clsx(
-            'w-full h-full flex flex-col lg:flex-row items-center justify-center gap-5',
-            className
-        )}>
+        <div className={clsx('w-full flex flex-col items-center gap-4', className)}>
             {/* Main Image */}
             <img
-                src={images[currentlySelected].src}
-                alt={images[currentlySelected].alt}
-                className="w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] object-cover rounded-2xl"
+                src={images[selectedIndex].src}
+                alt={images[selectedIndex].alt}
+                className="w-[280px] h-[280px] sm:w-[320px] sm:h-[320px] md:w-[400px] md:h-[400px] object-cover rounded-2xl transition-all duration-300 shadow-md"
             />
 
-            {/* Desktop Thumbnail List */}
-            <div className="hidden lg:flex flex-col items-center gap-3">
-                {/* Up Arrow */}
-                {images.length > visibleCount && (
-                    <button
-                        onClick={handlePrev}
-                        disabled={!canScrollBack}
-                        className={`text-base text-gray-600 disabled:opacity-30 ${!canScrollBack ? "cursor-not-allowed" : "cursor-pointer hover:text-gray-500"}`}
-                    >
-                        ▲
-                    </button>
+            {/* Thumbnails Carousel */}
+            <div className="relative w-full max-w-[400px]">
+                {/* Fading edges */}
+                {canScrollPrev && (
+                    <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white/90 to-transparent pointer-events-none z-10" />
+                )}
+                {canScrollNext && (
+                    <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white/90 to-transparent pointer-events-none z-10" />
                 )}
 
-                {/* Thumbnails (vertical) */}
-                {visibleImages.map((img, i) => {
-                    const actualIndex = startIndex + i;
-                    return (
-                        <div
-                            key={actualIndex}
-                            onClick={() => setCurrentlySelected(actualIndex)}
-                            className={clsx(
-                                'relative rounded-xl overflow-hidden cursor-pointer',
-                                'w-[40px] h-[40px] sm:w-[50px] sm:h-[50px]'
-                            )}
-                        >
-                            <img
-                                src={img.src}
-                                alt={img.alt}
-                                className={clsx(
-                                    'w-full h-full object-cover transition-all duration-200',
-                                    actualIndex === currentlySelected ? 'brightness-30 blur-[1px]' : 'hover:brightness-95'
-                                )}
-                            />
-                        </div>
-                    );
-                })}
-
-                {/* Down Arrow */}
-                {images.length > visibleCount && (
-                    <button
-                        onClick={handleNext}
-                        disabled={!canScrollForward}
-                        className={`text-base text-gray-600 disabled:opacity-30 ${!canScrollForward ? "cursor-not-allowed" : "cursor-pointer hover:text-gray-500"}`}
-                    >
-                        ▼
-                    </button>
-                )}
-            </div>
-
-            {/* Mobile Thumbnail Row */}
-            <div className="lg:hidden w-full flex flex-col items-center gap-2 mt-4">
-                {/* Horizontal Arrows */}
-                <div className="flex justify-center gap-4 text-gray-600 text-lg">
-                    <button
-                        onClick={handlePrev}
-                        disabled={!canScrollBack}
-                        className={clsx(
-                            'transition hover:text-gray-400',
-                            !canScrollBack && 'opacity-30 cursor-not-allowed'
-                        )}
-                    >
-                        ◀
-                    </button>
-
-                    <button
-                        onClick={handleNext}
-                        disabled={!canScrollForward}
-                        className={clsx(
-                            'transition hover:text-gray-400',
-                            !canScrollForward && 'opacity-30 cursor-not-allowed'
-                        )}
-                    >
-                        ▶
-                    </button>
-                </div>
-
-                {/* Scrollable Thumbnails */}
-                <div className="flex overflow-x-auto gap-2 w-full justify-center px-2">
-                    {visibleImages.map((img, i) => {
-                        const actualIndex = startIndex + i;
-                        return (
+                <div className="overflow-hidden" ref={emblaRef}>
+                    <div className="flex">
+                        {images.map((img, index) => (
                             <div
-                                key={actualIndex}
-                                onClick={() => setCurrentlySelected(actualIndex)}
-                                className={clsx(
-                                    'relative rounded-xl overflow-hidden cursor-pointer shrink-0',
-                                    'w-[50px] h-[50px]'
-                                )}
+                                key={index}
+                                className="min-w-[60px] sm:min-w-[70px] px-1 flex-shrink-0"
+                                onClick={() => scrollTo(index)}
                             >
                                 <img
                                     src={img.src}
                                     alt={img.alt}
                                     className={clsx(
-                                        'w-full h-full object-cover transition-all duration-200',
-                                        actualIndex === currentlySelected ? 'brightness-30 blur-[1px]' : 'hover:brightness-95'
+                                        'rounded-xl object-cover w-full h-[60px] sm:h-[70px] cursor-pointer transition-all duration-200',
+                                        index === selectedIndex
+                                            ? 'brightness-30 blur-[1px]'
+                                            : 'hover:brightness-95'
                                     )}
                                 />
                             </div>
-                        );
-                    })}
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
