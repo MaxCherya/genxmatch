@@ -5,8 +5,10 @@ import clsx from 'clsx'
 import UkrainianPhoneInput from './UkrainianPhoneInput'
 import { useTranslation, Trans } from 'react-i18next'
 import { isValidPhoneNumber } from 'react-phone-number-input'
+import { placeAnOrder } from '../../endpoints/orders'
 
 type OrderFormProps = {
+    productId: number
     productName: string | ReactNode
     productAlt?: string
     productImage: string
@@ -16,6 +18,7 @@ type OrderFormProps = {
 }
 
 const OrderForm: React.FC<OrderFormProps> = ({
+    productId,
     productName,
     productAlt,
     productImage,
@@ -46,12 +49,25 @@ const OrderForm: React.FC<OrderFormProps> = ({
         warehouse: selectedWarehouse !== null,
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setSubmitted(true)
         const allValid = Object.values(isValid).every(Boolean)
         if (!allValid) return
 
-        console.log({ name, surname, phone, quantity, selectedCity, selectedWarehouse })
+        try {
+            const res = await placeAnOrder({
+                item_id: productId,
+                quantity,
+                name,
+                surname,
+                phone: phone as string,
+                city: selectedCity.Description,
+                warehouse: selectedWarehouse.Description,
+            });
+            console.log('Order placed', res);
+        } catch (err: any) {
+            console.error("Order failed: ", err.message);
+        }
     }
 
     const errorBorder = 'border-red-500'
@@ -82,9 +98,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 onChange={(e) => {
                     const val = e.target.value;
 
-                    // Allow clearing temporarily
                     if (val === '') {
-                        setQuantity(0); // temporary value while field is cleared
+                        setQuantity(0);
                         return;
                     }
 
@@ -95,7 +110,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     }
                 }}
                 onBlur={() => {
-                    if (quantity < 1) setQuantity(1); // enforce minimum on blur
+                    if (quantity < 1) setQuantity(1);
                 }}
                 className={clsx(
                     'w-full border px-3 rounded',

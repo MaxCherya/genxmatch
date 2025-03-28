@@ -24,6 +24,7 @@ from django.views.static import serve
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/np/', include('novaposhta.urls')),
+    path('orders/', include('orders.urls')),
 
     # ✅ Serve Static Files (JS, CSS, Images)
     re_path(r"^assets/(?P<path>.*)$", serve, {"document_root": settings.STATICFILES_DIRS[1]}),

@@ -106,8 +106,8 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 {/* Background */}
                 <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 {/* Hero Section */}
-                <div className="xl:flex-row mt-4 sm:mt-7 xl:mt-7 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
-                    <div className="w-full flex flex-col xl:flex-col gap-4 xl:gap-12 items-center justify-center">
+                <div className="xl:flex-row mt-4 sm:mt-7 xl:mt-7 px-4 py-8 min-h-screen flex flex-col justify-center">
+                    <div className="w-full flex flex-col xl:flex-row gap-4 xl:gap-12 items-center justify-center">
 
                         {/* Left: Image Carousel */}
                         <div className="xs:w-1/2 flex justify-center">
@@ -115,15 +115,23 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         </div>
 
                         {/* Right: Product Info */}
-                        <div className="w-full xs:w-1/2 max-w-2xl p-2 sm:p-4 rounded-3xl bg-gradient-to-b from-orange-950/30 to-orange-900/30 shadow-xl flex flex-col gap-2 sm:gap-3">
+                        <div className="w-full xs:w-1/2 mt-4 xl:mt-0 xl:min-h-[500px] max-w-2xl p-2 py-4 sm:p-4 rounded-3xl bg-gradient-to-b from-orange-950/30 to-orange-900/30 shadow-xl flex flex-col xl:justify-evenly gap-2 sm:gap-3">
 
                             {/* Title */}
-                            <h1 className="text-orange-400 text-2xl sm:text-4xl font-bold text-center leading-snug tracking-tight">
+                            <h1 className="text-orange-400 text-2xl sm:text-4xl font-bold text-center leading-snug tracking-tight mb-2">
                                 <Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />
                             </h1>
 
                             {/* Divider */}
-                            <div className="w-20 h-1 rounded-full mx-auto bg-orange-500" />
+                            <div className="w-20 h-1 rounded-full mx-auto bg-orange-500 mb-2" />
+
+                            {/* Short Description */}
+                            <p className="text-stone-400 text-center text-sm max-w-full xl:max-w-[90%] self-center mb-2">
+                                <p>{t('description_floor_rgb_lamp_short')}</p>
+                            </p>
+
+                            {/* Divider */}
+                            <div className="w-20 h-1 rounded-full mx-auto bg-orange-500 mb-2" />
 
                             {/* Price */}
                             <PriceTag
@@ -135,8 +143,8 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
 
                             {/* Rating */}
                             <div className="flex items-center justify-center gap-3">
-                                <ReviewStars rating={4.5} />
-                                <p className="text-stone-300 text-sm sm:text-base">4.93 | 1034 {t('ratings')}</p>
+                                <ReviewStars rating={4.5} size="sm" />
+                                <p className="text-stone-300/90 text-sm">4.93 | 1034 {t('ratings')}</p>
                             </div>
 
                             {/* CTA */}
@@ -289,7 +297,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                     {/* CTA */}
                     <div className="w-full max-w-xl space-y-4">
                         {/* <OrderFeed theme="dark" /> */}
-                        <OrderForm productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />} productImage={productImagesHero[0].src} oldPrice={productOldPrice} currentPrice={productNewPrice} theme="dark" />
+                        <OrderForm productId={0} productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />} productImage={productImagesHero[0].src} oldPrice={productOldPrice} currentPrice={productNewPrice} theme="dark" />
                     </div>
                 </div>
 
