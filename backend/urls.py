@@ -20,9 +20,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 from django.views.static import serve
+from two_factor import urls as two_factor_urls
+from custom_auth.views import CustomLoginView
+
+from two_factor.admin import AdminSiteOTPRequired
+admin.site.__class__ = AdminSiteOTPRequired
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("account/login/", CustomLoginView.as_view(), name="login"),
+    path("", include(two_factor_urls.urlpatterns)),
     path('api/np/', include('novaposhta.urls')),
     path('orders/', include('orders.urls')),
 
@@ -31,7 +38,7 @@ urlpatterns = [
 
     # ✅ Serve React's index.html for frontend routes
     path("", TemplateView.as_view(template_name="index.html"), name="home"),
-    re_path(r"^(?!api/).*", TemplateView.as_view(template_name="index.html")),
+    re_path(r"^(?!admin/|account/|api/|orders/).*", TemplateView.as_view(template_name="index.html")),
 ]
 
 if settings.DEBUG:

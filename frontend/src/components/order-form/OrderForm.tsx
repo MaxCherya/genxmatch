@@ -31,6 +31,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [surname, setSurname] = useState('')
     const [phone, setPhone] = useState<string | undefined>()
     const [submitted, setSubmitted] = useState(false)
+    const [username, setUsername] = useState('')
 
     // Nova Poshta
     const [selectedCity, setSelectedCity] = useState<any | null>(null)
@@ -50,6 +51,10 @@ const OrderForm: React.FC<OrderFormProps> = ({
     };
 
     const handleSubmit = async () => {
+        if (username) {
+            console.warn("Bot detected")
+            return
+        }
         setSubmitted(true)
         const allValid = Object.values(isValid).every(Boolean)
         if (!allValid) return
@@ -63,7 +68,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 phone: phone as string,
                 city: selectedCity.Description,
                 warehouse: selectedWarehouse.Description,
-                delivery_company_id: 1
+                delivery_company_id: 1,
+                username
             });
             console.log('Order placed', res);
         } catch (err: any) {
@@ -88,6 +94,16 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     <PriceTag current={currentPrice} old={oldPrice} currency="₴" size="sm" />
                 </div>
             </div>
+
+            <input
+                type="text"
+                name="nickname"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                autoComplete="off"
+                tabIndex={-1}
+                className="absolute left-[-9999px] opacity-0 h-0 w-0"
+            />
 
             {/* Quantity */}
             <input

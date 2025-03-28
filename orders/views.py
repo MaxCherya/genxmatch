@@ -1,3 +1,4 @@
+from django_ratelimit.decorators import ratelimit
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 import json
@@ -6,9 +7,15 @@ from items.models import Item
 from .models import Order, DeliveryCompany
 
 @require_POST
+@ratelimit(key='ip', rate='10/m', block=True)
 def place_an_order(request):
     try:
         data = json.loads(request.body)
+
+        username = data.get("username")
+        if username:
+            print('[SECURITY] Bot detected: Honeypot triggered.')
+            return JsonResponse({'error': 'Suspicious activity'}, status=400)
 
         item_id = data.get("item_id")
         quantity = int(data.get("quantity", 1))

@@ -9,6 +9,7 @@ type OrderPayload = {
     city: string
     warehouse: string
     delivery_company_id: number
+    username: any
 }
 
 export const placeAnOrder = async (orderData: OrderPayload) => {

@@ -1,0 +1,19 @@
+{% extends "two_factor/_base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% block title %}{% trans "Login" %}{% endblock %}</h1>
+
+{% if wizard.steps.current == 'auth' %}
+<p>{% trans "Please enter your username and password." %}</p>
+{% elif wizard.steps.current == 'token' %}
+<p>{% trans "Please enter your two-factor authentication code." %}</p>
+{% endif %}
+
+<form action="" method="post">
+    {% csrf_token %}
+    {{ wizard.management_form }}
+    {{ wizard.form.as_p }}
+    <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}" />
+</form>
+{% endblock %}
