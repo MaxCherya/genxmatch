@@ -63,7 +63,7 @@ const FeatureSection: React.FC<Props> = ({ features }) => {
                         animate={
                             isActive
                                 ? { opacity: 1, scale: 1.05, filter: 'blur(0px)' }
-                                : { opacity: 0.3, scale: 0.95, filter: 'blur(4px)' }
+                                : { opacity: 0.3, scale: 0.95, filter: 'blur(1px)' }
                         }
                         transition={{ duration: 0.4, ease: 'easeOut' }}
                         className={clsx(

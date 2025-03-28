@@ -106,7 +106,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 {/* Background */}
                 <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 {/* Hero Section */}
-                <div className="xl:flex-row mt-7 xl:mt-7 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
+                <div className="xl:flex-row mt-4 sm:mt-7 xl:mt-7 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
                     <div className="w-full flex flex-col xl:flex-col gap-4 xl:gap-12 items-center justify-center">
 
                         {/* Left: Image Carousel */}

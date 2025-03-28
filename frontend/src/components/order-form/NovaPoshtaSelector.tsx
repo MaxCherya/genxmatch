@@ -66,7 +66,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     return (
         <div className="space-y-6">
             <div>
-                <label className="block font-medium mb-1">{t('city')}</label>
+                <label className="block font-medium mb-1">{t('city')} <span className="text-red-500">*</span></label>
                 <input
                     type="text"
                     className={clsx(
@@ -103,7 +103,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
 
             {selectedCity && (
                 <div>
-                    <label className="block font-medium mb-1">{t('facility')}</label>
+                    <label className="block font-medium mb-1">{t('facility')} <span className="text-red-500">*</span></label>
                     <select
                         className={clsx(
                             'w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500',
