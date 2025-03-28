@@ -84,7 +84,7 @@ const HeroImagesCarousel: React.FC<Props> = ({ images, className = '', setIsFull
                 <img
                     src={images[selectedIndex].src}
                     alt={images[selectedIndex].alt}
-                    className="w-[350px] h-[350px] sm:w-[400px] sm:h-[400px] md:w-[460px] md:h-[460px] lg:w-[500px] lg:h-[500px] object-cover rounded-2xl transition-all duration-300 shadow-md cursor-pointer"
+                    className="w-[350px] h-[350px] sm:w-[370px] sm:h-[370px] md:w-[390px] md:h-[390px] lg:w-[410px] lg:h-[410px] object-cover rounded-2xl transition-all duration-300 shadow-md cursor-pointer"
                     onClick={() => handleFullscreenToggle(true)}
                 />
 

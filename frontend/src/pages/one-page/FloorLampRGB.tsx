@@ -106,7 +106,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 {/* Background */}
                 <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 {/* Hero Section */}
-                <div className="xl:flex-row mt-7 xl:mt-0 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
+                <div className="xl:flex-row mt-7 xl:mt-7 px-4 py-8 gap-10 min-h-screen flex flex-col justify-center">
                     <div className="w-full flex flex-col xl:flex-col gap-4 xl:gap-12 items-center justify-center">
 
                         {/* Left: Image Carousel */}
@@ -115,7 +115,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         </div>
 
                         {/* Right: Product Info */}
-                        <div className="w-full xs:w-1/2 max-w-2xl p-2 sm:p-8 rounded-3xl bg-gradient-to-b from-orange-950/30 to-orange-900/30 shadow-xl flex flex-col gap-5 sm:gap-6">
+                        <div className="w-full xs:w-1/2 max-w-2xl p-2 sm:p-4 rounded-3xl bg-gradient-to-b from-orange-950/30 to-orange-900/30 shadow-xl flex flex-col gap-2 sm:gap-3">
 
                             {/* Title */}
                             <h1 className="text-orange-400 text-2xl sm:text-4xl font-bold text-center leading-snug tracking-tight">
