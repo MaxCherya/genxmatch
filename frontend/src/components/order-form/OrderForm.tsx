@@ -63,6 +63,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 phone: phone as string,
                 city: selectedCity.Description,
                 warehouse: selectedWarehouse.Description,
+                delivery_company_id: 1
             });
             console.log('Order placed', res);
         } catch (err: any) {

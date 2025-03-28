@@ -3,7 +3,7 @@ from django.http import JsonResponse
 import json
 
 from items.models import Item
-from .models import Order
+from .models import Order, DeliveryCompany
 
 @require_POST
 def place_an_order(request):
@@ -17,14 +17,20 @@ def place_an_order(request):
         phone = data.get("phone")
         city = data.get("city")
         warehouse = data.get("warehouse")
+        delivery_company_id = data.get("delivery_company_id")
 
-        if not all([item_id, quantity, name, surname, phone, city, warehouse]):
+        if not all([item_id, quantity, name, surname, phone, city, warehouse, delivery_company_id]):
             return JsonResponse({"error": "All fields are required."}, status=400)
         
         try:
             item = Item.objects.get(id=item_id)
         except Item.DoesNotExist:
             return JsonResponse({"error": "Invalid item"}, status=404)
+        
+        try:
+            delivery_company = DeliveryCompany.objects.get(id=delivery_company_id)
+        except DeliveryCompany.DoesNotExist:
+            return JsonResponse({'error': 'Invalid Delivering Company'})
         
         order = Order.objects.create(
             item=item,
@@ -34,9 +40,11 @@ def place_an_order(request):
             phone_number=phone,
             city=city,
             warehouse=warehouse,
+            delivery_company=delivery_company,
+            status='new'
         )
 
-        return JsonResponse({'success': True, "order_id": order.id}, status=201)
+        return JsonResponse({'success': True, "order_id": order.order_special_id}, status=201)
     
     except Exception as e:
         return JsonResponse({"error": "Server error"}, status=500)
