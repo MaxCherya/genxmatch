@@ -2,12 +2,9 @@
   "name": "django-reactjs-heroku-template",
   "version": "1.0.0",
   "scripts": {
-    "heroku-postbuild": "cd frontend && npm install && npm run build"
+      "heroku-postbuild": "cd frontend && npm install && npm run build"
   },
   "engines": {
-    "node": "23.6.0"
-  },
-  "dependencies": {
-    "swiper": "^11.2.6"
+      "node": "22.12.0"
   }
 }
