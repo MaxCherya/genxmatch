@@ -82,7 +82,7 @@ DATABASES = {
 
 
 CSRF_COOKIE_SECURE = True  # Set to False for local development (if not using HTTPS)
-CSRF_COOKIE_HTTPONLY = True  # Allow JavaScript to read the CSRF cookie
+CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript to read the CSRF cookie
 CSRF_COOKIE_SAMESITE = 'Strict'  # 'Lax' allows the cookie to be sent in same-site requests
 CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'https://genxmatch-9d751e301f5e.herokuapp.com']  # Add your local network IP
 
