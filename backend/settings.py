@@ -8,12 +8,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 LOGIN_URL = '/account/login/'
 
 load_dotenv()
+ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+IS_DEV = ENVIRONMENT == "development"
+
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = IS_DEV
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*'] if IS_DEV else ['genxmatch-9d751e301f5e.herokuapp.com']
 
 # Application definition
 
@@ -73,20 +76,35 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if IS_DEV:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv("DB_NAME"),
+            'USER': os.getenv("DB_USER"),
+            'PASSWORD': os.getenv("DB_PASSWORD"),
+            'HOST': os.getenv("DB_HOST"),
+            'PORT': os.getenv("DB_PORT", "5432"),
+        }
+    }
 
-
-CSRF_COOKIE_SECURE = True  # Set to False for local development (if not using HTTPS)
-CSRF_COOKIE_HTTPONLY = False  # Allow JavaScript to read the CSRF cookie
+CSRF_COOKIE_SECURE = not IS_DEV  # Set to False for local development (if not using HTTPS)
+CSRF_COOKIE_HTTPONLY = not IS_DEV   # Allow JavaScript to read the CSRF cookie
 CSRF_COOKIE_SAMESITE = 'Strict'  # 'Lax' allows the cookie to be sent in same-site requests
-CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'https://genxmatch-9d751e301f5e.herokuapp.com']  # Add your local network IP
+CSRF_TRUSTED_ORIGINS = (
+    ['http://127.0.0.1:8000']
+    if IS_DEV else
+    ['https://genxmatch-9d751e301f5e.herokuapp.com']
+) # Add your local network IP
 
-SESSION_COOKIE_SECURE = True  # Set to False for local development
+SESSION_COOKIE_SECURE = not IS_DEV  # Set to False for local development
 SESSION_COOKIE_SAMESITE = 'Strict'
 
 
@@ -136,3 +154,5 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+print(f"✅ Running in {'DEV' if IS_DEV else 'PROD'} mode")

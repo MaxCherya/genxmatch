@@ -17,3 +17,5 @@ qrcode==7.4.2
 ratelimit==2.2.1
 requests==2.32.3
 whitenoise==6.8.2
+psycopg2-binary
+dj-database-url
