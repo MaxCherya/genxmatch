@@ -13,7 +13,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -50,7 +50,10 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates', BASE_DIR / 'frontend' / 'dist'],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'frontend', 'dist'),
+            os.path.join(BASE_DIR, 'templates'),
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -58,6 +61,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.static',
             ],
         },
     },
@@ -75,6 +79,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+CSRF_COOKIE_SECURE = True  # Set to False for local development (if not using HTTPS)
+CSRF_COOKIE_HTTPONLY = True  # Allow JavaScript to read the CSRF cookie
+CSRF_COOKIE_SAMESITE = 'Strict'  # 'Lax' allows the cookie to be sent in same-site requests
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:8000', 'https://genxmatch-9d751e301f5e.herokuapp.com']  # Add your local network IP
+
+SESSION_COOKIE_SECURE = True  # Set to False for local development
+SESSION_COOKIE_SAMESITE = 'Strict'
 
 
 # Password validation
