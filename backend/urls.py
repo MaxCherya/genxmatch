@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path, re_path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.views.generic import TemplateView
+from frontend.views import CSRFAwareIndexView
 from django.views.static import serve
 from two_factor import urls as two_factor_urls
 from custom_auth.views import CustomLoginView
@@ -37,8 +37,8 @@ urlpatterns = [
     re_path(r"^assets/(?P<path>.*)$", serve, {"document_root": settings.STATICFILES_DIRS[1]}),
 
     # ✅ Serve React's index.html for frontend routes
-    path("", TemplateView.as_view(template_name="index.html"), name="home"),
-    re_path(r"^(?!admin/|account/|api/|orders/).*", TemplateView.as_view(template_name="index.html")),
+    path("", CSRFAwareIndexView.as_view(), name="home"),
+    re_path(r"^(?!admin/|account/|api/|orders/).*", CSRFAwareIndexView.as_view()),
 ]
 
 if settings.DEBUG:
