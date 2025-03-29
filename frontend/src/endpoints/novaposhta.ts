@@ -7,6 +7,7 @@ export const fetchCities = async (query: string) => {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken(),
         },
+        credentials: 'include',
         body: JSON.stringify({ methodProperties: { FindByString: query } }),
     })
     const data = await res.json()
@@ -20,6 +21,7 @@ export const fetchWarehouses = async (cityRef: string, excludePoshtomats?: boole
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken(),
         },
+        credentials: 'include',
         body: JSON.stringify({ methodProperties: { CityRef: cityRef } }),
     })
     const data = await res.json()
