@@ -95,17 +95,17 @@ else:
         }
     }
 
-CSRF_COOKIE_SECURE = not IS_DEV  # Set to False for local development (if not using HTTPS)
-CSRF_COOKIE_HTTPONLY = not IS_DEV   # Allow JavaScript to read the CSRF cookie
-CSRF_COOKIE_SAMESITE = 'Strict'  # 'Lax' allows the cookie to be sent in same-site requests
+CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_HTTPONLY = False
+CSRF_COOKIE_SAMESITE = 'Strict'
+
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'Strict'
 CSRF_TRUSTED_ORIGINS = (
     ['http://127.0.0.1:8000']
     if IS_DEV else
     ['https://genxmatch-9d751e301f5e.herokuapp.com']
-) # Add your local network IP
-
-SESSION_COOKIE_SECURE = not IS_DEV  # Set to False for local development
-SESSION_COOKIE_SAMESITE = 'Strict'
+)
 
 
 # Password validation
