@@ -2,10 +2,33 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 
+from django.utils.translation import gettext_lazy as _
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 LOGIN_URL = '/account/login/'
+LOGIN_REDIRECT_URL = '/'
+
+# ==================== i18n
+LANGUAGE_CODE = 'uk'  # Default fallback
+
+USE_I18N = True
+USE_L10N = True
+USE_TZ = True
+
+# Supported languages
+LANGUAGES = [
+    ('en', _('English')),
+    ('uk', _('Ukrainian')),
+    ('ru', _('Russian')),
+]
+
+# Path where Django stores translation files (.po/.mo)
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+# =========================
 
 load_dotenv()
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
@@ -40,6 +63,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'custom_auth.middlewares.LanguageMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',

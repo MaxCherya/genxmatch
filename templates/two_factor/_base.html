@@ -50,6 +50,16 @@
       <div class="card">{% block content %} {% endblock %}</div>
     </div>
 
+    <div class="d-flex justify-content-center mt-3">
+      <form method="get" id="language-form" style="width: 200px;">
+        <select name="lang" class="form-select" onchange="document.getElementById('language-form').submit();">
+          <option value="eng" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+          <option value="ukr" {% if request.LANGUAGE_CODE == 'uk' %}selected{% endif %}>Українська</option>
+          <option value="rus" {% if request.LANGUAGE_CODE == 'ru' %}selected{% endif %}>Русский</option>
+        </select>
+      </form>
+    </div>      
+
     <!-- Bootstrap JS (optional, for interactive components) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}

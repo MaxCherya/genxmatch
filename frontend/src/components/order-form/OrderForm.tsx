@@ -6,6 +6,7 @@ import UkrainianPhoneInput from './UkrainianPhoneInput'
 import { useTranslation, Trans } from 'react-i18next'
 import { isValidPhoneNumber } from 'react-phone-number-input'
 import { placeAnOrder } from '../../endpoints/orders'
+import { useToast } from '../../contexts/ToastContext'
 
 type OrderFormProps = {
     productId: number
@@ -41,9 +42,11 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const { t } = useTranslation()
     const isDark = theme === 'dark'
 
+    const { addToast } = useToast();
+
     const isValid = {
-        name: name.trim() !== '',
-        surname: surname.trim() !== '',
+        name: name.trim() !== '' && name.length < 255,
+        surname: surname.trim() !== '' && surname.length < 255,
         phone: typeof phone === 'string' && phone.trim() !== '' && isValidPhoneNumber(phone, 'UA'),
         quantity: quantity > 0,
         city: selectedCity !== null,
@@ -60,7 +63,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
         if (!allValid) return
 
         try {
-            const res = await placeAnOrder({
+            await placeAnOrder({
                 item_id: productId,
                 quantity,
                 name,
@@ -71,9 +74,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 delivery_company_id: 1,
                 username
             });
-            console.log('Order placed', res);
+            addToast("✅ Order placed successfully!", 'success');
         } catch (err: any) {
-            console.error("Order failed: ", err.message);
+            addToast("❌ " + (err.message || "Something went wrong"), 'error');
         }
     }
 

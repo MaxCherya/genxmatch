@@ -1,0 +1,115 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-30 10:44+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+
+#: backend/settings.py:21
+msgid "English"
+msgstr "Англійська"
+
+#: backend/settings.py:22
+msgid "Ukrainian"
+msgstr "Українська"
+
+#: backend/settings.py:23
+msgid "Russian"
+msgstr "Російська"
+
+#: orders/views.py:20
+msgid "Suspicious activity"
+msgstr "Підозріла активність"
+
+#: orders/views.py:32
+msgid "All fields are required."
+msgstr "Усі поля є обов’язковими для заповнення."
+
+#: orders/views.py:35
+msgid "Name or surname too long."
+msgstr "Ім’я або прізвище надто довге."
+
+#: orders/views.py:38
+msgid "Invalid phone number."
+msgstr "Недійсний номер телефону."
+
+#: orders/views.py:41
+msgid "Invalid quantity."
+msgstr "Недійсна кількість."
+
+#: orders/views.py:46
+msgid "Invalid item"
+msgstr "Недійсний товар"
+
+#: orders/views.py:51
+msgid "Invalid Delivering Company"
+msgstr "Недійсна служба доставки"
+
+#: orders/views.py:68
+msgid "Server error"
+msgstr "Помилка сервера"
+
+#: templates/two_factor/_base.html:9
+msgid "Two-Factor Authentication"
+msgstr "Двофакторна автентифікація"
+
+#: templates/two_factor/core/login.html:5
+#: templates/two_factor/core/login.html:17
+msgid "Login"
+msgstr "Увійти"
+
+#: templates/two_factor/core/login.html:8
+msgid "Please enter your username and password."
+msgstr "Будь ласка, введіть ім’я користувача та пароль."
+
+#: templates/two_factor/core/login.html:10
+msgid "Please enter your two-factor authentication code."
+msgstr "Будь ласка, введіть код двофакторної автентифікації."
+
+#: templates/two_factor/core/setup.html:2
+msgid "Setup Two-Factor Authentication"
+msgstr "Налаштування двофакторної автентифікації"
+
+#: templates/two_factor/core/setup.html:11
+msgid "Continue"
+msgstr "Продовжити"
+
+#: templates/two_factor/core/setup.html:21
+msgid "Next"
+msgstr "Далі"
+
+#: templates/two_factor/core/setup.html:33
+msgid "QR Code for TOTP Setup"
+msgstr "QR-код для налаштування TOTP"
+
+#: templates/two_factor/core/setup.html:39
+msgid "Error: QR code could not be generated. Please try again."
+msgstr "Помилка: неможливо згенерувати QR-код. Спробуйте ще раз."
+
+#: templates/two_factor/core/setup.html:55
+msgid "Verify"
+msgstr "Підтвердити"
+
+#: templates/two_factor/core/setup.html:60
+msgid "Two-Factor Authentication has been successfully set up!"
+msgstr "Двофакторну автентифікацію успішно налаштовано!"
+
+#: templates/two_factor/core/setup.html:64
+msgid "Finish"
+msgstr "Завершити"

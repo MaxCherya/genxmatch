@@ -1,0 +1,114 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-03-30 10:44+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: backend/settings.py:21
+msgid "English"
+msgstr "Английский"
+
+#: backend/settings.py:22
+msgid "Ukrainian"
+msgstr "Украинский"
+
+#: backend/settings.py:23
+msgid "Russian"
+msgstr "Русский"
+
+#: orders/views.py:20
+msgid "Suspicious activity"
+msgstr "Подозрительная активность"
+
+#: orders/views.py:32
+msgid "All fields are required."
+msgstr "Все поля обязательны для заполнения."
+
+#: orders/views.py:35
+msgid "Name or surname too long."
+msgstr "Имя или фамилия слишком длинные."
+
+#: orders/views.py:38
+msgid "Invalid phone number."
+msgstr "Неверный номер телефона."
+
+#: orders/views.py:41
+msgid "Invalid quantity."
+msgstr "Недопустимое количество."
+
+#: orders/views.py:46
+msgid "Invalid item"
+msgstr "Недопустимый товар"
+
+#: orders/views.py:51
+msgid "Invalid Delivering Company"
+msgstr "Недопустимая служба доставки"
+
+#: orders/views.py:68
+msgid "Server error"
+msgstr "Ошибка сервера"
+
+#: templates/two_factor/_base.html:9
+msgid "Two-Factor Authentication"
+msgstr "Двухфакторная аутентификация"
+
+#: templates/two_factor/core/login.html:5
+#: templates/two_factor/core/login.html:17
+msgid "Login"
+msgstr "Вход"
+
+#: templates/two_factor/core/login.html:8
+msgid "Please enter your username and password."
+msgstr "Пожалуйста, введите имя пользователя и пароль."
+
+#: templates/two_factor/core/login.html:10
+msgid "Please enter your two-factor authentication code."
+msgstr "Пожалуйста, введите код двухфакторной аутентификации."
+
+#: templates/two_factor/core/setup.html:2
+msgid "Setup Two-Factor Authentication"
+msgstr "Настройка двухфакторной аутентификации"
+
+#: templates/two_factor/core/setup.html:11
+msgid "Continue"
+msgstr "Продолжить"
+
+#: templates/two_factor/core/setup.html:21
+msgid "Next"
+msgstr "Далее"
+
+#: templates/two_factor/core/setup.html:33
+msgid "QR Code for TOTP Setup"
+msgstr "QR-код для настройки TOTP"
+
+#: templates/two_factor/core/setup.html:39
+msgid "Error: QR code could not be generated. Please try again."
+msgstr "Ошибка: не удалось сгенерировать QR-код. Пожалуйста, попробуйте снова."
+
+#: templates/two_factor/core/setup.html:55
+msgid "Verify"
+msgstr "Подтвердить"
+
+#: templates/two_factor/core/setup.html:60
+msgid "Two-Factor Authentication has been successfully set up!"
+msgstr "Двухфакторная аутентификация успешно настроена!"
+
+#: templates/two_factor/core/setup.html:64
+msgid "Finish"
+msgstr "Завершить"

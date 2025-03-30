@@ -1,67 +1,70 @@
 {% extends "two_factor/_base.html" %} {% load i18n static %} {% block content %}
-<h1>Setup Two-Factor Authentication</h1>
+<h1>{% trans "Setup Two-Factor Authentication" %}</h1>
 
 {% if wizard.steps.current == 'welcome' %}
 <p>
-  Welcome to Two-Factor Authentication setup! This will add an extra layer of
-  security to your account.
+  {% trans "Welcome to Two-Factor Authentication setup! This will add an extra
+  layer of security to your account." %}
 </p>
 <form method="post">
   {% csrf_token %} {{ wizard.management_form }}
-  <button type="submit" class="btn btn-primary">Continue</button>
+  <button type="submit" class="btn btn-primary">{% trans "Continue" %}</button>
 </form>
 
 {% elif wizard.steps.current == 'method' %}
 <p>
-  Please select your preferred 2FA method. We recommend using an authenticator
-  app (TOTP).
+  {% trans "Please select your preferred 2FA method. We recommend using an
+  authenticator app (TOTP)." %}
 </p>
 <form method="post">
   {% csrf_token %} {{ wizard.management_form }} {{ wizard.form.as_p }}
-  <button type="submit" class="btn btn-primary">Next</button>
+  <button type="submit" class="btn btn-primary">{% trans "Next" %}</button>
 </form>
 
 {% elif wizard.steps.current == 'generator' %}
 <p>
-  Scan the QR code below with your authenticator app (e.g., Google
-  Authenticator, Authy).
+  {% trans "Scan the QR code below with your authenticator app (e.g., Google
+  Authenticator, Authy)." %}
 </p>
 <div class="text-center">
   {% if QR_URL %}
   <img
     src="{{ QR_URL }}"
-    alt="QR Code for TOTP Setup"
+    alt="{% trans 'QR Code for TOTP Setup' %}"
     class="img-fluid mb-3"
     style="max-width: 200px"
   />
   {% else %}
   <p class="text-danger">
-    Error: QR code could not be generated. Please try again.
+    {% trans "Error: QR code could not be generated. Please try again." %}
   </p>
   {% endif %}
 </div>
 <p>
-  If you can't scan the QR code, you can manually enter this code in your app:
+  {% trans "If you can't scan the QR code, you can manually enter this code in
+  your app:" %}
 </p>
 <pre class="bg-light p-2 rounded">{{ secret_key }}</pre>
 
-<p>After scanning, enter the 6-digit code from your authenticator app below:</p>
+<p>
+  {% trans "After scanning, enter the 6-digit code from your authenticator app
+  below:" %}
+</p>
 <form method="post">
   {% csrf_token %} {{ wizard.management_form }} {{ wizard.form.as_p }}
-  <button type="submit" class="btn btn-primary">Verify</button>
+  <button type="submit" class="btn btn-primary">{% trans "Verify" %}</button>
 </form>
 
 {% elif wizard.steps.current == 'valid' %}
 <p class="text-success">
-  Two-Factor Authentication has been successfully set up!
+  {% trans "Two-Factor Authentication has been successfully set up!" %}
 </p>
 <form method="post">
   {% csrf_token %} {{ wizard.management_form }}
-  <button type="submit" class="btn btn-primary">Finish</button>
+  <button type="submit" class="btn btn-primary">{% trans "Finish" %}</button>
 </form>
 {% endif %} {% endblock %} {% block extra_js %}
 <script>
-  // Optional: Add JavaScript to auto-focus the input field for the TOTP code
   document.addEventListener("DOMContentLoaded", function () {
     const tokenInput = document.querySelector('input[name="token"]');
     if (tokenInput) {
