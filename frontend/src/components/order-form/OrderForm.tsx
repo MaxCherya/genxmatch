@@ -16,6 +16,11 @@ type OrderFormProps = {
     currentPrice: number
     oldPrice?: number
     theme?: 'light' | 'dark'
+    itemAntopometryWarning?: boolean
+    itemLength?: number // in cm
+    itemWidth?: number // in cm
+    itemHeight?: number // in cm
+    itemWeight?: number // in kg
 }
 
 const OrderForm: React.FC<OrderFormProps> = ({
@@ -25,7 +30,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
     productImage,
     currentPrice,
     oldPrice,
-    theme = 'light'
+    theme = 'light',
+    itemAntopometryWarning = false,
+    itemLength,
+    itemWidth,
+    itemHeight,
+    itemWeight
 }) => {
     const [quantity, setQuantity] = useState(1)
     const [name, setName] = useState('')
@@ -174,6 +184,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
             {/* Phone */}
             <UkrainianPhoneInput value={phone} onChange={setPhone} theme={theme} showError={submitted} />
 
+            {itemAntopometryWarning ?
+                <div className="w-full p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-md shadow-sm mb-4 text-sm">
+                    <p>
+                        {t('too_big_or_heavy_item_warning')}
+                    </p>
+                </div>
+                : null}
+
             {/* Nova Poshta */}
             <NovaPoshtaSelector
                 excludePoshtomats={true}
@@ -182,6 +200,10 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 setSelectedCity={setSelectedCity}
                 selectedWarehouse={selectedWarehouse}
                 setSelectedWarehouse={setSelectedWarehouse}
+                itemLength={itemLength}
+                itemHeight={itemHeight}
+                itemWidth={itemWidth}
+                itemWeight={itemWeight}
             />
 
             {submitted && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>}

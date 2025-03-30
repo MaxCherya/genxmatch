@@ -39,7 +39,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = IS_DEV
 
-ALLOWED_HOSTS = ['*'] if IS_DEV else ['genxmatch-9d751e301f5e.herokuapp.com']
+ALLOWED_HOSTS = ['*'] if IS_DEV else ['genxmatch-9d751e301f5e.herokuapp.com', 'www.genxmatch.com.ua', 'genxmatch.com.ua']
 
 # Application definition
 
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'custom_auth.middlewares.WwwRedirectMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -10,6 +10,10 @@ type NovaPoshtaSelectorProps = {
     setSelectedCity: (value: any) => void;
     selectedWarehouse: any | null;
     setSelectedWarehouse: (value: any) => void;
+    itemLength?: number; // in cm
+    itemWidth?: number; // in cm
+    itemHeight?: number; // in cm
+    itemWeight?: number; // in kg
 };
 
 const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
@@ -19,6 +23,10 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     setSelectedCity,
     selectedWarehouse,
     setSelectedWarehouse,
+    itemLength,
+    itemWidth,
+    itemHeight,
+    itemWeight
 }) => {
     const [cityQuery, setCityQuery] = useState('');
     const [cities, setCities] = useState<any[]>([]);
@@ -40,11 +48,28 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
 
     useEffect(() => {
         if (selectedCity?.Ref) {
-            fetchWarehouses(selectedCity.Ref, excludePoshtomats).then(setWarehouses);
+            fetchWarehouses(selectedCity.Ref, excludePoshtomats).then((allWarehouses) => {
+                const filtered = allWarehouses.filter((wh: any) => {
+                    const limits = wh.ReceivingLimitationsOnDimensions || {};
+                    const maxLength = limits.Length || Infinity;
+                    const maxWidth = limits.Width || Infinity;
+                    const maxHeight = limits.Height || Infinity;
+                    const maxWeight = parseInt(wh.PlaceMaxWeightAllowed || "0", 10) || Infinity;
+
+                    return (
+                        (!itemLength || itemLength <= maxLength) &&
+                        (!itemWidth || itemWidth <= maxWidth) &&
+                        (!itemHeight || itemHeight <= maxHeight) &&
+                        (!itemWeight || itemWeight <= maxWeight)
+                    );
+                });
+
+                setWarehouses(filtered);
+            });
         } else {
             setWarehouses([]);
         }
-    }, [selectedCity]);
+    }, [selectedCity, itemLength, itemWidth, itemHeight, itemWeight]);
 
     const themeStyles = {
         light: {

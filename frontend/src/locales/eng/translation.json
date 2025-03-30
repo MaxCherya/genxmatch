@@ -65,5 +65,6 @@
     "you_order": "You order",
     "nova_poshta_delivers": "Nova Poshta delivers",
     "you_receive_and_pay": "You receive & pay",
-    "terms_of_delivery": "We operate exclusively via cash on delivery and payment upon receiving the product."
+    "terms_of_delivery": "We operate exclusively via cash on delivery and payment upon receiving the product.",
+    "too_big_or_heavy_item_warning": "The item you're ordering might be too big or heavy for some delivery points. If you can't find your location, please choose one from the available list."
 }

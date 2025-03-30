@@ -297,7 +297,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                     {/* CTA */}
                     <div className="w-full max-w-xl space-y-4">
                         {/* <OrderFeed theme="dark" /> */}
-                        <OrderForm productId={1} productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />} productImage={productImagesHero[0].src} oldPrice={productOldPrice} currentPrice={productNewPrice} theme="dark" />
+                        <OrderForm itemLength={120} itemHeight={10} itemWeight={3} itemWidth={10} itemAntopometryWarning productId={1} productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />} productImage={productImagesHero[0].src} oldPrice={productOldPrice} currentPrice={productNewPrice} theme="dark" />
                     </div>
                 </div>
 
