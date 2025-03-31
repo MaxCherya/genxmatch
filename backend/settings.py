@@ -38,7 +38,7 @@ IS_DEV = ENVIRONMENT == "development"
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = IS_DEV
+DEBUG = True
 
 ALLOWED_HOSTS = ['*'] if IS_DEV else ['genxmatch-9d751e301f5e.herokuapp.com', 'www.genxmatch.com.ua', 'genxmatch.com.ua']
 
@@ -126,6 +126,9 @@ else:
             'PASSWORD': os.getenv("DB_PASSWORD"),
             'HOST': os.getenv("DB_HOST"),
             'PORT': os.getenv("DB_PORT", "5432"),
+            'OPTIONS': {
+                'client_encoding': 'UTF8',
+            },
         }
     }
 
