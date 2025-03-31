@@ -44,6 +44,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [submitted, setSubmitted] = useState(false)
     const [username, setUsername] = useState('')
 
+    const [deliveryCompany, setDeliveryCompany] = useState<'nova_poshta' | 'ukr_poshta'>('nova_poshta')
+
     // Nova Poshta
     const [selectedOblast, setSelectedOblast] = useState<any | null>(null)
     const [selectedCity, setSelectedCity] = useState<any | null>(null)
@@ -195,21 +197,79 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 </div>
                 : null}
 
+            {/* Delivery Company Selection */}
+            <div className="space-y-2">
+                <label className="block mb-1 font-medium">
+                    {t('delivery_company')} <span className="text-red-500">*</span>
+                </label>
+                <div className="gap-4 flex justify-center">
+                    <div className="flex items-center">
+                        <input
+                            type="radio"
+                            id="novaPoshta"
+                            name="delivery"
+                            value="nova_poshta"
+                            checked={deliveryCompany === 'nova_poshta'}
+                            onChange={() => setDeliveryCompany('nova_poshta')}
+                            className={clsx(
+                                'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300',
+                                isDark && 'bg-gray-800'
+                            )}
+                        />
+                        <label
+                            htmlFor="novaPoshta"
+                            className={clsx(
+                                'ml-2 text-sm font-medium',
+                                isDark ? 'text-gray-300' : 'text-gray-700'
+                            )}
+                        >
+                            {t('nova_poshta')}
+                        </label>
+                    </div>
+
+                    <div className="flex items-center">
+                        <input
+                            type="radio"
+                            id="ukrPoshta"
+                            name="delivery"
+                            value="ukr_poshta"
+                            checked={deliveryCompany === 'ukr_poshta'}
+                            onChange={() => setDeliveryCompany('ukr_poshta')}
+                            className={clsx(
+                                'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300',
+                                isDark && 'bg-gray-800'
+                            )}
+                        />
+                        <label
+                            htmlFor="ukrPoshta"
+                            className={clsx(
+                                'ml-2 text-sm font-medium',
+                                isDark ? 'text-gray-300' : 'text-gray-700'
+                            )}
+                        >
+                            {t('ukr_poshta')}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
             {/* Nova Poshta */}
-            <NovaPoshtaSelector
-                excludePoshtomats={true}
-                theme={theme}
-                selectedOblast={selectedOblast}
-                setSelectedOblast={setSelectedOblast}
-                selectedCity={selectedCity}
-                setSelectedCity={setSelectedCity}
-                selectedWarehouse={selectedWarehouse}
-                setSelectedWarehouse={setSelectedWarehouse}
-                itemLength={itemLength}
-                itemHeight={itemHeight}
-                itemWidth={itemWidth}
-                itemWeight={itemWeight}
-            />
+            {deliveryCompany === 'nova_poshta' && (
+                <NovaPoshtaSelector
+                    excludePoshtomats={true}
+                    theme={theme}
+                    selectedOblast={selectedOblast}
+                    setSelectedOblast={setSelectedOblast}
+                    selectedCity={selectedCity}
+                    setSelectedCity={setSelectedCity}
+                    selectedWarehouse={selectedWarehouse}
+                    setSelectedWarehouse={setSelectedWarehouse}
+                    itemLength={itemLength}
+                    itemHeight={itemHeight}
+                    itemWidth={itemWidth}
+                    itemWeight={itemWeight}
+                />
+            )}
 
             {submitted && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>}
             {submitted && !isValid.warehouse && <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>}

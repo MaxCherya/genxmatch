@@ -14,6 +14,7 @@ class OrderAdmin(admin.ModelAdmin):
         'quantity',
         'name',
         'surname',
+        'patronymic',
         'phone_number',
         'oblast',
         'city',
@@ -21,5 +22,5 @@ class OrderAdmin(admin.ModelAdmin):
         'date',
     )
     list_filter = ('date', 'oblast', 'city', 'item')
-    search_fields = ('name', 'surname', 'phone_number', 'oblast', 'city', 'warehouse')
+    search_fields = ('name', 'surname', 'patronymic', 'phone_number', 'oblast', 'city', 'warehouse')
     ordering = ('-date',)

@@ -32,6 +32,7 @@ LOCALE_PATHS = [
 
 load_dotenv()
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
+PGCRYPTO_KEY = os.getenv('PGCRYPTO_KEY')
 IS_DEV = ENVIRONMENT == "development"
 
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -56,7 +57,8 @@ INSTALLED_APPS = [
     'novaposhta',
     'items',
     'orders',
-    'custom_auth'
+    'custom_auth',
+    'pgcrypto',
 ]
 
 MIDDLEWARE = [
@@ -104,9 +106,16 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 if IS_DEV:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'dev',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv('DB_PASSWORD', default='none'),
+        'HOST': 'localhost',
+        'PORT': '5432',
+        'OPTIONS': {
+            'client_encoding': 'UTF8',
+        },
+    }
     }
 else:
     DATABASES = {

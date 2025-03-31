@@ -1,6 +1,7 @@
 from django.db import models
 from items.models import Item
 from django.contrib.auth.models import User
+from pgcrypto.fields import TextPGPSymmetricKeyField
 
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255)
@@ -20,12 +21,14 @@ class Order(models.Model):
     item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='orders')
     quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
-    name = models.CharField(max_length=255)
-    surname = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
+    name = TextPGPSymmetricKeyField(max_length=255)
+    surname = TextPGPSymmetricKeyField(max_length=255)
+    patronymic = TextPGPSymmetricKeyField(max_length=255, null=True, blank=True)
+    phone_number = TextPGPSymmetricKeyField(max_length=255)
     oblast = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255)
     warehouse = models.TextField()
+    notes = models.TextField(null=True, blank=True)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
     order_special_id = models.IntegerField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')

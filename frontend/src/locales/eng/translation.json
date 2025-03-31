@@ -53,7 +53,7 @@
     "your_name": "Your name",
     "surname": "Last Name",
     "your_surname": "Your last name",
-    "deliveryNovaPoshtaInfo": "Delivery: <1>Cash on delivery</1> according to Nova Poshta's rates. Pay upon receipt.",
+    "deliveryNovaPoshtaInfo": "Delivery: <1>Cash on delivery</1> according to post's rates. Pay upon receipt.",
     "amount_due": "Amount due",
     "confirm_order": "Confirm Order",
     "stylish_design": "Stylish Design",
@@ -66,5 +66,10 @@
     "nova_poshta_delivers": "Nova Poshta delivers",
     "you_receive_and_pay": "You receive & pay",
     "terms_of_delivery": "We operate exclusively via cash on delivery and payment upon receiving the product.",
-    "too_big_or_heavy_item_warning": "The item you're ordering might be too big or heavy for some delivery points. If you can't find your location, please choose one from the available list."
+    "too_big_or_heavy_item_warning": "The item you're ordering might be too big or heavy for some delivery points. If you can't find your location, please choose one from the available list.",
+    "Oblast": "Oblast",
+    "select_oblast": "Select Oblast",
+    "delivery_company": "Delivery Company",
+    "nova_poshta": "Nova Poshta",
+    "ukr_poshta": "Ukrposhta"
 }

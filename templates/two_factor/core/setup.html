@@ -1,39 +1,43 @@
-{% extends "two_factor/_base.html" %} {% load i18n static %} {% block content %}
+{% extends "two_factor/_base.html" %}
+{% load i18n static %}
+
+{% block content %}
 <h1>{% trans "Setup Two-Factor Authentication" %}</h1>
 
 {% if wizard.steps.current == 'welcome' %}
 <p>
-  {% trans "Welcome to Two-Factor Authentication setup! This will add an extra
-  layer of security to your account." %}
+  {% blocktrans %}
+  Welcome to Two-Factor Authentication setup! This will add an extra layer of security to your account.
+  {% endblocktrans %}
 </p>
 <form method="post">
-  {% csrf_token %} {{ wizard.management_form }}
+  {% csrf_token %}
+  {{ wizard.management_form }}
   <button type="submit" class="btn btn-primary">{% trans "Continue" %}</button>
 </form>
 
 {% elif wizard.steps.current == 'method' %}
 <p>
-  {% trans "Please select your preferred 2FA method. We recommend using an
-  authenticator app (TOTP)." %}
+  {% blocktrans %}
+  Please select your preferred 2FA method. We recommend using an authenticator app (TOTP).
+  {% endblocktrans %}
 </p>
 <form method="post">
-  {% csrf_token %} {{ wizard.management_form }} {{ wizard.form.as_p }}
+  {% csrf_token %}
+  {{ wizard.management_form }}
+  {{ wizard.form.as_p }}
   <button type="submit" class="btn btn-primary">{% trans "Next" %}</button>
 </form>
 
 {% elif wizard.steps.current == 'generator' %}
 <p>
-  {% trans "Scan the QR code below with your authenticator app (e.g., Google
-  Authenticator, Authy)." %}
+  {% blocktrans %}
+  Scan the QR code below with your authenticator app (e.g., Google Authenticator, Authy).
+  {% endblocktrans %}
 </p>
 <div class="text-center">
   {% if QR_URL %}
-  <img
-    src="{{ QR_URL }}"
-    alt="{% trans 'QR Code for TOTP Setup' %}"
-    class="img-fluid mb-3"
-    style="max-width: 200px"
-  />
+  <img src="{{ QR_URL }}" alt="{% trans 'QR Code for TOTP Setup' %}" class="img-fluid mb-3" style="max-width: 200px" />
   {% else %}
   <p class="text-danger">
     {% trans "Error: QR code could not be generated. Please try again." %}
@@ -41,17 +45,21 @@
   {% endif %}
 </div>
 <p>
-  {% trans "If you can't scan the QR code, you can manually enter this code in
-  your app:" %}
+  {% blocktrans %}
+  If you can't scan the QR code, you can manually enter this code in your app:
+  {% endblocktrans %}
 </p>
 <pre class="bg-light p-2 rounded">{{ secret_key }}</pre>
 
 <p>
-  {% trans "After scanning, enter the 6-digit code from your authenticator app
-  below:" %}
+  {% blocktrans %}
+  After scanning, enter the 6-digit code from your authenticator app below:
+  {% endblocktrans %}
 </p>
 <form method="post">
-  {% csrf_token %} {{ wizard.management_form }} {{ wizard.form.as_p }}
+  {% csrf_token %}
+  {{ wizard.management_form }}
+  {{ wizard.form.as_p }}
   <button type="submit" class="btn btn-primary">{% trans "Verify" %}</button>
 </form>
 
@@ -60,10 +68,14 @@
   {% trans "Two-Factor Authentication has been successfully set up!" %}
 </p>
 <form method="post">
-  {% csrf_token %} {{ wizard.management_form }}
+  {% csrf_token %}
+  {{ wizard.management_form }}
   <button type="submit" class="btn btn-primary">{% trans "Finish" %}</button>
 </form>
-{% endif %} {% endblock %} {% block extra_js %}
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     const tokenInput = document.querySelector('input[name="token"]');

@@ -104,14 +104,14 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     return (
         <div className="space-y-6">
             <div>
-                <label className="block font-medium mb-1">{t('region')} <span className="text-red-500">*</span></label>
+                <label className="block font-medium mb-1">{t('Oblast')} <span className="text-red-500">*</span></label>
                 <select
                     className={clsx(
                         'w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500',
                         currentTheme.input
                     )}
                     value={selectedOblast?.Ref || ''}
-                    onChange={(e) => {
+                    onChange={(e: any) => {
                         const selected = oblasts.find((o) => o.Ref === e.target.value);
                         setSelectedOblast(selected || null);
                         setCityQuery('');
@@ -119,7 +119,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
                         setSelectedWarehouse(null);
                     }}
                 >
-                    <option value="">{t('select_region')}</option>
+                    <option value="">{t('select_oblast')}</option>
                     {oblasts.map((ob, idx) => (
                         <option key={idx} value={ob.Ref}>
                             {ob.Description}

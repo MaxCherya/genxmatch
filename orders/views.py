@@ -23,6 +23,7 @@ def place_an_order(request):
         quantity = int(data.get("quantity", 1))
         name = data.get("name", "").strip()
         surname = data.get("surname", "").strip()
+        patronymic = data.get("patronymic", "").strip()
         phone = data.get("phone")
         oblast = data.get("oblast")
         city = data.get("city")
@@ -34,6 +35,9 @@ def place_an_order(request):
         
         if len(name) > 255 or len(surname) > 255:
             return JsonResponse({"error": _("Name or surname too long.")}, status=400)
+        
+        if len(patronymic) > 255:
+            return JsonResponse({'error': _("Patronymic is too long.")}, status=400)
         
         if len(oblast) > 255 or len(city) > 255:
             return JsonResponse({"error": _("Oblast or city names are too long.")}, status=400)
