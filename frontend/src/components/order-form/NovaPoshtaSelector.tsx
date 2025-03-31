@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
-import { fetchCities, fetchWarehouses } from '../../endpoints/novaposhta';
+import { fetchCities, fetchOblasts, fetchWarehouses } from '../../endpoints/novaposhta';
 import { useTranslation, Trans } from "react-i18next";
 
 type NovaPoshtaSelectorProps = {
     theme?: 'light' | 'dark';
     excludePoshtomats?: boolean;
+    selectedOblast: any | null;
+    setSelectedOblast: (value: any) => void;
     selectedCity: any | null;
     setSelectedCity: (value: any) => void;
     selectedWarehouse: any | null;
@@ -19,6 +21,8 @@ type NovaPoshtaSelectorProps = {
 const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     theme = 'light',
     excludePoshtomats = false,
+    selectedOblast,
+    setSelectedOblast,
     selectedCity,
     setSelectedCity,
     selectedWarehouse,
@@ -28,6 +32,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     itemHeight,
     itemWeight
 }) => {
+    const [oblasts, setOblasts] = useState<any[]>([]);
     const [cityQuery, setCityQuery] = useState('');
     const [cities, setCities] = useState<any[]>([]);
     const [warehouses, setWarehouses] = useState<any[]>([]);
@@ -35,16 +40,24 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     const { t } = useTranslation();
 
     useEffect(() => {
+        fetchOblasts().then(setOblasts);
+    }, []);
+
+    useEffect(() => {
         if (cityQuery.length >= 2) {
             const timeout = setTimeout(async () => {
                 const results = await fetchCities(cityQuery);
-                setCities(results);
+                const filtered = selectedOblast
+                    ? results.filter((c: any) => c.Area === selectedOblast.Ref)
+                    : results;
+
+                setCities(filtered);
             }, 300);
             return () => clearTimeout(timeout);
         } else {
             setCities([]);
         }
-    }, [cityQuery]);
+    }, [cityQuery, selectedOblast]);
 
     useEffect(() => {
         if (selectedCity?.Ref) {
@@ -90,6 +103,30 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
 
     return (
         <div className="space-y-6">
+            <div>
+                <label className="block font-medium mb-1">{t('region')} <span className="text-red-500">*</span></label>
+                <select
+                    className={clsx(
+                        'w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500',
+                        currentTheme.input
+                    )}
+                    value={selectedOblast?.Ref || ''}
+                    onChange={(e) => {
+                        const selected = oblasts.find((o) => o.Ref === e.target.value);
+                        setSelectedOblast(selected || null);
+                        setCityQuery('');
+                        setSelectedCity(null);
+                        setSelectedWarehouse(null);
+                    }}
+                >
+                    <option value="">{t('select_region')}</option>
+                    {oblasts.map((ob, idx) => (
+                        <option key={idx} value={ob.Ref}>
+                            {ob.Description}
+                        </option>
+                    ))}
+                </select>
+            </div>
             <div>
                 <label className="block font-medium mb-1">{t('city')} <span className="text-red-500">*</span></label>
                 <input

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-30 10:44+0300\n"
+"POT-Creation-Date: 2025-03-31 14:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,95 +18,101 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: backend/settings.py:21
+#: .\backend\settings.py:22
 msgid "English"
 msgstr "English"
 
-#: backend/settings.py:22
+#: .\backend\settings.py:23
 msgid "Ukrainian"
 msgstr "Ukrainian"
 
-#: backend/settings.py:23
+#: .\backend\settings.py:24
 msgid "Russian"
 msgstr "Russian"
 
-#: orders/views.py:20
+#: .\orders\views.py:20
 msgid "Suspicious activity"
 msgstr "Suspicious activity"
 
-#: orders/views.py:32
+#: .\orders\views.py:33
 msgid "All fields are required."
 msgstr "All fields are required."
 
-#: orders/views.py:35
+#: .\orders\views.py:36
 msgid "Name or surname too long."
 msgstr "Name or surname too long."
 
-#: orders/views.py:38
+#: .\orders\views.py:39
+#, fuzzy
+#| msgid "Name or surname too long."
+msgid "Oblast or city names are too long."
+msgstr "Oblast or city names are too long."
+
+#: .\orders\views.py:42
 msgid "Invalid phone number."
 msgstr "Invalid phone number."
 
-#: orders/views.py:41
+#: .\orders\views.py:45
 msgid "Invalid quantity."
 msgstr "Invalid quantity."
 
-#: orders/views.py:46
+#: .\orders\views.py:50
 msgid "Invalid item"
 msgstr "Invalid item"
 
-#: orders/views.py:51
+#: .\orders\views.py:55
 msgid "Invalid Delivering Company"
 msgstr "Invalid Delivering Company"
 
-#: orders/views.py:68
+#: .\orders\views.py:72
 msgid "Server error"
 msgstr "Server error"
 
-#: templates/two_factor/_base.html:9
+#: .\templates\two_factor\_base.html:9
 msgid "Two-Factor Authentication"
 msgstr "Two-Factor Authentication"
 
-#: templates/two_factor/core/login.html:5
-#: templates/two_factor/core/login.html:17
+#: .\templates\two_factor\core\login.html:5
+#: .\templates\two_factor\core\login.html:17
 msgid "Login"
 msgstr "Login"
 
-#: templates/two_factor/core/login.html:8
+#: .\templates\two_factor\core\login.html:8
 msgid "Please enter your username and password."
 msgstr "Please enter your username and password."
 
-#: templates/two_factor/core/login.html:10
+#: .\templates\two_factor\core\login.html:10
 msgid "Please enter your two-factor authentication code."
 msgstr "Please enter your two-factor authentication code."
 
-#: templates/two_factor/core/setup.html:2
+#: .\templates\two_factor\core\setup.html:2
 msgid "Setup Two-Factor Authentication"
 msgstr "Setup Two-Factor Authentication"
 
-#: templates/two_factor/core/setup.html:11
+#: .\templates\two_factor\core\setup.html:11
 msgid "Continue"
 msgstr "Continue"
 
-#: templates/two_factor/core/setup.html:21
+#: .\templates\two_factor\core\setup.html:21
 msgid "Next"
 msgstr "Next"
 
-#: templates/two_factor/core/setup.html:33
+#: .\templates\two_factor\core\setup.html:33
 msgid "QR Code for TOTP Setup"
 msgstr "QR Code for TOTP Setup"
 
-#: templates/two_factor/core/setup.html:39
+#: .\templates\two_factor\core\setup.html:39
 msgid "Error: QR code could not be generated. Please try again."
 msgstr "Error: QR code could not be generated. Please try again."
 
-#: templates/two_factor/core/setup.html:55
+#: .\templates\two_factor\core\setup.html:55
 msgid "Verify"
 msgstr "Verify"
 
-#: templates/two_factor/core/setup.html:60
+#: .\templates\two_factor\core\setup.html:60
 msgid "Two-Factor Authentication has been successfully set up!"
 msgstr "Two-Factor Authentication has been successfully set up!"
 
-#: templates/two_factor/core/setup.html:64
+#: .\templates\two_factor\core\setup.html:64
 msgid "Finish"
 msgstr "Finish"

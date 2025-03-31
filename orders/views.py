@@ -24,15 +24,19 @@ def place_an_order(request):
         name = data.get("name", "").strip()
         surname = data.get("surname", "").strip()
         phone = data.get("phone")
+        oblast = data.get("oblast")
         city = data.get("city")
         warehouse = data.get("warehouse")
         delivery_company_id = data.get("delivery_company_id")
 
-        if not all([item_id, quantity, name, surname, phone, city, warehouse, delivery_company_id]):
+        if not all([item_id, quantity, name, surname, phone, oblast, city, warehouse, delivery_company_id]):
             return JsonResponse({"error": _("All fields are required.")}, status=400)
         
         if len(name) > 255 or len(surname) > 255:
             return JsonResponse({"error": _("Name or surname too long.")}, status=400)
+        
+        if len(oblast) > 255 or len(city) > 255:
+            return JsonResponse({"error": _("Oblast or city names are too long.")}, status=400)
 
         if not phone or len(phone) < 10 or len(phone) > 20:
             return JsonResponse({"error": _("Invalid phone number.")}, status=400)
@@ -56,6 +60,7 @@ def place_an_order(request):
             name=name,
             surname=surname,
             phone_number=phone,
+            oblast=oblast,
             city=city,
             warehouse=warehouse,
             delivery_company=delivery_company,

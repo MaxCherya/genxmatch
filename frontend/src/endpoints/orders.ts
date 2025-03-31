@@ -6,6 +6,7 @@ type OrderPayload = {
     name: string
     surname: string
     phone: string
+    oblast: string
     city: string
     warehouse: string
     delivery_company_id: number

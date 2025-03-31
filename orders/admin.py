@@ -15,10 +15,11 @@ class OrderAdmin(admin.ModelAdmin):
         'name',
         'surname',
         'phone_number',
+        'oblast',
         'city',
         'warehouse',
         'date',
     )
-    list_filter = ('date', 'city', 'item')
-    search_fields = ('name', 'surname', 'phone_number', 'city', 'warehouse')
+    list_filter = ('date', 'oblast', 'city', 'item')
+    search_fields = ('name', 'surname', 'phone_number', 'oblast', 'city', 'warehouse')
     ordering = ('-date',)

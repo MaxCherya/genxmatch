@@ -45,6 +45,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [username, setUsername] = useState('')
 
     // Nova Poshta
+    const [selectedOblast, setSelectedOblast] = useState<any | null>(null)
     const [selectedCity, setSelectedCity] = useState<any | null>(null)
     const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null)
 
@@ -59,6 +60,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
         surname: surname.trim() !== '' && surname.length < 255,
         phone: typeof phone === 'string' && phone.trim() !== '' && isValidPhoneNumber(phone, 'UA'),
         quantity: quantity > 0,
+        oblast: selectedOblast !== null,
         city: selectedCity !== null,
         warehouse: selectedWarehouse !== null,
     };
@@ -79,6 +81,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 name,
                 surname,
                 phone: phone as string,
+                oblast: selectedOblast.Description,
                 city: selectedCity.Description,
                 warehouse: selectedWarehouse.Description,
                 delivery_company_id: 1,
@@ -196,6 +199,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
             <NovaPoshtaSelector
                 excludePoshtomats={true}
                 theme={theme}
+                selectedOblast={selectedOblast}
+                setSelectedOblast={setSelectedOblast}
                 selectedCity={selectedCity}
                 setSelectedCity={setSelectedCity}
                 selectedWarehouse={selectedWarehouse}

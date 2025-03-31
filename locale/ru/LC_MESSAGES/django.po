@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-30 10:44+0300\n"
+"POT-Creation-Date: 2025-03-31 14:40+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,95 +20,101 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: backend/settings.py:21
+#: .\backend\settings.py:22
 msgid "English"
 msgstr "Английский"
 
-#: backend/settings.py:22
+#: .\backend\settings.py:23
 msgid "Ukrainian"
 msgstr "Украинский"
 
-#: backend/settings.py:23
+#: .\backend\settings.py:24
 msgid "Russian"
 msgstr "Русский"
 
-#: orders/views.py:20
+#: .\orders\views.py:20
 msgid "Suspicious activity"
 msgstr "Подозрительная активность"
 
-#: orders/views.py:32
+#: .\orders\views.py:33
 msgid "All fields are required."
 msgstr "Все поля обязательны для заполнения."
 
-#: orders/views.py:35
+#: .\orders\views.py:36
 msgid "Name or surname too long."
 msgstr "Имя или фамилия слишком длинные."
 
-#: orders/views.py:38
+#: .\orders\views.py:39
+#, fuzzy
+#| msgid "Name or surname too long."
+msgid "Oblast or city names are too long."
+msgstr "Название области или города слишком длинное."
+
+#: .\orders\views.py:42
 msgid "Invalid phone number."
 msgstr "Неверный номер телефона."
 
-#: orders/views.py:41
+#: .\orders\views.py:45
 msgid "Invalid quantity."
 msgstr "Недопустимое количество."
 
-#: orders/views.py:46
+#: .\orders\views.py:50
 msgid "Invalid item"
 msgstr "Недопустимый товар"
 
-#: orders/views.py:51
+#: .\orders\views.py:55
 msgid "Invalid Delivering Company"
 msgstr "Недопустимая служба доставки"
 
-#: orders/views.py:68
+#: .\orders\views.py:72
 msgid "Server error"
 msgstr "Ошибка сервера"
 
-#: templates/two_factor/_base.html:9
+#: .\templates\two_factor\_base.html:9
 msgid "Two-Factor Authentication"
 msgstr "Двухфакторная аутентификация"
 
-#: templates/two_factor/core/login.html:5
-#: templates/two_factor/core/login.html:17
+#: .\templates\two_factor\core\login.html:5
+#: .\templates\two_factor\core\login.html:17
 msgid "Login"
 msgstr "Вход"
 
-#: templates/two_factor/core/login.html:8
+#: .\templates\two_factor\core\login.html:8
 msgid "Please enter your username and password."
 msgstr "Пожалуйста, введите имя пользователя и пароль."
 
-#: templates/two_factor/core/login.html:10
+#: .\templates\two_factor\core\login.html:10
 msgid "Please enter your two-factor authentication code."
 msgstr "Пожалуйста, введите код двухфакторной аутентификации."
 
-#: templates/two_factor/core/setup.html:2
+#: .\templates\two_factor\core\setup.html:2
 msgid "Setup Two-Factor Authentication"
 msgstr "Настройка двухфакторной аутентификации"
 
-#: templates/two_factor/core/setup.html:11
+#: .\templates\two_factor\core\setup.html:11
 msgid "Continue"
 msgstr "Продолжить"
 
-#: templates/two_factor/core/setup.html:21
+#: .\templates\two_factor\core\setup.html:21
 msgid "Next"
 msgstr "Далее"
 
-#: templates/two_factor/core/setup.html:33
+#: .\templates\two_factor\core\setup.html:33
 msgid "QR Code for TOTP Setup"
 msgstr "QR-код для настройки TOTP"
 
-#: templates/two_factor/core/setup.html:39
+#: .\templates\two_factor\core\setup.html:39
 msgid "Error: QR code could not be generated. Please try again."
 msgstr "Ошибка: не удалось сгенерировать QR-код. Пожалуйста, попробуйте снова."
 
-#: templates/two_factor/core/setup.html:55
+#: .\templates\two_factor\core\setup.html:55
 msgid "Verify"
 msgstr "Подтвердить"
 
-#: templates/two_factor/core/setup.html:60
+#: .\templates\two_factor\core\setup.html:60
 msgid "Two-Factor Authentication has been successfully set up!"
 msgstr "Двухфакторная аутентификация успешно настроена!"
 
-#: templates/two_factor/core/setup.html:64
+#: .\templates\two_factor\core\setup.html:64
 msgid "Finish"
 msgstr "Завершить"

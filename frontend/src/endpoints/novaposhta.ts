@@ -1,5 +1,19 @@
 import { getCSRFToken } from "../utils/csrf"
 
+export const fetchOblasts = async () => {
+    const res = await fetch('/api/np/oblasts/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        credentials: 'include',
+        body: JSON.stringify({}),
+    });
+    const data = await res.json();
+    return data.data || [];
+};
+
 export const fetchCities = async (query: string) => {
     const res = await fetch('/api/np/cities/', {
         method: 'POST',

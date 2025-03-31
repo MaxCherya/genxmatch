@@ -23,6 +23,7 @@ class Order(models.Model):
     name = models.CharField(max_length=255)
     surname = models.CharField(max_length=255)
     phone_number = models.CharField(max_length=255)
+    oblast = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255)
     warehouse = models.TextField()
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
