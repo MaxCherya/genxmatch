@@ -127,41 +127,43 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
                     ))}
                 </select>
             </div>
-            <div>
-                <label className="block font-medium mb-1">{t('city')} <span className="text-red-500">*</span></label>
-                <input
-                    type="text"
-                    className={clsx(
-                        'w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500',
-                        currentTheme.input
+            {selectedOblast ?
+                <div>
+                    <label className="block font-medium mb-1">{t('city')} <span className="text-red-500">*</span></label>
+                    <input
+                        type="text"
+                        className={clsx(
+                            'w-full border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500',
+                            currentTheme.input
+                        )}
+                        placeholder={t('enter_city_name')}
+                        value={cityQuery}
+                        onChange={(e) => {
+                            setCityQuery(e.target.value);
+                            setSelectedCity(null);
+                            setWarehouses([]);
+                            setSelectedWarehouse(null);
+                        }}
+                    />
+                    {cities.length > 0 && !selectedCity && (
+                        <ul className={clsx('border mt-2 rounded-lg max-h-48 overflow-y-auto', currentTheme.dropdown)}>
+                            {cities.map((city, idx) => (
+                                <li
+                                    key={idx}
+                                    className={clsx('px-4 py-2 cursor-pointer', currentTheme.hover)}
+                                    onClick={() => {
+                                        setSelectedCity(city);
+                                        setCityQuery(city.Description);
+                                        setCities([]);
+                                    }}
+                                >
+                                    {city.Description}
+                                </li>
+                            ))}
+                        </ul>
                     )}
-                    placeholder={t('enter_city_name')}
-                    value={cityQuery}
-                    onChange={(e) => {
-                        setCityQuery(e.target.value);
-                        setSelectedCity(null);
-                        setWarehouses([]);
-                        setSelectedWarehouse(null);
-                    }}
-                />
-                {cities.length > 0 && !selectedCity && (
-                    <ul className={clsx('border mt-2 rounded-lg max-h-48 overflow-y-auto', currentTheme.dropdown)}>
-                        {cities.map((city, idx) => (
-                            <li
-                                key={idx}
-                                className={clsx('px-4 py-2 cursor-pointer', currentTheme.hover)}
-                                onClick={() => {
-                                    setSelectedCity(city);
-                                    setCityQuery(city.Description);
-                                    setCities([]);
-                                }}
-                            >
-                                {city.Description}
-                            </li>
-                        ))}
-                    </ul>
-                )}
-            </div>
+                </div>
+                : null}
 
             {selectedCity && (
                 <div>

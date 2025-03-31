@@ -7,6 +7,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import { isValidPhoneNumber } from 'react-phone-number-input'
 import { placeAnOrder } from '../../endpoints/orders'
 import { useToast } from '../../contexts/ToastContext'
+import UkrPoshtaSelector from './UkrPoshtaSelector'
 
 type OrderFormProps = {
     productId: number
@@ -50,6 +51,10 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [selectedOblast, setSelectedOblast] = useState<any | null>(null)
     const [selectedCity, setSelectedCity] = useState<any | null>(null)
     const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null)
+
+    // Ukrposhta
+    const [index, setSelectedIndex] = useState<any | null>(null)
+    const [patronymic, setPatronymic] = useState<any | null>(null)
 
     const total = currentPrice * quantity
     const { t } = useTranslation()
@@ -253,6 +258,13 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 </div>
             </div>
 
+            {/* Ukrposhta */}
+            {
+                deliveryCompany === 'ukr_poshta' && (
+                    <UkrPoshtaSelector patronymic={patronymic} setPatronymic={setPatronymic} city={selectedCity} setCity={setSelectedCity} index={index} setIndex={setSelectedIndex} theme='dark' />
+                )
+            }
+
             {/* Nova Poshta */}
             {deliveryCompany === 'nova_poshta' && (
                 <NovaPoshtaSelector
@@ -271,8 +283,10 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 />
             )}
 
+            {submitted && deliveryCompany === 'ukr_poshta' && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_zip_code')}</p>}
+            {submitted && deliveryCompany === 'nova_poshta' && !isValid.oblast && <p className="text-sm text-red-500 mt-1">{t('select_oblast')}</p>}
             {submitted && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>}
-            {submitted && !isValid.warehouse && <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>}
+            {submitted && deliveryCompany === 'nova_poshta' && !isValid.warehouse && <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>}
 
             {/* Delivery note */}
             <p className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-600')}>

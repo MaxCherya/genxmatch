@@ -71,5 +71,10 @@
     "select_oblast": "Select Oblast",
     "delivery_company": "Delivery Company",
     "nova_poshta": "Nova Poshta",
-    "ukr_poshta": "Ukrposhta"
+    "ukr_poshta": "Ukrposhta",
+    "patronymic": "Patronymic",
+    "enter_patronymic": "Enter your patronymic",
+    "your_patronymic_required_by_delivery_company": "We need your patronymic to send package through the Ukrposhta company.",
+    "zip_code": "Zip Code",
+    "enter_zip_code": "Enter Zip Code"
 }

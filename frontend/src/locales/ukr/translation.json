@@ -71,5 +71,10 @@
     "select_oblast": "Оберіть область",
     "delivery_company": "Компанія Доставки",
     "nova_poshta": "Нова Пошта",
-    "ukr_poshta": "Укрпошта"
+    "ukr_poshta": "Укрпошта",
+    "patronymic": "По батькові",
+    "enter_patronymic": "Введіть по батькові",
+    "your_patronymic_required_by_delivery_company": "Нам потрібне ваше по батькові, щоб відправити посилку через Укрпошту.",
+    "zip_code": "Поштовий індекс",
+    "enter_zip_code": "Введіть поштовий індекс"
 }
