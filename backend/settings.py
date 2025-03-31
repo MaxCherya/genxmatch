@@ -38,7 +38,7 @@ IS_DEV = ENVIRONMENT == "development"
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = IS_DEV
 
 ALLOWED_HOSTS = ['*'] if IS_DEV else ['genxmatch-9d751e301f5e.herokuapp.com', 'www.genxmatch.com.ua', 'genxmatch.com.ua']
 
