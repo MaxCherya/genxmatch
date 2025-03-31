@@ -74,4 +74,7 @@ def place_an_order(request):
         return JsonResponse({'success': True, "order_id": order.order_special_id}, status=201)
     
     except Exception as e:
+        import traceback
+        print("[ERROR] Exception in place_an_order:", e)
+        traceback.print_exc()  # This prints the full stack trace to logs
         return JsonResponse({"error": _("Server error")}, status=500)
