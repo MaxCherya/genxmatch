@@ -9,6 +9,7 @@ import { placeAnOrder, signOrder } from '../../endpoints/orders'
 import { useToast } from '../../contexts/ToastContext'
 import UkrPoshtaSelector from './UkrPoshtaSelector'
 import { useNavigate } from "react-router-dom";
+import LoadingSpinner from '../general/LoadingSpinner'
 
 type OrderFormProps = {
     productId: number
@@ -50,6 +51,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [username, setUsername] = useState('')
     const [note, setNote] = useState('');
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const [deliveryCompany, setDeliveryCompany] = useState<'nova_poshta' | 'ukr_poshta'>('nova_poshta')
 
     // Nova Poshta
@@ -75,7 +78,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
         surname: surname.trim() !== '' && surname.length < 255,
         phone: typeof phone === 'string' && phone.trim() !== '' && isValidPhoneNumber(phone, 'UA'),
         quantity: quantity > 0,
-        // Conditional checks based on delivery method
         ...(isUkrPoshta && {
             patronymic: patronymic.trim() !== '' && patronymic.length < 255,
             index: index.trim() !== '' && index.length < 15,
@@ -106,6 +108,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
         });
 
         try {
+            setIsLoading(true)
             const response = await placeAnOrder({
                 item_id: productId,
                 quantity,
@@ -126,6 +129,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
             navigate("/order-confirmation", { state: { orderId: response.order_id } });
         } catch (err: any) {
             addToast("❌ " + (err.message || "Something went wrong"), 'error');
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -360,10 +365,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 <PriceTag current={total} currency="₴" size="md" />
             </div>
 
+            <LoadingSpinner isLoading={isLoading} />
+
             {/* Submit */}
             <button
                 onClick={handleSubmit}
-                className="w-full bg-green-600 text-white rounded py-1 font-medium hover:bg-green-700 transition"
+                className="cursor-pointer w-full bg-green-600 text-white rounded py-1 font-medium hover:bg-green-700 transition"
             >
                 {t('confirm_order')}
             </button>
