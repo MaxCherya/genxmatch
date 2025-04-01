@@ -1,4 +1,5 @@
 import { getCSRFToken } from "../utils/csrf"
+import i18n from "../utils/i18n"
 
 type OrderPayload = {
     item_id: number
@@ -24,6 +25,7 @@ export const placeAnOrder = async (orderData: OrderPayload) => {
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken(),
+            'X-Language': i18n.language,
         },
         body: JSON.stringify(orderData),
     })
@@ -46,6 +48,7 @@ export const signOrder = async ({
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': getCSRFToken(),
+            'X-Language': i18n.language,
         },
         body: JSON.stringify({ item_id, quantity, timestamp }),
     });
