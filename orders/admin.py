@@ -1,5 +1,10 @@
 from django.contrib import admin
-from .models import Order, DeliveryCompany
+from .models import Order, DeliveryCompany, NotificationOrdersEmails
+
+@admin.register(NotificationOrdersEmails)
+class DeliveryCompanyAdmin(admin.ModelAdmin):
+    list_display = ('id', 'email')
+    search_fields = ('email',)
 
 @admin.register(DeliveryCompany)
 class DeliveryCompanyAdmin(admin.ModelAdmin):

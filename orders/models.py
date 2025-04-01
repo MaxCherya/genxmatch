@@ -3,6 +3,12 @@ from items.models import Item
 from django.contrib.auth.models import User
 from pgcrypto.fields import TextPGPSymmetricKeyField
 
+class NotificationOrdersEmails(models.Model):
+    email = TextPGPSymmetricKeyField(max_length=255)
+
+    def __str__(self):
+        return self.email
+
 class DeliveryCompany(models.Model):
     name = models.CharField(max_length=255)
 

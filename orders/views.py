@@ -2,7 +2,7 @@ from django_ratelimit.decorators import ratelimit
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.conf import settings
-from .utils import verify_signature
+from .utils import verify_signature, send_notification_email
 import hashlib
 import hmac
 import json
@@ -23,10 +23,8 @@ def sign_order(request):
         message = f"{item_id}:{quantity}:{timestamp}".encode("utf-8")
         secret = settings.HMAC_SECRET_KEY.encode("utf-8")
         signature = hmac.new(secret, message, hashlib.sha256).hexdigest()
-
         return JsonResponse({"signature": signature})
     except Exception as e:
-        print("[SIGNATURE ERROR]", e)
         return JsonResponse({"error": "Failed to sign"}, status=400)
 
 @require_POST
@@ -127,6 +125,8 @@ def place_an_order(request):
                 customer_notes=customer_notes,
                 total_price_uah=item.price_uah * quantity
             )
+
+        send_notification_email(order)
 
         return JsonResponse({'success': True, "order_id": order.order_special_id}, status=201)
     
