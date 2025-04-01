@@ -1,7 +1,7 @@
 from django.conf import settings
-from .models import NotificationOrdersEmails
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
+from django.contrib.auth.models import Group
 import hashlib
 import hmac
 import time
@@ -24,7 +24,12 @@ def verify_signature(item_id, quantity, timestamp, provided_signature, max_age_s
         return False
     
 def send_notification_email(order):
-    recipient_emails = [entry.email for entry in NotificationOrdersEmails.objects.all()]
+    try:
+        orders_dep_group = Group.objects.get(name="Orders Dep")
+    except Group.DoesNotExist:
+        return
+
+    recipient_emails = [user.email for user in orders_dep_group.user_set.all() if user.email]
     if not recipient_emails:
         return
 
