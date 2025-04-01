@@ -79,5 +79,10 @@
     "enter_zip_code": "Enter Zip Code",
     "order_notes": "Order notes",
     "optional": "optional",
-    "enter_optional_note": "Enter any special instructions (optional)"
+    "enter_optional_note": "Enter any special instructions (optional)",
+    "oops_no_order_details": "Oops, No Order Found!",
+    "we_couldnt_retrieve_your_orders_details": "It seems we couldn’t retrieve your order details. Please try again or contact support.",
+    "order_confirmed_title": "Your Order is Confirmed!",
+    "order_success_text": "Thank you for your order! Your order number is <strong>#{{order}}</strong>.",
+    "order_success_note": "We might contact you if there are any questions about delivery. Otherwise, expect a message from the delivery service with tracking details."
 }

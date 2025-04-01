@@ -7,6 +7,7 @@ import NotFound from "./pages/general/NotFound/NotFound";
 // one-page stores
 import FloorLampRGB from "./pages/one-page/FloorLampRGB";
 import Navbar from "./components/navbar/Navbar";
+import OrderConfirmation from "./pages/general/OrderConfirmation/OrderConfirmation";
 
 const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -17,6 +18,7 @@ const App: React.FC = () => {
       <Routes>
         <Route path="*" element={<NotFound />} />
         <Route path="/one-page/floor-lamp-rgb" element={<FloorLampRGB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
       </Routes>
     </Router>
   );

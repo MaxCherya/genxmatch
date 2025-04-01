@@ -8,6 +8,7 @@ import { isValidPhoneNumber } from 'react-phone-number-input'
 import { placeAnOrder } from '../../endpoints/orders'
 import { useToast } from '../../contexts/ToastContext'
 import UkrPoshtaSelector from './UkrPoshtaSelector'
+import { useNavigate } from "react-router-dom";
 
 type OrderFormProps = {
     productId: number
@@ -38,6 +39,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
     itemHeight,
     itemWeight
 }) => {
+
+    const navigate = useNavigate();
+
     const [quantity, setQuantity] = useState(1)
     const [name, setName] = useState('')
     const [surname, setSurname] = useState('')
@@ -94,7 +98,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
         if (!allValid) return
 
         try {
-            await placeAnOrder({
+            const response = await placeAnOrder({
                 item_id: productId,
                 quantity,
                 name,
@@ -109,7 +113,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 username,
                 customer_notes: note as string
             });
-            addToast("✅ Order placed successfully!", 'success');
+            navigate("/order-confirmation", { state: { orderId: response.order_id } });
         } catch (err: any) {
             addToast("❌ " + (err.message || "Something went wrong"), 'error');
         }
