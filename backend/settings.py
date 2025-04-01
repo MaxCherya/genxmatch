@@ -64,7 +64,6 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_totp',
     'two_factor',
-    'novaposhta',
     'items',
     'orders',
     'custom_auth',
