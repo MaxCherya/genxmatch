@@ -1,12 +1,33 @@
 from django_ratelimit.decorators import ratelimit
 from django.views.decorators.http import require_POST
 from django.http import JsonResponse
+from django.conf import settings
+from .utils import verify_signature
+import hashlib
+import hmac
 import json
 
 from items.models import Item
 from .models import Order, DeliveryCompany
 
 from django.utils.translation import gettext as _
+
+@require_POST
+def sign_order(request):
+    try:
+        data = json.loads(request.body)
+        item_id = str(data.get("item_id"))
+        quantity = str(data.get("quantity"))
+        timestamp = str(data.get("timestamp"))
+
+        message = f"{item_id}:{quantity}:{timestamp}".encode("utf-8")
+        secret = settings.HMAC_SECRET_KEY.encode("utf-8")
+        signature = hmac.new(secret, message, hashlib.sha256).hexdigest()
+
+        return JsonResponse({"signature": signature})
+    except Exception as e:
+        print("[SIGNATURE ERROR]", e)
+        return JsonResponse({"error": "Failed to sign"}, status=400)
 
 @require_POST
 @ratelimit(key='ip', rate='10/m', block=True)
@@ -31,6 +52,12 @@ def place_an_order(request):
         warehouse = data.get("warehouse")
         delivery_company_id = data.get("delivery_company_id")
         customer_notes = data.get("customer_notes")
+
+        timestamp = data.get("timestamp")
+        signature = data.get("signature")
+
+        if not verify_signature(item_id, quantity, timestamp, signature):
+            return JsonResponse({"error": _('Invalid signature')}, status=403)
 
         if not delivery_company_id:
             return JsonResponse({'error': _('Invalid Delivering Company')})

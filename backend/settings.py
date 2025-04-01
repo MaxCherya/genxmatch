@@ -33,6 +33,8 @@ LOCALE_PATHS = [
 load_dotenv()
 ENVIRONMENT = os.getenv("ENVIRONMENT", "production")
 PGCRYPTO_KEY = os.getenv('PGCRYPTO_KEY')
+HMAC_SECRET_KEY = os.getenv("HMAC_SECRET_KEY")
+
 IS_DEV = ENVIRONMENT == "development"
 
 SECRET_KEY = os.getenv('SECRET_KEY')

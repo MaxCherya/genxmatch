@@ -5,7 +5,7 @@ import clsx from 'clsx'
 import UkrainianPhoneInput from './UkrainianPhoneInput'
 import { useTranslation, Trans } from 'react-i18next'
 import { isValidPhoneNumber } from 'react-phone-number-input'
-import { placeAnOrder } from '../../endpoints/orders'
+import { placeAnOrder, signOrder } from '../../endpoints/orders'
 import { useToast } from '../../contexts/ToastContext'
 import UkrPoshtaSelector from './UkrPoshtaSelector'
 import { useNavigate } from "react-router-dom";
@@ -97,6 +97,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
         const allValid = Object.values(isValid).every(Boolean)
         if (!allValid) return
 
+        const timestamp = Math.floor(Date.now() / 1000);
+
+        const { signature } = await signOrder({
+            item_id: productId,
+            quantity,
+            timestamp,
+        });
+
         try {
             const response = await placeAnOrder({
                 item_id: productId,
@@ -111,6 +119,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 warehouse: isNovaPoshta ? selectedWarehouse.Description : '',
                 delivery_company_id: isNovaPoshta ? 1 : 2,
                 username,
+                timestamp,
+                signature,
                 customer_notes: note as string
             });
             navigate("/order-confirmation", { state: { orderId: response.order_id } });
