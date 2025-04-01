@@ -35,7 +35,7 @@ const UkrPoshtaSelector: React.FC<Props> = ({
     const currentTheme = themeStyles[theme];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 bg-neutral-900 p-4">
             {/* Patronymic */}
             <div>
                 <label className="block font-medium mb-1">

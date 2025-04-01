@@ -44,6 +44,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [phone, setPhone] = useState<string | undefined>()
     const [submitted, setSubmitted] = useState(false)
     const [username, setUsername] = useState('')
+    const [note, setNote] = useState('');
 
     const [deliveryCompany, setDeliveryCompany] = useState<'nova_poshta' | 'ukr_poshta'>('nova_poshta')
 
@@ -53,8 +54,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null)
 
     // Ukrposhta
-    const [index, setSelectedIndex] = useState<any | null>(null)
-    const [patronymic, setPatronymic] = useState<any | null>(null)
+    const [index, setSelectedIndex] = useState('')
+    const [patronymic, setPatronymic] = useState('')
 
     const total = currentPrice * quantity
     const { t } = useTranslation()
@@ -62,14 +63,25 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
     const { addToast } = useToast();
 
+    const isUkrPoshta = deliveryCompany === 'ukr_poshta';
+    const isNovaPoshta = deliveryCompany === 'nova_poshta';
+
     const isValid = {
         name: name.trim() !== '' && name.length < 255,
         surname: surname.trim() !== '' && surname.length < 255,
         phone: typeof phone === 'string' && phone.trim() !== '' && isValidPhoneNumber(phone, 'UA'),
         quantity: quantity > 0,
-        oblast: selectedOblast !== null,
-        city: selectedCity !== null,
-        warehouse: selectedWarehouse !== null,
+        // Conditional checks based on delivery method
+        ...(isUkrPoshta && {
+            patronymic: patronymic.trim() !== '' && patronymic.length < 255,
+            index: index.trim() !== '' && index.length < 15,
+            city: selectedCity && typeof selectedCity === 'string' && selectedCity.trim() !== '',
+        }),
+        ...(isNovaPoshta && {
+            oblast: selectedOblast !== null,
+            city: selectedCity !== null,
+            warehouse: selectedWarehouse !== null,
+        }),
     };
 
     const handleSubmit = async () => {
@@ -87,12 +99,15 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 quantity,
                 name,
                 surname,
+                patronymic,
+                zipcode: index as string,
                 phone: phone as string,
-                oblast: selectedOblast.Description,
-                city: selectedCity.Description,
-                warehouse: selectedWarehouse.Description,
-                delivery_company_id: 1,
-                username
+                oblast: isNovaPoshta ? selectedOblast.Description : '',
+                city: isNovaPoshta ? selectedCity.Description : selectedCity,
+                warehouse: isNovaPoshta ? selectedWarehouse.Description : '',
+                delivery_company_id: isNovaPoshta ? 1 : 2,
+                username,
+                customer_notes: note as string
             });
             addToast("✅ Order placed successfully!", 'success');
         } catch (err: any) {
@@ -194,14 +209,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
             {/* Phone */}
             <UkrainianPhoneInput value={phone} onChange={setPhone} theme={theme} showError={submitted} />
 
-            {itemAntopometryWarning ?
-                <div className="w-full p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-md shadow-sm mb-4 text-sm">
-                    <p>
-                        {t('too_big_or_heavy_item_warning')}
-                    </p>
-                </div>
-                : null}
-
             {/* Delivery Company Selection */}
             <div className="space-y-2">
                 <label className="block mb-1 font-medium">
@@ -215,7 +222,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             name="delivery"
                             value="nova_poshta"
                             checked={deliveryCompany === 'nova_poshta'}
-                            onChange={() => setDeliveryCompany('nova_poshta')}
+                            onChange={() => {
+                                setDeliveryCompany('nova_poshta')
+                                setPatronymic('')
+                                setSelectedIndex('')
+                                setSelectedOblast(null)
+                                setSelectedCity(null)
+                                setSelectedWarehouse(null)
+                            }}
                             className={clsx(
                                 'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300',
                                 isDark && 'bg-gray-800'
@@ -239,7 +253,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             name="delivery"
                             value="ukr_poshta"
                             checked={deliveryCompany === 'ukr_poshta'}
-                            onChange={() => setDeliveryCompany('ukr_poshta')}
+                            onChange={() => {
+                                setDeliveryCompany('ukr_poshta')
+                                setPatronymic('')
+                                setSelectedIndex('')
+                                setSelectedOblast(null)
+                                setSelectedCity(null)
+                                setSelectedWarehouse(null)
+                            }}
                             className={clsx(
                                 'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300',
                                 isDark && 'bg-gray-800'
@@ -265,6 +286,14 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 )
             }
 
+            {itemAntopometryWarning && deliveryCompany === 'nova_poshta' ?
+                <div className="w-full p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-md shadow-sm mb-4 text-sm">
+                    <p>
+                        {t('too_big_or_heavy_item_warning')}
+                    </p>
+                </div>
+                : null}
+
             {/* Nova Poshta */}
             {deliveryCompany === 'nova_poshta' && (
                 <NovaPoshtaSelector
@@ -283,10 +312,28 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 />
             )}
 
+            {submitted && deliveryCompany === 'ukr_poshta' && !isValid.patronymic && <p className="text-sm text-red-500 mt-1">{t('enter_patronymic')}</p>}
             {submitted && deliveryCompany === 'ukr_poshta' && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_zip_code')}</p>}
             {submitted && deliveryCompany === 'nova_poshta' && !isValid.oblast && <p className="text-sm text-red-500 mt-1">{t('select_oblast')}</p>}
             {submitted && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>}
             {submitted && deliveryCompany === 'nova_poshta' && !isValid.warehouse && <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>}
+
+            {/* Order Notes */}
+            <div>
+                <label className="block font-medium mb-1">
+                    {t('order_notes')} <span className="text-gray-400 text-sm">({t('optional')})</span>
+                </label>
+                <textarea
+                    rows={3}
+                    placeholder={t('enter_optional_note')}
+                    value={note}
+                    onChange={(e) => setNote(e.target.value)}
+                    className={clsx(
+                        'w-full border rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500',
+                        isDark ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-black placeholder-gray-500'
+                    )}
+                />
+            </div>
 
             {/* Delivery note */}
             <p className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-600')}>

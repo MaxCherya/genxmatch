@@ -15,12 +15,18 @@ class OrderAdmin(admin.ModelAdmin):
         'name',
         'surname',
         'patronymic',
+        'get_delivery_company_name',
         'phone_number',
         'oblast',
         'city',
         'warehouse',
+        'zipcode',
         'date',
     )
     list_filter = ('date', 'oblast', 'city', 'item')
     search_fields = ('name', 'surname', 'patronymic', 'phone_number', 'oblast', 'city', 'warehouse')
     ordering = ('-date',)
+
+    @admin.display(description='Delivery Company')
+    def get_delivery_company_name(self, obj):
+        return obj.delivery_company.name if obj.delivery_company else "-"

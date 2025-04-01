@@ -102,7 +102,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     const currentTheme = themeStyles[theme];
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 bg-neutral-900 p-4">
             <div>
                 <label className="block font-medium mb-1">{t('Oblast')} <span className="text-red-500">*</span></label>
                 <select

@@ -5,12 +5,15 @@ type OrderPayload = {
     quantity: number
     name: string
     surname: string
+    patronymic?: string
     phone: string
-    oblast: string
+    oblast?: string
     city: string
-    warehouse: string
+    zipcode?: string
+    warehouse?: string
     delivery_company_id: number
     username: any
+    customer_notes?: string
 }
 
 export const placeAnOrder = async (orderData: OrderPayload) => {

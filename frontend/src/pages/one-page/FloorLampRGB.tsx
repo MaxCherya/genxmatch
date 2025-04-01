@@ -1,6 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { Trans } from 'react-i18next';
 import { motion } from "framer-motion";
+import { Element, scroller } from 'react-scroll';
 
 // styles
 import '../../components/styles/AnimatedBGGradient.css'
@@ -17,7 +18,6 @@ import ReviewSlider from "../../components/item-page/ReviewSlider";
 import OrderForm from "../../components/order-form/OrderForm";
 import FeatureSection from "../../components/item-page/FeaturesSection";
 import PicturesSlider from "../../components/item-page/PicturesSlider";
-// import OrderFeed from "../../components/item-page/OrderNotificationOnPage";
 import DeliveryInfo from "../../components/infos/DeliveryInfo";
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
 
@@ -149,7 +149,14 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
 
                             {/* CTA */}
                             <div className="mt-4">
-                                <CTAButton size="md" fullWidth />
+                                <CTAButton onClick={() =>
+                                    scroller.scrollTo('orderFormSection', {
+                                        duration: 800,
+                                        delay: 0,
+                                        smooth: 'easeInOutQuart',
+                                        offset: -20 // Optional: adjust for spacing
+                                    })
+                                } size="md" fullWidth />
                             </div>
                         </div>
                     </div>
@@ -294,15 +301,26 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 </div>
 
                 <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-white">
-                    {/* CTA */}
                     <div className="w-full max-w-xl space-y-4">
-                        {/* <OrderFeed theme="dark" /> */}
-                        <OrderForm itemLength={120} itemHeight={10} itemWeight={3} itemWidth={10} itemAntopometryWarning productId={1} productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />} productImage={productImagesHero[0].src} oldPrice={productOldPrice} currentPrice={productNewPrice} theme="dark" />
+                        <Element name="orderFormSection">
+                            <OrderForm
+                                itemLength={120}
+                                itemHeight={10}
+                                itemWeight={3}
+                                itemWidth={10}
+                                itemAntopometryWarning
+                                productId={1}
+                                productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />}
+                                productImage={productImagesHero[0].src}
+                                oldPrice={productOldPrice}
+                                currentPrice={productNewPrice}
+                                theme="dark"
+                            />
+                        </Element>
                     </div>
                 </div>
 
             </div>
-
         </div>
     );
 }

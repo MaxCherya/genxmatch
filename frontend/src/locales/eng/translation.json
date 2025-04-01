@@ -63,7 +63,7 @@
     "stylish_design_description": "Elevate your interior with a sleek, minimalist design that blends seamlessly into any space. This corner lamp’s elegant black finish and modern angular shape make it a chic statement piece, enhancing your decor while delivering stunning light effects.",
     "delivery_information": "Delivery Information",
     "you_order": "You order",
-    "nova_poshta_delivers": "Nova Poshta delivers",
+    "nova_poshta_delivers": "Post delivers",
     "you_receive_and_pay": "You receive & pay",
     "terms_of_delivery": "We operate exclusively via cash on delivery and payment upon receiving the product.",
     "too_big_or_heavy_item_warning": "The item you're ordering might be too big or heavy for some delivery points. If you can't find your location, please choose one from the available list.",
@@ -76,5 +76,8 @@
     "enter_patronymic": "Enter your patronymic",
     "your_patronymic_required_by_delivery_company": "We need your patronymic to send package through the Ukrposhta company.",
     "zip_code": "Zip Code",
-    "enter_zip_code": "Enter Zip Code"
+    "enter_zip_code": "Enter Zip Code",
+    "order_notes": "Order notes",
+    "optional": "optional",
+    "enter_optional_note": "Enter any special instructions (optional)"
 }

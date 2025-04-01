@@ -27,12 +27,14 @@ class Order(models.Model):
     phone_number = TextPGPSymmetricKeyField(max_length=255)
     oblast = models.CharField(max_length=255, null=True, blank=True)
     city = models.CharField(max_length=255)
-    warehouse = models.TextField()
-    notes = models.TextField(null=True, blank=True)
+    zipcode = models.CharField(max_length=255, null=True, blank=True)
+    warehouse = models.TextField(null=True, blank=True)
+    customer_notes = models.TextField(null=True, blank=True)
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
     order_special_id = models.IntegerField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
     assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_orders')
+    total_price_uah = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None

@@ -27,17 +27,33 @@ def place_an_order(request):
         phone = data.get("phone")
         oblast = data.get("oblast")
         city = data.get("city")
+        zipcode = data.get('zipcode')
         warehouse = data.get("warehouse")
         delivery_company_id = data.get("delivery_company_id")
+        customer_notes = data.get("customer_notes")
 
-        if not all([item_id, quantity, name, surname, phone, oblast, city, warehouse, delivery_company_id]):
-            return JsonResponse({"error": _("All fields are required.")}, status=400)
+        if not delivery_company_id:
+            return JsonResponse({'error': _('Invalid Delivering Company')})
+
+        try:
+            delivery_company = DeliveryCompany.objects.get(id=delivery_company_id)
+        except DeliveryCompany.DoesNotExist:
+            return JsonResponse({'error': _('Invalid Delivering Company')})
+        
+        if delivery_company.name == 'Nova Poshta':
+            if not all([item_id, quantity, name, surname, phone, oblast, city, warehouse]):
+                return JsonResponse({"error": _("All fields are required.")}, status=400)
+        
+        if delivery_company.name == 'Ukrposhta':
+            if not all([item_id, quantity, name, surname, patronymic, phone, city, zipcode]):
+                return JsonResponse({"error": _("All fields are required.")}, status=400)
+            if len(patronymic) > 255:
+                return JsonResponse({'error': _("Patronymic is too long.")}, status=400)
+            if len(zipcode) > 255:
+                return JsonResponse({'error': _("Zip-code is too long.")}, status=400)
         
         if len(name) > 255 or len(surname) > 255:
             return JsonResponse({"error": _("Name or surname too long.")}, status=400)
-        
-        if len(patronymic) > 255:
-            return JsonResponse({'error': _("Patronymic is too long.")}, status=400)
         
         if len(oblast) > 255 or len(city) > 255:
             return JsonResponse({"error": _("Oblast or city names are too long.")}, status=400)
@@ -53,23 +69,37 @@ def place_an_order(request):
         except Item.DoesNotExist:
             return JsonResponse({"error": _("Invalid item")}, status=404)
         
-        try:
-            delivery_company = DeliveryCompany.objects.get(id=delivery_company_id)
-        except DeliveryCompany.DoesNotExist:
-            return JsonResponse({'error': _('Invalid Delivering Company')})
-        
-        order = Order.objects.create(
-            item=item,
-            quantity=quantity,
-            name=name,
-            surname=surname,
-            phone_number=phone,
-            oblast=oblast,
-            city=city,
-            warehouse=warehouse,
-            delivery_company=delivery_company,
-            status='new'
-        )
+        if delivery_company.name == 'Nova Poshta':
+            order = Order.objects.create(
+                item=item,
+                quantity=quantity,
+                name=name,
+                surname=surname,
+                phone_number=phone,
+                oblast=oblast,
+                city=city,
+                warehouse=warehouse,
+                delivery_company=delivery_company,
+                status='new',
+                customer_notes=customer_notes,
+                total_price_uah=item.price_uah * quantity
+            )
+
+        if delivery_company.name == 'Ukrposhta':
+            order = Order.objects.create(
+                item=item,
+                quantity=quantity,
+                name=name,
+                surname=surname,
+                patronymic=patronymic,
+                phone_number=phone,
+                zipcode=zipcode,
+                city=city,
+                delivery_company=delivery_company,
+                status='new',
+                customer_notes=customer_notes,
+                total_price_uah=item.price_uah * quantity
+            )
 
         return JsonResponse({'success': True, "order_id": order.order_special_id}, status=201)
     
