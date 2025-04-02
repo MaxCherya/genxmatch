@@ -3,6 +3,7 @@ from django.views.decorators.http import require_POST
 from django.http import JsonResponse
 from django.conf import settings
 from .utils import verify_signature, send_notification_email
+from django.views.decorators.csrf import csrf_exempt
 import hashlib
 import hmac
 import json
