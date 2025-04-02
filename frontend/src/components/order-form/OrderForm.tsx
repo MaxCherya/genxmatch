@@ -90,6 +90,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
         }),
     };
 
+    const allValid = Object.values(isValid).every(Boolean)
+
     const handleSubmit = async () => {
         if (username) {
             console.warn("Bot detected")
@@ -370,7 +372,13 @@ const OrderForm: React.FC<OrderFormProps> = ({
             {/* Submit */}
             <button
                 onClick={handleSubmit}
-                className="cursor-pointer w-full bg-green-600 text-white rounded py-1 font-medium hover:bg-green-700 transition"
+                disabled={!allValid || isLoading}
+                className={clsx(
+                    "w-full rounded py-1 font-medium transition",
+                    allValid && !isLoading
+                        ? "bg-green-600 text-white hover:bg-green-700 cursor-pointer"
+                        : "bg-gray-400 text-white cursor-not-allowed"
+                )}
             >
                 {t('confirm_order')}
             </button>

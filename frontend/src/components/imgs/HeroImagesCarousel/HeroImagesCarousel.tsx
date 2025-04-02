@@ -128,7 +128,7 @@ const HeroImagesCarousel: React.FC<Props> = ({ images, className = '', setIsFull
                     {/* Close button */}
                     <button
                         onClick={() => handleFullscreenToggle(false)}
-                        className="absolute top-4 right-4 text-white text-4xl font-bold z-[10001] hover:text-gray-300 transition-colors duration-200 focus:outline-none"
+                        className="cursor-pointer absolute top-4 right-4 text-white text-4xl font-bold z-[10001] hover:text-gray-300 transition-colors duration-200 focus:outline-none"
                         aria-label="Close fullscreen"
                     >
                         ×
