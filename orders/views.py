@@ -129,7 +129,7 @@ def place_an_order(request):
 
         send_notification_email(order)
 
-        return JsonResponse({'success': True, "order_id": order.order_special_id}, status=201)
+        return JsonResponse({'success': True, "order_id": order.order_special_id, 'orderTotal': item.price_uah * quantity, 'currency': 'UAH'}, status=201)
     
     except Exception as e:
         return JsonResponse({"error": _("Server error")}, status=500)

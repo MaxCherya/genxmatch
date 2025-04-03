@@ -1,4 +1,10 @@
-import React from "react";
+declare global {
+    interface Window {
+        fbq: (...args: any[]) => void;
+    }
+}
+
+import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import OrderSuccess from "../../../components/OrderConfirmation/OrderSuccess";
 import { useTranslation } from "react-i18next";
@@ -7,6 +13,19 @@ const OrderConfirmation: React.FC = () => {
     const location = useLocation();
     const orderId = location.state?.orderId;
     const { t } = useTranslation();
+
+    // 📦 Assume we get order total and currency from location or elsewhere
+    const orderTotal = location.state?.orderTotal || 199.99;
+    const currency = location.state?.currency || 'UAH';
+
+    useEffect(() => {
+        if (orderId && typeof window !== 'undefined' && window.fbq) {
+            window.fbq('track', 'Purchase', {
+                value: orderTotal,
+                currency: currency,
+            });
+        }
+    }, [orderId, orderTotal, currency]);
 
     return (
         <div className="w-screen p-5 bg-black h-screen flex flex-col items-center justify-center">

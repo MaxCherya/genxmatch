@@ -120,7 +120,7 @@ if IS_DEV:
         'USER': 'postgres',
         'PASSWORD': os.getenv('DB_PASSWORD', default='none'),
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': os.getenv("DB_PORT", "5432"),
         'OPTIONS': {
             'client_encoding': 'UTF8',
         },

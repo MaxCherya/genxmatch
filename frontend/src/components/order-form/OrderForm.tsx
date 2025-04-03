@@ -128,7 +128,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 signature,
                 customer_notes: note as string
             });
-            navigate("/order-confirmation", { state: { orderId: response.order_id } });
+            navigate("/order-confirmation", { state: { orderId: response.order_id, orderTotal: response.order_total, currency: response.currency } });
         } catch (err: any) {
             addToast("❌ " + (err.message || "Something went wrong"), 'error');
         } finally {
