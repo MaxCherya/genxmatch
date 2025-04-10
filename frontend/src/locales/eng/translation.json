@@ -84,5 +84,27 @@
     "we_couldnt_retrieve_your_orders_details": "It seems we couldn’t retrieve your order details. Please try again or contact support.",
     "order_confirmed_title": "Your Order is Confirmed!",
     "order_success_text": "Thank you for your order! Your order number is <strong>#{{order}}</strong>.",
-    "order_success_note": "We might contact you if there are any questions about delivery. Otherwise, expect a message from the delivery service with tracking details."
+    "order_success_note": "We might contact you if there are any questions about delivery. Otherwise, expect a message from the delivery service with tracking details.",
+    "moon_projector_usb": {
+        "name": "'Moonlight Glow' Projector",
+        "short_description": "Bring romance to your home with the adjustable 'Moonlight Glow' projector. This LED nightlight casts a mesmerizing moon projection on your walls, making it perfect for bedrooms, relaxation, or stunning photography sessions.",
+        "description_part_1": "The 'Moonlight Glow' Projector is a sleek LED nightlight with an adjustable design that lets you customize the perfect angle for projecting a moon pattern onto your walls or ceiling. With a 3W light source and USB Type-C charging, it’s user-friendly and energy-efficient. Its durable ABS casing ensures longevity, while the compact build makes it portable for any space. A projection range of 2-3 meters makes it ideal for small rooms, effortlessly creating a cozy ambiance.",
+        "description_part_2": "Turn your bedroom or living space into a romantic retreat with the 'Moonlight Glow' Projector. This device not only adds a touch of magic to your downtime but also serves as a stunning backdrop for photography or special occasions. Its versatility makes it perfect for home use, vacations, or even as decor in kids’ rooms. With its soft glow and calming moon projection, it’s an ideal way to unwind after a busy day.",
+        "effect_of_projection": "Projection Effect",
+        "moon": "Moon",
+        "power": "Operating Voltage",
+        "answer_power": "5V",
+        "light_source_power": "Light Source Power",
+        "light_source_power_answer": "3W",
+        "light_source_type": "Light Source Type",
+        "light_source_type_answer": "LED",
+        "protection_lvl": "Protection Level",
+        "protection_lvl_answer": "IP33",
+        "material": "Body Material",
+        "material_answer": "ABS",
+        "range": "Illumination Range",
+        "range_answer": "2-3 meters",
+        "type_of_charge": "Charging Method",
+        "type_of_charge_answer": "USB Type-C"
+    }
 }

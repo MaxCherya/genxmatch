@@ -38,7 +38,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -100, opacity: 0 }}
                     transition={{ duration: 0.3, ease: "easeOut" }}
-                    className="fixed top-0 left-0 right-0 h-[10svh] z-50 px-4 py-2 bg-black/80 flex justify-end pointer-events-none backdrop-blur"
+                    className="fixed top-0 left-0 right-0 h-[7svh] z-50 px-4 py-2 bg-black/80 flex justify-end items-center align-middle pointer-events-none backdrop-blur"
                 >
                     <div className="pointer-events-auto">
                         <LanguageSwitcher />
