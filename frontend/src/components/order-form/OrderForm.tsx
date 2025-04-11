@@ -319,6 +319,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
             {deliveryCompany === 'nova_poshta' && (
                 <NovaPoshtaSelector
                     excludePoshtomats={true}
+                    excludePunkts={true}
                     theme={theme}
                     selectedOblast={selectedOblast}
                     setSelectedOblast={setSelectedOblast}

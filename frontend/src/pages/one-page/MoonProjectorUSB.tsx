@@ -1,4 +1,4 @@
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { useRef, useEffect } from 'react';
 import { motion } from "framer-motion";
 import { scroller, Element } from 'react-scroll';
@@ -355,13 +355,12 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
                     <div className="w-full max-w-xl space-y-4">
                         <Element name="orderFormSection">
                             <OrderForm
-                                itemLength={120}
-                                itemHeight={10}
-                                itemWeight={3}
-                                itemWidth={10}
-                                itemAntopometryWarning
-                                productId={1}
-                                productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />}
+                                itemLength={0}
+                                itemHeight={0}
+                                itemWeight={0}
+                                itemWidth={0}
+                                productId={34}
+                                productName={t('moon_projector_usb.name')}
                                 productImage={productImagesHero[0].src}
                                 oldPrice={productOldPrice}
                                 currentPrice={productNewPrice}

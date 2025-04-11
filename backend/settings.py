@@ -150,7 +150,7 @@ SESSION_COOKIE_SAMESITE = 'Lax'
 CSRF_TRUSTED_ORIGINS = (
     ['http://127.0.0.1:8000']
     if IS_DEV else
-    ['https://genxmatch-9d751e301f5e.herokuapp.com', 'www.genxmatch.com.ua', 'genxmatch.com.ua']
+    ['https://genxmatch-9d751e301f5e.herokuapp.com', 'https://www.genxmatch.com.ua', 'https://genxmatch.com.ua']
 )
 
 

@@ -16,6 +16,7 @@ interface NovaPoshtaItem {
 type NovaPoshtaSelectorProps = {
     theme?: 'light' | 'dark';
     excludePoshtomats?: boolean;
+    excludePunkts?: boolean;
     selectedOblast: NovaPoshtaItem | null;
     setSelectedOblast: (value: NovaPoshtaItem | null) => void;
     selectedCity: NovaPoshtaItem | null;
@@ -31,6 +32,7 @@ type NovaPoshtaSelectorProps = {
 const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     theme = 'light',
     excludePoshtomats = false,
+    excludePunkts = false,
     selectedOblast,
     setSelectedOblast,
     selectedCity,
@@ -80,7 +82,7 @@ const NovaPoshtaSelector: React.FC<NovaPoshtaSelectorProps> = ({
     useEffect(() => {
         if (selectedCity?.Ref) {
             setIsLoadingWarehouses(true);
-            fetchWarehouses(selectedCity.Ref, excludePoshtomats)
+            fetchWarehouses(selectedCity.Ref, excludePoshtomats, excludePunkts)
                 .then((allWarehouses) => {
                     const filtered = allWarehouses.filter((wh: NovaPoshtaItem) => {
                         const limits = wh.ReceivingLimitationsOnDimensions || {};

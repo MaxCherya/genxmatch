@@ -39,7 +39,7 @@ export const fetchCities = async (query: string) => {
     return data.data || [];
 };
 
-export const fetchWarehouses = async (cityRef: string, excludePoshtomats?: boolean) => {
+export const fetchWarehouses = async (cityRef: string, excludePoshtomats?: boolean, excludePunkts?: boolean) => {
     const res = await fetch(NOVA_POSHTA_URL, {
         method: 'POST',
         headers: {
@@ -56,12 +56,19 @@ export const fetchWarehouses = async (cityRef: string, excludePoshtomats?: boole
     });
 
     const data = await res.json();
+    let results = data.data || [];
 
     if (excludePoshtomats) {
-        return (data.data || []).filter((wh: any) =>
+        results = results.filter((wh: any) =>
             !wh.Description.toLowerCase().includes('поштомат')
         );
     }
 
-    return data.data || [];
+    if (excludePunkts) {
+        results = results.filter((wh: any) =>
+            !wh.Description.toLowerCase().includes('пункт')
+        );
+    }
+
+    return results;
 };
