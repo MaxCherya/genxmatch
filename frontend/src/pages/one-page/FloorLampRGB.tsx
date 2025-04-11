@@ -255,7 +255,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         }}
                         viewport={{ margin: '-20%' }}
                     >
-                        <VideoPlayer src={productVideo} muted poster='https://s6.ezgif.com/tmp/ezgif-6594db02049470.gif' />
+                        <VideoPlayer src={productVideo} muted poster='https://d2pnsmz45e0v9n.cloudfront.net/d4bfod%2Fpreview%2F66143207%2Fmain_large.gif?response-content-disposition=inline%3Bfilename%3D%22main_large.gif%22%3B&response-content-type=image%2Fgif&Expires=1744403193&Signature=Ruey5dmd8PId~1qR4N9ZIPEII048CfRkOsK6fYvIX50s-yMyKZvamFIVK~rlIz95wzjrCFZIt1Avqo4R7lkVaE0A-7zsk9NonaHcJUg7kdLVYSkNg1RDLRWETcNWo5eZ7PogGMuBABip1vQoX0lLOLwhAWlkrObiJQh5JkrmxSBdR9VL8AQ76Jp6RJCtg1yLYR2v1qrAQDGOXffo0mKGe4VEkbkQT-sKg44SH3AIx53zObw3dq5dpu7F~z6-HN0fVMJLGzvZkoabKqJ0DUGOW0eR135Umiwx-YxdrY~XSTMCjjOo8sA~T3zL51gPrm8ZmkpzVMxZrSpyLNQAqbM81w__&Key-Pair-Id=APKAJT5WQLLEOADKLHBQ' />
                     </motion.div>
 
                 </div>
