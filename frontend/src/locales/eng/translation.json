@@ -105,6 +105,14 @@
         "range": "Illumination Range",
         "range_answer": "2-3 meters",
         "type_of_charge": "Charging Method",
-        "type_of_charge_answer": "USB Type-C"
+        "type_of_charge_answer": "USB Type-C",
+        "feature_1": "Lunar Projection",
+        "feature_1_d": "Projects a beautiful, detailed view of the moon, creating a serene and dreamy atmosphere in your space.",
+        "feature_2": "Adjustable Brightness",
+        "feature_2_d": "Customize the light intensity to match your mood, from a gentle glow to a brighter lunar shine.",
+        "feature_3": "USB-Powered Convenience",
+        "feature_3_d": "Easily powered via USB, offering portability and compatibility with various devices or adapters.",
+        "feature_4": "Elegant Compact Design",
+        "feature_4_d": "Sleek and stylish, this projector enhances any room’s decor while remaining unobtrusive."
     }
 }

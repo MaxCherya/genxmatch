@@ -1,7 +1,7 @@
-import { useTranslation } from "react-i18next";
+import { Trans, useTranslation } from "react-i18next";
 import { useRef, useEffect } from 'react';
 import { motion } from "framer-motion";
-import { scroller } from 'react-scroll';
+import { scroller, Element } from 'react-scroll';
 
 import BubbleBackground from "../../components/bg/BubbleGradient/BubbleGradient";
 import CTAButton from "../../components/btns/CTAButton";
@@ -10,6 +10,13 @@ import LiveVisitorsCounter from "../../components/item-page/LiveVisitorsCounter"
 import PriceTag from "../../components/item-page/PriceTag";
 import ReviewStars from "../../components/item-page/ReviewStars";
 import SpecItem from "../../components/item-page/SpecItem";
+import FeatureSection from "../../components/item-page/FeaturesSection";
+import PicturesSlider from "../../components/item-page/PicturesSlider";
+import DeliveryInfo from "../../components/infos/DeliveryInfo";
+import ReviewSlider from "../../components/item-page/ReviewSlider";
+import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
+import OrderForm from "../../components/order-form/OrderForm";
+import VideoPlayer from "../../components/item-page/VideoPlayer";
 
 interface Props {
     setIsFullscreen?: (value: boolean) => void;
@@ -20,10 +27,17 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
 
     const { t } = useTranslation();
 
-    const productOldPrice: number = 699;
-    const productNewPrice: number = 499;
+    const productOldPrice: number = 459;
+    const productNewPrice: number = 399;
 
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    const features = [
+        { header: t('moon_projector_usb.feature_1'), description: t('moon_projector_usb.feature_1_d') },
+        { header: t('moon_projector_usb.feature_2'), description: t('moon_projector_usb.feature_2_d') },
+        { header: t('moon_projector_usb.feature_3'), description: t('moon_projector_usb.feature_3_d') },
+        { header: t('moon_projector_usb.feature_4'), description: t('moon_projector_usb.feature_4_d') }
+    ]
 
     useEffect(() => {
         const video = videoRef.current;
@@ -51,18 +65,104 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
         { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6403242877_luna-lunnyj-proektor.jpg', alt: 'Hero 6' },
     ]
 
+    const productImageswide = [
+        { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6403242846_luna-lunnyj-proektor.jpg', alt: 'Wide 1' },
+        { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6403242849_luna-lunnyj-proektor.jpg', alt: 'Wide 2' },
+        { src: 'https://zima.com.ua/wp-content/uploads/2024/12/6403242882_luna-lunnyj-proektor.jpg', alt: 'Wide 3' },
+    ]
+
+    const reviews = [
+        {
+            name: "Олександр Т.",
+            rating: 5,
+            text: "Чудовий місячний проєктор! Створює неймовірно затишну атмосферу в спальні. Яскравість регулюється ідеально.",
+            avatar: "https://i.pravatar.cc/150?img=3"
+        },
+        {
+            name: "Марія К.",
+            rating: 4,
+            text: "Гарний нічник, проекція Місяця виглядає дуже реалістично. Хотілося б трішки довший кабель USB.",
+            avatar: "https://i.pravatar.cc/150?img=5"
+        },
+        {
+            name: "Дмитро Л.",
+            rating: 5,
+            text: "Обожнюю цей проєктор! Увечері вмикаю, і кімната перетворюється на космос. Дуже простий у використанні.",
+            avatar: "https://i.pravatar.cc/150?img=12"
+        },
+        {
+            name: "Софія М.",
+            rating: 4.5,
+            text: "Стильний і компактний, ідеально вписався в мою кімнату. Проєкція Місяця заспокоює перед сном.",
+            avatar: "https://i.pravatar.cc/150?img=47"
+        },
+        {
+            name: "Артем В.",
+            rating: 5,
+            text: "Класна річ! Використовую як нічник, світло м’яке і приємне. Дуже задоволений покупкою."
+        },
+        {
+            name: "Олена П.",
+            rating: 5,
+            text: "Місячне світло виглядає магічно! Дітям подобається, засинають швидше. Зручно, що на USB.",
+            avatar: "https://i.pravatar.cc/150?img=53"
+        },
+        {
+            name: "Іван Д.",
+            rating: 4,
+            text: "Проєктор супер, атмосфера в кімнаті казкова. Трохи незручно, що немає таймера вимкнення."
+        },
+        {
+            name: "Анастасія Р.",
+            rating: 5,
+            text: "Подарувала подрузі, вона в захваті! Місяць на стелі виглядає неймовірно, рекомендую!",
+            avatar: "https://i.pravatar.cc/150?img=9"
+        },
+        {
+            name: "Микола С.",
+            rating: 4.5,
+            text: "Якість відмінна, світло приємне. Компактний, не займає багато місця. Хотів би пульт для зручності."
+        },
+        {
+            name: "Вікторія З.",
+            rating: 5,
+            text: "Це просто вау! Вечірня релаксація з проекцією Місяця — найкраще завершення дня.",
+            avatar: "https://i.pravatar.cc/150?img=21"
+        },
+        {
+            name: "Павло Б.",
+            rating: 5,
+            text: "Крутий нічник, додає затишку. Легко підключити, проекція чітка і красива."
+        },
+        {
+            name: "Юлія Н.",
+            rating: 4.5,
+            text: "Купила для дитячої кімнати, виглядає чарівно. Дуже легкий і зручний у використанні.",
+            avatar: "https://i.pravatar.cc/150?img=36"
+        },
+        {
+            name: "Ростислав Г.",
+            rating: 5,
+            text: "Місяць на стелі — це щось! Працює без нарікань, ідеально для вечірнього відпочинку."
+        }
+    ];
+
     return (
         <div className="relative w-full min-h-screen overflow-hidden">
+
+            <ScrollProgressCircle isFullscreen={isFullscreen} />
+
             {!isFullscreen ?
                 <div className="fixed bottom-4 right-4 overflow-x-hidden z-50">
                     <LiveVisitorsCounter min={10} max={30} refreshInterval={5} size="sm" theme="dark" />
                 </div>
                 : null}
-            <div className="relative w-full min-h-screen z-10 flex flex-col">
 
+            <div className="relative w-full min-h-screen z-10 flex flex-col">
+                <BubbleBackground className="fixed inset-0 min-h-[200svh] w-screen pointer-events-none" />
                 {/* Hero */}
-                <BubbleBackground className="fixed inset-0 h-screen w-screen pointer-events-none" />
                 <div className="xl:flex-row mt-4 sm:mt-7 xl:mt-10 px-4 py-8 min-h-screen flex flex-col justify-center">
+
                     <div className="w-full flex flex-col xl:flex-row gap-4 xl:gap-12 items-center justify-center">
 
                         {/* Left */}
@@ -100,7 +200,7 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
                             {/* Rating */}
                             <div className="flex items-center justify-center gap-3">
                                 <ReviewStars rating={4.5} size="sm" />
-                                <p className="text-stone-300/90 text-sm">4.93 | 1034 {t('ratings')}</p>
+                                <p className="text-stone-300/90 text-sm">4.87 | 341 {t('ratings')}</p>
                             </div>
 
                             {/* CTA */}
@@ -211,7 +311,7 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
 
                     {/* Video */}
                     <motion.div
-                        className="w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl mb-12"
+                        className="w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl mb-12 flex flex-col items-center"
                         initial={{
                             opacity: 0,
                             scale: 0.95,
@@ -229,18 +329,46 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
                         }}
                         viewport={{ margin: '-20%' }}
                     >
-                        <video
-                            ref={videoRef}
-                            autoPlay
-                            muted
-                            playsInline
-                            className="w-full h-auto rounded-xl"
-                        >
-                            <source src={productVideo} type="video/mp4" />
-                            {t('your_browser_does_not_support_video_tag')}
-                        </video>
+                        <VideoPlayer loopUntil={21} src={productVideo} />
                     </motion.div>
 
+                </div>
+
+                <div className="w-full bg-white py-12 px-4 text-black flex flex-col items-center">
+                    <div className="w-full max-w-3xl bg-white py-12 px-4 text-black">
+                        <FeatureSection features={features} />
+                    </div>
+                </div>
+
+                <div className="relative w-screen h-screen bg-black text-black overflow-hidden flex flex-col items-center justify-center">
+                    <PicturesSlider asBG={true} images={productImageswide} />
+                    <div className="w-3xl max-w-[95%] z-50">
+                        <DeliveryInfo />
+                    </div>
+                </div>
+
+                <div className="w-full bg-white py-12 px-4 text-black flex flex-col items-center">
+                    <ReviewSlider reviews={reviews} />
+                </div>
+
+                <div className="w-full bg-black py-12 flex flex-col items-center px-4 text-white">
+                    <div className="w-full max-w-xl space-y-4">
+                        <Element name="orderFormSection">
+                            <OrderForm
+                                itemLength={120}
+                                itemHeight={10}
+                                itemWeight={3}
+                                itemWidth={10}
+                                itemAntopometryWarning
+                                productId={1}
+                                productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />}
+                                productImage={productImagesHero[0].src}
+                                oldPrice={productOldPrice}
+                                currentPrice={productNewPrice}
+                                theme="dark"
+                            />
+                        </Element>
+                    </div>
                 </div>
 
             </div>
