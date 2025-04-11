@@ -329,7 +329,7 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
                         }}
                         viewport={{ margin: '-20%' }}
                     >
-                        <VideoPlayer muted poster={productImagesHero[0].src} loopUntil={21} src={productVideo} />
+                        <VideoPlayer muted poster='https://s6.ezgif.com/tmp/ezgif-6a846cc6859218.gif' loopUntil={21} src={productVideo} />
                     </motion.div>
 
                 </div>
