@@ -255,7 +255,7 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         }}
                         viewport={{ margin: '-20%' }}
                     >
-                        <VideoPlayer src={productVideo} />
+                        <VideoPlayer src={productVideo} muted poster={productImagesHero[0].src} />
                     </motion.div>
 
                 </div>

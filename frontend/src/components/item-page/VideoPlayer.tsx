@@ -1,7 +1,4 @@
-import { useEffect, useRef } from 'react';
-import videojs from 'video.js';
-import type Player from 'video.js/dist/types/player';
-import 'video.js/dist/video-js.css';
+import { useEffect, useRef, useState } from 'react';
 
 interface VideoPlayerProps {
     src: string;
@@ -9,7 +6,7 @@ interface VideoPlayerProps {
     muted?: boolean;
     poster?: string;
     autoplay?: boolean;
-    loopUntil?: number; // ⬅️ custom end time
+    loopUntil?: number;
 }
 
 const VideoPlayer = ({
@@ -21,93 +18,95 @@ const VideoPlayer = ({
     loopUntil,
 }: VideoPlayerProps) => {
     const videoRef = useRef<HTMLVideoElement | null>(null);
-    const playerRef = useRef<Player | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
-        const cleanupFn = { current: () => { } };
+        const video = videoRef.current;
+        if (!video) return;
 
-        const timeout = setTimeout(() => {
-            const videoElement = videoRef.current;
-            if (!videoElement || playerRef.current) return;
+        // Handle loading and error states
+        const handleCanPlay = () => {
+            setIsLoading(false);
+            setHasError(false);
+        };
 
-            const player = videojs(videoElement, {
-                autoplay: false,
-                muted,
-                loop: !loopUntil && loop,
-                controls: false,
-                preload: 'auto',
-                playsinline: true,
-                poster,
-                sources: [{ src, type: 'video/mp4' }],
-            });
+        const handleError = () => {
+            setIsLoading(false);
+            setHasError(true);
+            console.warn('Video failed to load:', src);
+        };
 
-            playerRef.current = player;
+        video.addEventListener('canplay', handleCanPlay);
+        video.addEventListener('error', handleError);
 
-            // Manual loop logic
-            if (loopUntil) {
-                player.on('timeupdate', () => {
-                    const currentTime = player.currentTime();
-                    if (typeof currentTime === 'number' && currentTime >= loopUntil) {
-                        player.currentTime(0);
-                        const maybePromise = player.play();
-                        if (maybePromise && typeof maybePromise.then === 'function') {
-                            maybePromise.catch(() => { });
-                        }
-                    }
+        // Retry play on visibility change for WebViews
+        const retryPlay = () => {
+            if (
+                document.visibilityState === 'visible' &&
+                video.paused &&
+                !hasError
+            ) {
+                video.play().catch((error) => {
+                    console.warn('Retry play failed:', error);
                 });
             }
+        };
 
-            // Try to play when ready
-            player.ready(() => {
-                const maybePromise = player.play();
-                if (maybePromise && typeof maybePromise.then === 'function') {
-                    maybePromise.catch((error: unknown) => {
-                        if (error instanceof Error) {
-                            console.warn('Autoplay blocked:', error.message);
-                        }
-                    });
-                }
-            });
-
-            const retryPlay = () => {
-                if (
-                    document.visibilityState === 'visible' &&
-                    !player.isDisposed() &&
-                    player.paused()
-                ) {
-                    const maybePromise = player.play();
-                    if (maybePromise && typeof maybePromise.then === 'function') {
-                        maybePromise.catch((error: unknown) => {
-                            if (error instanceof Error) {
-                                console.warn('Retry autoplay failed:', error.message);
-                            }
-                        });
-                    }
-                }
-            };
-
-            document.addEventListener('visibilitychange', retryPlay);
-
-            cleanupFn.current = () => {
-                document.removeEventListener('visibilitychange', retryPlay);
-                if (loopUntil) player.off('timeupdate');
-                if (!player.isDisposed()) player.dispose();
-                playerRef.current = null;
-            };
-        }, 0);
+        document.addEventListener('visibilitychange', retryPlay);
 
         return () => {
-            clearTimeout(timeout);
-            cleanupFn.current();
+            video.removeEventListener('canplay', handleCanPlay);
+            video.removeEventListener('error', handleError);
+            document.removeEventListener('visibilitychange', retryPlay);
         };
-    }, [src, autoplay, muted, loop, loopUntil, poster]);
+    }, [src, hasError]);
 
     return (
-        <div data-vjs-player className="w-full">
+        <div className="relative w-full overflow-hidden rounded-xl shadow-lg bg-black">
             <video
                 ref={videoRef}
-                className="video-js vjs-default-skin w-full h-auto rounded-xl"
+                src={src}
+                poster={poster}
+                muted={muted}
+                autoPlay={muted && autoplay}
+                playsInline
+                loop={!loopUntil && loop}
+                className={`w-full h-auto aspect-video object-cover rounded-xl transition-opacity duration-500 ${!isLoading && !hasError ? 'opacity-100' : 'opacity-0'
+                    }`}
+                onTimeUpdate={
+                    loopUntil
+                        ? (e) => {
+                            const video = e.target as HTMLVideoElement;
+                            if (video.currentTime >= loopUntil) {
+                                video.currentTime = 0;
+                                video.play().catch((error) => {
+                                    console.warn('Loop replay failed:', error);
+                                });
+                            }
+                        }
+                        : undefined
+                }
+                onError={() => setHasError(true)}
             />
+            {isLoading && !hasError && (
+                <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-10 h-10 border-4 border-white/30 border-t-white rounded-full animate-spin" />
+                </div>
+            )}
+            {poster && (isLoading || hasError) && (
+                <img
+                    src={poster}
+                    alt="Video placeholder"
+                    className={`absolute inset-0 w-full h-full object-cover rounded-xl transition-opacity duration-300 ${hasError ? 'opacity-100' : 'opacity-50'
+                        }`}
+                />
+            )}
+            {hasError && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-white text-sm rounded-xl">
+                    Unable to load video
+                </div>
+            )}
         </div>
     );
 };
