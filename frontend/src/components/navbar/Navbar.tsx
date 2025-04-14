@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LanguageSwitcher from "../general/LanguageSwitcher";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logo from '/assets/logo.png';
@@ -16,8 +17,10 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
 
     const { t } = useTranslation();
 
+    const navigate = useNavigate();
+
     const categories = [
-        { name: t('navbar.catalog'), icon: "📚", action: () => console.log("Catalog clicked") },
+        { name: t('navbar.catalog'), icon: "📚", action: () => navigate('/catalog') },
         { name: t('navbar.contact_us'), icon: "✉️", action: () => console.log("Contact Us clicked") },
         { name: t('navbar.cart'), icon: "🛒", action: () => console.log("Cart clicked") },
     ];

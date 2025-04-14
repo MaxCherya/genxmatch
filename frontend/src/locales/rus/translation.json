@@ -119,5 +119,12 @@
         "catalog": "Каталог",
         "contact_us": "Связаться",
         "cart": "Корзина"
+    },
+    "catalog": {
+        "filters": "Фильтры",
+        "categories": "Категории",
+        "price": "Цена",
+        "no_products": "Товары не найдены.",
+        "view_details": "Посмотреть детали"
     }
 }

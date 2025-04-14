@@ -119,5 +119,12 @@
         "catalog": "Catalog",
         "contact_us": "Contact Us",
         "cart": "Cart"
+    },
+    "catalog": {
+        "filters": "Filters",
+        "categories": "Categories",
+        "price": "Price",
+        "no_products": "No products found.",
+        "view_details": "View Details"
     }
 }

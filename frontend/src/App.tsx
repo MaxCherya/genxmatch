@@ -9,6 +9,7 @@ import FloorLampRGB from "./pages/one-page/FloorLampRGB";
 import Navbar from "./components/navbar/Navbar";
 import OrderConfirmation from "./pages/general/OrderConfirmation/OrderConfirmation";
 import MoonProjectorUSB from "./pages/one-page/MoonProjectorUSB";
+import Catalog from "./pages/general/Catalog/Catalog";
 
 const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -20,6 +21,7 @@ const App: React.FC = () => {
         <Route path="*" element={<NotFound />} />
         <Route path="/one-page/floor-lamp-rgb" element={<FloorLampRGB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/one-page/moon-projector-usb" element={<MoonProjectorUSB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
+        <Route path="/catalog" element={<Catalog />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
       </Routes>
     </Router>

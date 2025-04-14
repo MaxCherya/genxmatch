@@ -119,5 +119,12 @@
         "catalog": "Каталог",
         "contact_us": "Зв’язатися",
         "cart": "Кошик"
+    },
+    "catalog": {
+        "filters": "Фільтри",
+        "categories": "Категорії",
+        "price": "Ціна",
+        "no_products": "Товари не знайдені.",
+        "view_details": "Переглянути деталі"
     }
 }
