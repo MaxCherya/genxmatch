@@ -125,6 +125,24 @@
         "categories": "Categories",
         "price": "Price",
         "no_products": "No products found.",
-        "view_details": "View Details"
+        "view_details": "View Details",
+        "loading": "Loading products...",
+        "fetch_error": "Failed to load products. Please try again later.",
+        "add_to_cart": "Add to Cart",
+        "added_to_cart": "Item added to cart successfully!",
+        "add_to_cart_error": "Failed to add item to cart. Please try again."
+    },
+    "cart": {
+        "empty": "Your cart is empty.",
+        "summary": "Order Summary",
+        "total": "Total",
+        "checkout": "Checkout",
+        "checkout_success": "Proceeding to checkout!",
+        "quantity_updated": "Quantity updated successfully.",
+        "item_removed": "Item removed from cart.",
+        "remove": "Remove",
+        "fetch_error": "Failed to load cart items. Please try again later.",
+        "update_error": "Failed to update quantity. Please try again.",
+        "remove_error": "Failed to remove item. Please try again."
     }
 }

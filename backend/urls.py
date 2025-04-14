@@ -30,6 +30,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("account/login/", CustomLoginView.as_view(), name="login"),
     path("", include(two_factor_urls.urlpatterns)),
+    path("api/items/", include("items.urls")),
     path('orders/', include('orders.urls')),
 
     # ✅ Serve Static Files (JS, CSS, Images)

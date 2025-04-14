@@ -22,7 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
     const categories = [
         { name: t('navbar.catalog'), icon: "📚", action: () => navigate('/catalog') },
         { name: t('navbar.contact_us'), icon: "✉️", action: () => console.log("Contact Us clicked") },
-        { name: t('navbar.cart'), icon: "🛒", action: () => console.log("Cart clicked") },
+        { name: t('navbar.cart'), icon: "🛒", action: () => navigate('/cart') },
     ];
 
     useEffect(() => {
@@ -66,7 +66,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                     </motion.div>
 
                     {/* Desktop Categories */}
-                    <div className="hidden lg:flex flex-1 justify-center gap-8">
+                    <div className="hidden lg:flex flex-1 justify-center gap-8 font-bold">
                         {categories.map((category) => (
                             <motion.button
                                 key={category.name}

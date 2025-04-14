@@ -64,11 +64,26 @@ INSTALLED_APPS = [
     'django_otp',
     'django_otp.plugins.otp_totp',
     'two_factor',
+    'rest_framework',
     'items',
     'orders',
     'custom_auth',
     'pgcrypto',
 ]
+
+REST_FRAMEWORK = {
+    # No permission enforcement
+    'DEFAULT_PERMISSION_CLASSES': [],
+
+    # Allow browsable API in dev mode, JSON only in production
+    'DEFAULT_RENDERER_CLASSES': (
+        ['rest_framework.renderers.JSONRenderer'] +
+        (['rest_framework.renderers.BrowsableAPIRenderer'] if IS_DEV else [])
+    ),
+
+    # No built-in DRF authentication
+    'DEFAULT_AUTHENTICATION_CLASSES': [],
+}
 
 MIDDLEWARE = [
     'custom_auth.middlewares.WwwRedirectMiddleware',

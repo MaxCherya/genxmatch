@@ -1,37 +1,59 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Filter } from "lucide-react";
-
-// Mock product data (replace with API data later)
-const mockProducts = [
-    { id: 1, name: "RGB Floor Lamp", category: "Lighting", price: 120, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=300&auto=format&fit=crop" },
-    { id: 2, name: "Smart Speaker", category: "Electronics", price: 80, image: "https://images.unsplash.com/photo-1605648916361-8d4e6a936e56?q=80&w=300&auto=format&fit=crop" },
-    { id: 3, name: "Modern Sofa", category: "Furniture", price: 450, image: "https://images.unsplash.com/photo-1555041469-a586c61ea9ec?q=80&w=300&auto=format&fit=crop" },
-    { id: 4, name: "LED Strip Lights", category: "Lighting", price: 30, image: "https://images.unsplash.com/photo-1603217017497-50d2c4c9a2d6?q=80&w=300&auto=format&fit=crop" },
-    { id: 5, name: "Wireless Headphones", category: "Electronics", price: 150, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=300&auto=format&fit=crop" },
-    { id: 6, name: "Coffee Table", category: "Furniture", price: 200, image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=300&auto=format&fit=crop" },
-];
+import { fetchItems } from "../../../endpoints/catalog";
+import FilterSidebar from "../../../components/catalog/FilterSidebar";
+import CategoryFilter from "../../../components/catalog/CategoryFilter";
+import PriceFilter from "../../../components/catalog/PriceFilter";
+import ProductCard from "../../../components/catalog/ProductCard";
+import LoadingSpinner from "../../../components/general/LoadingSpinner";
+import { useToast } from "../../../contexts/ToastContext";
 
 const Catalog: React.FC = () => {
-    const { t } = useTranslation();
-    const [products, setProducts] = useState(mockProducts);
+    const { t, i18n } = useTranslation();
+    const [products, setProducts] = useState<any[]>([]);
+    const [allProducts, setAllProducts] = useState<any[]>([]);
     const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
     const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [maxPrice, setMaxPrice] = useState(1000);
+    const [loading, setLoading] = useState(true);
+    const { addToast } = useToast();
 
-    // Extract unique categories from products
-    const categories = [...new Set(mockProducts.map((product) => product.category))];
+    const categories = [...new Set(allProducts.flatMap((product) => product.categories.map((cat: any) => cat.name)))];
+
+    useEffect(() => {
+        const loadProducts = async () => {
+            setLoading(true);
+            try {
+                const data = await fetchItems();
+                setAllProducts(data);
+                setProducts(data);
+
+                // Calculate max price for the price range filter
+                const prices = data.map((item: any) => Number(item.price_uah));
+                const max = Math.ceil(Math.max(...prices));
+                setMaxPrice(max > 0 ? max : 1000);
+                setPriceRange([0, max > 0 ? max : 1000]);
+            } catch (error) {
+                addToast(t('catalog.fetch_error'), "error");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadProducts();
+    }, [t, addToast]);
 
     // Filter products based on selected categories and price range
     useEffect(() => {
-        const filtered = mockProducts.filter((product) => {
-            const inCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
-            const inPriceRange = product.price >= priceRange[0] && product.price <= priceRange[1];
+        const filtered = allProducts.filter((product) => {
+            const productCategories = product.categories.map((cat: any) => cat.name);
+            const inCategory = selectedCategories.length === 0 || selectedCategories.some((cat) => productCategories.includes(cat));
+            const inPriceRange = Number(product.price_uah) >= priceRange[0] && Number(product.price_uah) <= priceRange[1];
             return inCategory && inPriceRange;
         });
         setProducts(filtered);
-    }, [selectedCategories, priceRange]);
+    }, [selectedCategories, priceRange, allProducts]);
 
     // Handle category filter changes
     const handleCategoryChange = (category: string) => {
@@ -50,120 +72,58 @@ const Catalog: React.FC = () => {
         });
     };
 
+    const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPriceRange([priceRange[0], Number(e.target.value)]);
+    };
+
+    // Determine the name field based on the current language
+    const getProductName = (product: any) => {
+        switch (i18n.language) {
+            case "ukr":
+                return product.name_ua;
+            case "rus":
+                return product.name_rus;
+            case "eng":
+            default:
+                return product.name_eng;
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white">
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white relative">
+            {/* Loading Spinner */}
+            <LoadingSpinner isLoading={loading} />
+
             {/* Main Content */}
             <div className="flex flex-col lg:flex-row gap-6 p-6 md:p-8 lg:p-12">
-                {/* Filter Sidebar (Desktop: Visible, Mobile: Collapsible) */}
-                <div className="lg:w-1/4 mt-12">
-                    {/* Filter Toggle Button (Mobile) */}
-                    <button
-                        className="lg:hidden flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
-                        onClick={() => setIsFilterOpen(!isFilterOpen)}
-                    >
-                        <Filter size={20} />
-                        <span>{t('catalog.filters')}</span>
-                    </button>
-
-                    {/* Filter Content */}
-                    <AnimatePresence>
-                        {(isFilterOpen || window.innerWidth >= 1024) && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: "auto", opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3, ease: "easeInOut" }}
-                                className="lg:block bg-gradient-to-b from-gray-900/90 to-black/90 backdrop-blur-xl rounded-xl p-6 mt-4 lg:mt-0 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border border-gray-800/50 overflow-hidden"
-                            >
-                                {/* Close Button (Mobile) */}
-                                <button
-                                    className="lg:hidden flex items-center justify-end w-full text-gray-200 hover:text-white"
-                                    onClick={() => setIsFilterOpen(false)}
-                                >
-                                    <X size={20} />
-                                </button>
-
-                                {/* Category Filter */}
-                                <div className="mb-8">
-                                    <h3 className="text-lg font-light tracking-wide mb-4">{t('catalog.categories')}</h3>
-                                    {categories.map((category) => (
-                                        <label key={category} className="flex items-center gap-3 mb-3 text-gray-200 hover:text-white">
-                                            <input
-                                                type="checkbox"
-                                                checked={selectedCategories.includes(category)}
-                                                onChange={() => handleCategoryChange(category)}
-                                                className="w-5 h-5 accent-blue-500 rounded"
-                                            />
-                                            <span className="text-base font-light">{category}</span>
-                                        </label>
-                                    ))}
-                                </div>
-
-                                {/* Price Filter */}
-                                <div>
-                                    <h3 className="text-lg font-light tracking-wide mb-4">{t('catalog.price')}</h3>
-                                    <div className="flex items-center gap-3 mb-4">
-                                        <input
-                                            type="number"
-                                            value={priceRange[0]}
-                                            onChange={(e) => handlePriceChange(e, 0)}
-                                            className="w-20 p-2 bg-gray-800/50 rounded-lg text-white text-base font-light focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            min={0}
-                                            max={priceRange[1]}
-                                        />
-                                        <span>-</span>
-                                        <input
-                                            type="number"
-                                            value={priceRange[1]}
-                                            onChange={(e) => handlePriceChange(e, 1)}
-                                            className="w-20 p-2 bg-gray-800/50 rounded-lg text-white text-base font-light focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                            min={priceRange[0]}
-                                            max={500}
-                                        />
-                                    </div>
-                                    <input
-                                        type="range"
-                                        min={0}
-                                        max={500}
-                                        value={priceRange[1]}
-                                        onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
-                                        className="w-full accent-blue-500"
-                                    />
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </div>
+                {/* Filter Sidebar */}
+                <FilterSidebar isFilterOpen={isFilterOpen} setIsFilterOpen={setIsFilterOpen}>
+                    <CategoryFilter
+                        categories={categories}
+                        selectedCategories={selectedCategories}
+                        onCategoryChange={handleCategoryChange}
+                    />
+                    <PriceFilter
+                        priceRange={priceRange}
+                        maxPrice={maxPrice}
+                        onPriceChange={handlePriceChange}
+                        onRangeChange={handleRangeChange}
+                    />
+                </FilterSidebar>
 
                 {/* Product Grid */}
                 <div className="flex-1 mt-0 lg:mt-12">
                     <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-6">{t('navbar.catalog')}</h2>
-                    {products.length === 0 ? (
+                    {products.length === 0 && !loading ? (
                         <p className="text-gray-400 text-lg font-light">{t('catalog.no_products')}</p>
                     ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {products.map((product) => (
-                                <motion.div
+                                <ProductCard
                                     key={product.id}
-                                    className="bg-gradient-to-b from-gray-900/90 to-black/90 backdrop-blur-xl rounded-xl p-4 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border border-gray-800/50"
-                                    whileHover={{ y: -5, boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    <img
-                                        src={product.image}
-                                        alt={product.name}
-                                        className="w-full h-48 object-cover rounded-lg mb-4"
-                                    />
-                                    <h3 className="text-lg font-light tracking-wide mb-2">{product.name}</h3>
-                                    <p className="text-gray-400 text-sm mb-2">{product.category}</p>
-                                    <p className="text-xl font-light mb-4">${product.price}</p>
-                                    <motion.button
-                                        className="w-full px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
-                                        whileTap={{ scale: 0.95 }}
-                                    >
-                                        {t('catalog.view_details')}
-                                    </motion.button>
-                                </motion.div>
+                                    product={product}
+                                    getProductName={getProductName}
+                                />
                             ))}
                         </div>
                     )}
