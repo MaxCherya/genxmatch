@@ -1,9 +1,15 @@
 from django.contrib import admin
-from .models import Supplier, Item
+from .models import Supplier, Item, ItemCharacteristic
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
+
+@admin.register(ItemCharacteristic)
+class ItemCharacteristicAdmin(admin.ModelAdmin):
+    list_display = ('id', 'item', 'key_ua', 'key_eng', 'key_rus', 'value_ua', 'value_eng', 'value_rus')
+    list_filter = ('item',)
+    search_fields = ('key_ua', 'key_eng', 'key_rus', 'value_ua', 'value_eng', 'value_rus')
 
 @admin.register(Item)
 class ItemAdmin(admin.ModelAdmin):
