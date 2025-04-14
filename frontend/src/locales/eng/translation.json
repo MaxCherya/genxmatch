@@ -114,5 +114,10 @@
         "feature_3_d": "Easily powered via USB, offering portability and compatibility with various devices or adapters.",
         "feature_4": "Elegant Compact Design",
         "feature_4_d": "Sleek and stylish, this projector enhances any room’s decor while remaining unobtrusive."
+    },
+    "navbar": {
+        "catalog": "Catalog",
+        "contact_us": "Contact Us",
+        "cart": "Cart"
     }
 }
