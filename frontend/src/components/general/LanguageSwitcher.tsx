@@ -11,9 +11,9 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isMobile = false })
     const [isOpen, setIsOpen] = useState(false);
 
     const languages = [
-        { code: 'ukr', label: 'Українська', flag: '🇺🇦' },
-        { code: 'eng', label: 'English', flag: '🇬🇧' },
-        { code: 'rus', label: 'Русский', flag: '🇷🇺' },
+        { code: 'ukr', label: 'Українська', flag: 'uk' },
+        { code: 'eng', label: 'English', flag: 'en' },
+        { code: 'rus', label: 'Русский', flag: 'ru' },
     ];
 
     const handleSelect = (code: string) => {

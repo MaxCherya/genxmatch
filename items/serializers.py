@@ -7,9 +7,19 @@ class ItemCharacteristicSerializer(serializers.ModelSerializer):
         fields = ['key_ua', 'key_eng', 'key_rus', 'value_ua', 'value_eng', 'value_rus']
 
 class CategorySerializer(serializers.ModelSerializer):
+    subcategories = serializers.SerializerMethodField()
+
     class Meta:
         model = Category
-        fields = ['name']
+        fields = [
+            'id', 'name_eng', 'name_ua', 'name_rus',
+            'description_eng', 'description_ua', 'description_rus',
+            'subcategories'
+        ]
+
+    def get_subcategories(self, obj):
+        subcats = obj.subcategories.all()
+        return CategorySerializer(subcats, many=True).data
 
 class ItemSerializer(serializers.ModelSerializer):
     categories = CategorySerializer(many=True)

@@ -1,7 +1,42 @@
 from rest_framework import generics
-from .models import Item
-from .serializers import ItemSerializer
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from django.db.models import Max
+from .models import Item, Category
+from .serializers import ItemSerializer, CategorySerializer
+from .paginator import CatalogPagination
+
 
 class ItemListView(generics.ListAPIView):
-    queryset = Item.objects.all()
     serializer_class = ItemSerializer
+    pagination_class = CatalogPagination
+
+    def get_queryset(self):
+        qs = Item.objects.all()
+
+        # Filtering by price
+        min_price = self.request.query_params.get("min_price")
+        max_price = self.request.query_params.get("max_price")
+
+        if min_price:
+            qs = qs.filter(price_uah__gte=min_price)
+        if max_price:
+            qs = qs.filter(price_uah__lte=max_price)
+
+        # Filtering by category IDs
+        categories = self.request.query_params.get("categories")
+        if categories:
+            category_ids = [int(cid) for cid in categories.split(",") if cid.isdigit()]
+            qs = qs.filter(categories__id__in=category_ids).distinct()
+
+        return qs
+
+
+class CatalogFiltersView(APIView):
+    def get(self, request):
+        categories = Category.objects.all()
+        max_price = Item.objects.aggregate(max_price=Max("price_uah"))["max_price"] or 1000
+        return Response({
+            "categories": CategorySerializer(categories, many=True).data,
+            "max_price": max_price
+        })

@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
-import { fetchItems } from "../../../endpoints/catalog";
+import {
+    fetchItemsPaginated,
+    fetchCatalogFilters,
+    Category,
+    Item
+} from "../../../endpoints/catalog";
 import FilterSidebar from "../../../components/catalog/FilterSidebar";
 import CategoryFilter from "../../../components/catalog/CategoryFilter";
 import PriceFilter from "../../../components/catalog/PriceFilter";
@@ -10,98 +15,161 @@ import { useToast } from "../../../contexts/ToastContext";
 
 const Catalog: React.FC = () => {
     const { t, i18n } = useTranslation();
-    const [products, setProducts] = useState<any[]>([]);
-    const [allProducts, setAllProducts] = useState<any[]>([]);
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-    const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
-    const [isFilterOpen, setIsFilterOpen] = useState(false);
-    const [maxPrice, setMaxPrice] = useState(1000);
-    const [loading, setLoading] = useState(true);
     const { addToast } = useToast();
 
-    const categories = [...new Set(allProducts.flatMap((product) => product.categories.map((cat: any) => cat.name)))];
+    const [products, setProducts] = useState<Item[]>([]);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+    const [maxPrice, setMaxPrice] = useState(1000);
+    const [isFilterOpen, setIsFilterOpen] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const getCategoryName = (cat: Category) => {
+        switch (i18n.language) {
+            case "ukr": return cat.name_ua;
+            case "rus": return cat.name_rus;
+            case "eng":
+            default: return cat.name_eng;
+        }
+    };
+
+    const getProductName = (product: Item) => {
+        switch (i18n.language) {
+            case "ukr": return product.name_ua;
+            case "rus": return product.name_rus;
+            case "eng":
+            default: return product.name_eng;
+        }
+    };
 
     useEffect(() => {
-        const loadProducts = async () => {
+        const loadFilters = async () => {
+            try {
+                const res = await fetchCatalogFilters();
+                setCategories(res.categories);
+                setMaxPrice(res.max_price || 1000);
+                setPriceRange([0, res.max_price || 1000]);
+            } catch (e) {
+                addToast(t("catalog.filter_error"), "error");
+            }
+        };
+        loadFilters();
+    }, []);
+
+    useEffect(() => {
+        const loadItems = async () => {
             setLoading(true);
             try {
-                const data = await fetchItems();
-                setAllProducts(data);
-                setProducts(data);
-
-                // Calculate max price for the price range filter
-                const prices = data.map((item: any) => Number(item.price_uah));
-                const max = Math.ceil(Math.max(...prices));
-                setMaxPrice(max > 0 ? max : 1000);
-                setPriceRange([0, max > 0 ? max : 1000]);
-            } catch (error) {
-                addToast(t('catalog.fetch_error'), "error");
+                const res = await fetchItemsPaginated({
+                    page: currentPage,
+                    minPrice: priceRange[0],
+                    maxPrice: priceRange[1],
+                    categories: selectedCategories,
+                });
+                setProducts(res.results);
+                const pageSize = res.results.length > 0 ? res.results.length : 1;
+                setTotalPages(Math.ceil(res.count / pageSize));
+            } catch (err) {
+                addToast(t("catalog.fetch_error"), "error");
             } finally {
                 setLoading(false);
             }
         };
+        loadItems();
+    }, [selectedCategories, priceRange, currentPage]);
 
-        loadProducts();
-    }, [t, addToast]);
-
-    // Filter products based on selected categories and price range
-    useEffect(() => {
-        const filtered = allProducts.filter((product) => {
-            const productCategories = product.categories.map((cat: any) => cat.name);
-            const inCategory = selectedCategories.length === 0 || selectedCategories.some((cat) => productCategories.includes(cat));
-            const inPriceRange = Number(product.price_uah) >= priceRange[0] && Number(product.price_uah) <= priceRange[1];
-            return inCategory && inPriceRange;
-        });
-        setProducts(filtered);
-    }, [selectedCategories, priceRange, allProducts]);
-
-    // Handle category filter changes
-    const handleCategoryChange = (category: string) => {
+    const handleCategoryChange = (categoryId: number) => {
         setSelectedCategories((prev) =>
-            prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+            prev.includes(categoryId)
+                ? prev.filter((id) => id !== categoryId)
+                : [...prev, categoryId]
         );
+        setCurrentPage(1);
     };
 
-    // Handle price range changes
     const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
         const value = Number(e.target.value);
         setPriceRange((prev) => {
-            const newRange = [...prev] as [number, number];
+            const newRange: [number, number] = [...prev];
             newRange[index] = value;
             return newRange;
         });
+        setCurrentPage(1);
     };
 
     const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPriceRange([priceRange[0], Number(e.target.value)]);
+        setCurrentPage(1);
     };
 
-    // Determine the name field based on the current language
-    const getProductName = (product: any) => {
-        switch (i18n.language) {
-            case "ukr":
-                return product.name_ua;
-            case "rus":
-                return product.name_rus;
-            case "eng":
-            default:
-                return product.name_eng;
-        }
+    const parentCategories = categories.filter(c => c.subcategories.length > 0);
+
+    const renderPagination = () => {
+        if (totalPages <= 1) return null;
+
+        const range: (number | "...")[] = [];
+        const delta = 1;
+
+        const start = Math.max(2, currentPage - delta);
+        const end = Math.min(totalPages - 1, currentPage + delta);
+
+        if (start > 2) range.push(1, "...");
+        else for (let i = 1; i < start; i++) range.push(i);
+
+        for (let i = start; i <= end; i++) range.push(i);
+
+        if (end < totalPages - 1) range.push("...", totalPages);
+        else for (let i = end + 1; i <= totalPages; i++) range.push(i);
+
+        return (
+            <div className="flex justify-center gap-2 mt-8 flex-wrap">
+                <button
+                    disabled={currentPage === 1}
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    className="px-3 py-1 border rounded text-sm disabled:opacity-30"
+                >
+                    {t("pagination.prev", "Prev")}
+                </button>
+
+                {range.map((p, i) =>
+                    typeof p === "number" ? (
+                        <button
+                            key={i}
+                            onClick={() => setCurrentPage(p)}
+                            className={`px-3 py-1 border rounded text-sm ${p === currentPage ? "bg-indigo-600 text-white border-indigo-600" : "text-white"}`}
+                        >
+                            {p}
+                        </button>
+                    ) : (
+                        <span key={i} className="px-2 text-gray-400">…</span>
+                    )
+                )}
+
+                <button
+                    disabled={currentPage === totalPages}
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    className="px-3 py-1 border rounded text-sm disabled:opacity-30"
+                >
+                    {t("pagination.next", "Next")}
+                </button>
+            </div>
+        );
     };
 
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white relative">
-            {/* Loading Spinner */}
             <LoadingSpinner isLoading={loading} />
 
-            {/* Main Content */}
             <div className="flex flex-col lg:flex-row gap-6 p-6 md:p-8 lg:p-12">
-                {/* Filter Sidebar */}
                 <FilterSidebar isFilterOpen={isFilterOpen} setIsFilterOpen={setIsFilterOpen}>
                     <CategoryFilter
-                        categories={categories}
+                        categories={parentCategories}
                         selectedCategories={selectedCategories}
                         onCategoryChange={handleCategoryChange}
+                        getLabel={getCategoryName}
                     />
                     <PriceFilter
                         priceRange={priceRange}
@@ -111,21 +179,23 @@ const Catalog: React.FC = () => {
                     />
                 </FilterSidebar>
 
-                {/* Product Grid */}
                 <div className="flex-1 mt-0 lg:mt-12">
                     <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-6">{t('navbar.catalog')}</h2>
                     {products.length === 0 && !loading ? (
                         <p className="text-gray-400 text-lg font-light">{t('catalog.no_products')}</p>
                     ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {products.map((product) => (
-                                <ProductCard
-                                    key={product.id}
-                                    product={product}
-                                    getProductName={getProductName}
-                                />
-                            ))}
-                        </div>
+                        <>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {products.map((product) => (
+                                    <ProductCard
+                                        key={product.id}
+                                        product={product}
+                                        getProductName={getProductName}
+                                    />
+                                ))}
+                            </div>
+                            {renderPagination()}
+                        </>
                     )}
                 </div>
             </div>

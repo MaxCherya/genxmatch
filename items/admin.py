@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Supplier, Item, ItemCharacteristic
+from .models import Supplier, Item, ItemCharacteristic, Category
+
+@admin.register(Category)
+class Category(admin.ModelAdmin):
+    list_display = ('id', 'name_eng')
 
 @admin.register(Supplier)
 class SupplierAdmin(admin.ModelAdmin):

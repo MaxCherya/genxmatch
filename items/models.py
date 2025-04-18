@@ -7,7 +7,23 @@ class Supplier(models.Model):
         return self.name
     
 class Category(models.Model):
-    name = models.CharField(max_length=255)
+    name_eng = models.CharField(max_length=255)
+    name_ua = models.CharField(max_length=255)
+    name_rus = models.CharField(max_length=255)
+    description_eng = models.TextField(blank=True, null=True)
+    description_ua = models.TextField(blank=True, null=True)
+    description_rus = models.TextField(blank=True, null=True)
+
+    parent = models.ForeignKey(
+        'self',
+        on_delete=models.SET_NULL,
+        related_name='subcategories',
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.name_eng
 
 class ItemCharacteristic(models.Model):
     item = models.ForeignKey('Item', on_delete=models.CASCADE, related_name='characteristics')
