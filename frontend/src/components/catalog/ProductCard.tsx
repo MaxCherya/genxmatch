@@ -12,7 +12,7 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { addToast } = useToast();
 
     const handleAddToCart = async () => {
@@ -37,7 +37,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
             />
             <h3 className="text-lg font-light tracking-wide mb-2">{getProductName(product)}</h3>
             <p className="text-gray-400 text-sm mb-2">
-                {product.categories.map((cat: any) => cat.name).join(", ")}
+                {product.categories.map((cat: any) => {
+                    switch (i18n.language) {
+                        case "ukr": return cat.name_ua;
+                        case "rus": return cat.name_rus;
+                        case "eng":
+                        default: return cat.name_eng;
+                    }
+                }).join(", ")}
             </p>
             <div className="flex flex-col gap-2">
                 <PriceTag size="sm" current={product.price_uah} currency="₴" />
