@@ -26,43 +26,48 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
 
     return (
         <motion.div
-            className="bg-gradient-to-b from-gray-900/90 to-black/90 backdrop-blur-xl rounded-xl p-4 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border border-gray-800/50 flex flex-col justify-evenly"
+            className="bg-gradient-to-b from-gray-900/90 to-black/90 backdrop-blur-xl rounded-xl p-4 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border border-gray-800/50 flex flex-col justify-between min-h-[500px]"
             whileHover={{ y: -5, boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}
             transition={{ duration: 0.3 }}
         >
-            <img
-                src={product.main_image || "https://via.placeholder.com/300x192?text=No+Image"}
-                alt={getProductName(product)}
-                className="w-48 h-48 object-cover rounded-lg mb-4 self-center"
-            />
-            <h3 className="text-lg font-light tracking-wide mb-2">{getProductName(product)}</h3>
-            <p className="text-gray-400 text-sm mb-2">
-                {product.categories.map((cat: any) => {
-                    switch (i18n.language) {
-                        case "ukr": return cat.name_ua;
-                        case "rus": return cat.name_rus;
-                        case "eng":
-                        default: return cat.name_eng;
-                    }
-                }).join(", ")}
-            </p>
-            <div className="flex flex-col gap-2">
+            {/* Top: Image + Name + Categories */}
+            <div className="flex flex-col items-center text-center">
+                <img
+                    src={product.main_image || "https://via.placeholder.com/300x192?text=No+Image"}
+                    alt={getProductName(product)}
+                    className="w-48 h-48 object-cover rounded-lg mb-4"
+                />
+                <h3 className="text-lg font-light tracking-wide mb-2">
+                    {getProductName(product)}
+                </h3>
+                <p className="text-gray-400 text-sm mb-2">
+                    {product.categories.map((cat: any) => {
+                        switch (i18n.language) {
+                            case "ukr": return cat.name_ua;
+                            case "rus": return cat.name_rus;
+                            case "eng":
+                            default: return cat.name_eng;
+                        }
+                    }).join(", ")}
+                </p>
+            </div>
+
+            {/* Bottom: Buttons */}
+            <div className="mt-auto flex flex-col gap-2">
                 <PriceTag size="sm" current={product.price_uah} currency="₴" />
-                <div className="flex flex-col gap-2">
-                    <motion.button
-                        className="flex-1 px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        {t('catalog.view_details')}
-                    </motion.button>
-                    <motion.button
-                        className="flex-1 px-4 py-2 bg-green-600/80 hover:bg-green-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
-                        onClick={handleAddToCart}
-                        whileTap={{ scale: 0.95 }}
-                    >
-                        {t('catalog.add_to_cart')}
-                    </motion.button>
-                </div>
+                <motion.button
+                    className="px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                    whileTap={{ scale: 0.95 }}
+                >
+                    {t('catalog.view_details')}
+                </motion.button>
+                <motion.button
+                    className="px-4 py-2 bg-green-600/80 hover:bg-green-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                    onClick={handleAddToCart}
+                    whileTap={{ scale: 0.95 }}
+                >
+                    {t('catalog.add_to_cart')}
+                </motion.button>
             </div>
         </motion.div>
     );
