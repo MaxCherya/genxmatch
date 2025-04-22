@@ -5,6 +5,7 @@ import { useToast } from "../../contexts/ToastContext";
 import { addCartItem } from "../../endpoints/cart";
 import PriceTag from "../item-page/PriceTag";
 import ReviewStars from "../item-page/ReviewStars";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
     product: any;
@@ -14,6 +15,7 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) => {
     const { t, i18n } = useTranslation();
     const { addToast } = useToast();
+    const navigate = useNavigate();
 
     const handleAddToCart = async () => {
         try {
@@ -22,6 +24,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
         } catch (error) {
             addToast(t('catalog.add_to_cart_error'), "error");
         }
+    };
+
+    const handleViewDetails = () => {
+        navigate("/product-page", { state: { product } });
     };
 
     return (
@@ -57,6 +63,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
                     <motion.button
                         className="flex-1 cursor-pointer px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                         whileTap={{ scale: 0.95 }}
+                        onClick={handleViewDetails}
                     >
                         {t('catalog.view_details')}
                     </motion.button>
