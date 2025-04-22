@@ -1,10 +1,10 @@
-// src/components/ProductCard.tsx
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../contexts/ToastContext";
 import { addCartItem } from "../../endpoints/cart";
 import PriceTag from "../item-page/PriceTag";
+import ReviewStars from "../item-page/ReviewStars";
 
 interface ProductCardProps {
     product: any;
@@ -35,7 +35,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
                 alt={getProductName(product)}
                 className="w-48 h-48 object-cover rounded-lg mb-4 self-center"
             />
-            <h3 className="text-lg font-light tracking-wide mb-2">{getProductName(product)}</h3>
+            <h3 className="text-lg font-light tracking-wide mb-0.5">{getProductName(product)}</h3>
             <p className="text-gray-400 text-sm mb-2">
                 {product.categories.map((cat: any) => {
                     switch (i18n.language) {
@@ -47,16 +47,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
                 }).join(", ")}
             </p>
             <div className="flex flex-col gap-2">
-                <PriceTag size="sm" current={product.price_uah} currency="₴" />
+                <PriceTag size="sm" current={product.price_uah} old={product.old_price_uah ? product.old_price_uah : null} currency="₴" />
+                <div className="self-center flex flex-col my-2 items-center">
+                    <ReviewStars rating={product.rating} readOnly={true} />
+                    <p className="text-gray-400 text-sm mt-0.5">{product.sold} {t('catalog.items_sold')}</p>
+                </div>
                 <div className="flex flex-col gap-2">
                     <motion.button
-                        className="flex-1 px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                        className="flex-1 cursor-pointer px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                         whileTap={{ scale: 0.95 }}
                     >
                         {t('catalog.view_details')}
                     </motion.button>
                     <motion.button
-                        className="flex-1 px-4 py-2 bg-green-600/80 hover:bg-green-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                        className="flex-1 px-4 cursor-pointer py-2 bg-green-600/80 hover:bg-green-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                         onClick={handleAddToCart}
                         whileTap={{ scale: 0.95 }}
                     >

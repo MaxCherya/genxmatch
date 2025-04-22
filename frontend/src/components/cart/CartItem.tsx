@@ -1,4 +1,3 @@
-// src/components/CartItem.tsx
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
@@ -12,7 +11,7 @@ interface CartItemProps {
 }
 
 const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { addToast } = useToast();
     const [quantity, setQuantity] = React.useState(cartItem.quantity);
     const [isUpdating, setIsUpdating] = React.useState(false);
@@ -58,7 +57,17 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
             <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-lg font-light tracking-wide mb-2">{getProductName(cartItem.item)}</h3>
                 <p className="text-gray-400 text-sm mb-2">
-                    {cartItem.item.categories.map((cat: any) => cat.name).join(", ")}
+                    {cartItem.item.categories
+                        .map((cat: any) => {
+                            switch (i18n.language) {
+                                case "ukr": return cat.name_ua;
+                                case "rus": return cat.name_rus;
+                                case "eng":
+                                default: return cat.name_eng;
+                            }
+                        })
+                        .join(", ")
+                    }
                 </p>
                 <p className="text-xl font-light mb-2">₴{cartItem.item.price_uah}</p>
             </div>

@@ -33,13 +33,13 @@ const ReviewStars: React.FC<Props> = ({
                         onClick={() => !readOnly && onChange?.(i + 1)}
                         className={clsx(
                             sizeClasses[size],
-                            'cursor-pointer transition',
+                            'transition',
                             filled
                                 ? 'text-yellow-400 fill-yellow-400'
                                 : half
                                     ? 'text-yellow-400 fill-yellow-200'
                                     : 'text-gray-300 fill-none',
-                            readOnly && 'cursor-default'
+                            readOnly ? 'cursor-default' : 'cursor-pointer'
                         )}
                     />
                 );
