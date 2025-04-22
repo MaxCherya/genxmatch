@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logo from '/assets/logo.png';
+import { useCart } from "../../contexts/CartContext";
+import clsx from "clsx";
 
 interface NavbarProps {
     isFullscreen?: boolean;
@@ -15,6 +17,8 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
     const [lastScrollY, setLastScrollY] = useState(0);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+    const { cartCount } = useCart();
+
     const { t } = useTranslation();
 
     const navigate = useNavigate();
@@ -22,7 +26,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
     const categories = [
         { name: t('navbar.catalog'), icon: "📚", action: () => navigate('/catalog') },
         { name: t('navbar.contact_us'), icon: "✉️", action: () => console.log("Contact Us clicked") },
-        { name: t('navbar.cart'), icon: "🛒", action: () => navigate('/cart') },
+        { name: t('navbar.cart'), icon: "🛒", action: () => navigate('/cart'), highlight: cartCount > 0 },
     ];
 
     useEffect(() => {
@@ -71,15 +75,27 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                             <motion.button
                                 key={category.name}
                                 onClick={category.action}
-                                className="group flex cursor-pointer items-center gap-2 text-sm md:text-base font-light tracking-wide transition-all duration-300"
+                                className={clsx(
+                                    "group flex cursor-pointer items-center gap-2 text-sm md:text-base font-light tracking-wide transition-all duration-300 relative",
+                                    category.highlight && "text-green-400"
+                                )}
                                 whileHover={{ y: -2 }}
                                 transition={{ duration: 0.1 }}
                             >
                                 <span
-                                    className="font-[Rubik_Mono_One] uppercase text-gray-400/70 hover:text-white transition duration-300"
+                                    className={clsx(
+                                        "font-[Rubik_Mono_One] uppercase transition duration-300",
+                                        category.highlight ? "text-green-400" : "text-gray-400/70 hover:text-white"
+                                    )}
                                 >
                                     {category.name}
                                 </span>
+
+                                {category.name === t('navbar.cart') && cartCount > 0 && (
+                                    <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                                        {cartCount}
+                                    </span>
+                                )}
                             </motion.button>
                         ))}
                     </div>
@@ -112,19 +128,28 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                                     {categories.map((category) => (
                                         <motion.button
                                             key={category.name}
-                                            onClick={() => {
-                                                category.action();
-                                                setIsMobileMenuOpen(false);
-                                            }}
-                                            className="flex items-center justify-start gap-3 w-full py-2 text-gray-200 hover:text-white transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
-                                            whileHover={{ x: 5 }}
-                                            transition={{ duration: 0.3 }}
+                                            onClick={category.action}
+                                            className={clsx(
+                                                "group flex cursor-pointer items-center gap-2 text-sm md:text-base font-light tracking-wide transition-all duration-300 relative",
+                                                category.highlight && "text-green-400"
+                                            )}
+                                            whileHover={{ y: -2 }}
+                                            transition={{ duration: 0.1 }}
                                         >
                                             <span
-                                                className="font-[Rubik_Mono_One] uppercase font-light text-gray-400 transition duration-300"
+                                                className={clsx(
+                                                    "font-[Rubik_Mono_One] uppercase transition duration-300",
+                                                    category.highlight ? "text-green-400" : "text-gray-400/70 hover:text-white"
+                                                )}
                                             >
                                                 {category.name}
                                             </span>
+
+                                            {category.name === t('navbar.cart') && cartCount > 0 && (
+                                                <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
+                                                    {cartCount}
+                                                </span>
+                                            )}
                                         </motion.button>
                                     ))}
                                     <div className="border-t border-gray-800/50 pt-4">

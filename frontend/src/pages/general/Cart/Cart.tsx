@@ -5,12 +5,15 @@ import CartItem from "../../../components/cart/CartItem";
 import CartSummary from "../../../components/cart/CartSummary";
 import LoadingSpinner from "../../../components/general/LoadingSpinner";
 import { useToast } from "../../../contexts/ToastContext";
+import { useCart } from "../../../contexts/CartContext";
 
 const Cart: React.FC = () => {
     const { t, i18n } = useTranslation();
     const { addToast } = useToast();
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+
+    const { refreshCart } = useCart();
 
     // Calculate total price
     const totalPrice = cartItems.reduce(
@@ -33,6 +36,7 @@ const Cart: React.FC = () => {
 
     useEffect(() => {
         loadCartItems();
+        refreshCart();
     }, []);
 
     // Determine the product name based on the current language

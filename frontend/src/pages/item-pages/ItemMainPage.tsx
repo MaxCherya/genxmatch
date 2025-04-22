@@ -12,6 +12,7 @@ import SpecItem from "../../components/item-page/SpecItem";
 import VideoPlayer from "../../components/item-page/VideoPlayer";
 import HeroImagesCarousel from "../../components/imgs/HeroImagesCarousel/HeroImagesCarousel";
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
+import { useCart } from "../../contexts/CartContext";
 
 interface Props {
     setIsFullscreen?: (value: boolean) => void;
@@ -24,6 +25,8 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
     const location = useLocation();
     const navigate = useNavigate();
     const product = location.state?.product;
+
+    const { refreshCart } = useCart();
 
     if (!product) {
         return (
@@ -90,6 +93,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
     const handleAddToCart = async () => {
         try {
             await addCartItem(product);
+            refreshCart();
             addToast(t("catalog.added_to_cart"), "success");
         } catch (error) {
             addToast(t("catalog.add_to_cart_error"), "error");
@@ -104,7 +108,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
             {/* <PicturesSlider images={product.gallery} asBG={true} /> */}
 
             <div
-                className={`relative z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'
+                className={`relative min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'
                     }`}
             >
                 {/* Left Section Photos */}
@@ -155,14 +159,14 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         </div>
                         <div className="flex gap-4">
                             <motion.button
-                                className="flex-1 px-4 py-2 bg-green-600/80 hover:bg-green-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                                className="flex-1 cursor-pointer px-4 py-2 bg-green-600/80 hover:bg-green-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                                 whileTap={{ scale: 0.95 }}
                                 onClick={handleAddToCart}
                             >
                                 {t("catalog.add_to_cart")}
                             </motion.button>
                             <motion.button
-                                className="flex-1 px-4 py-2 bg-gray-600/80 hover:bg-gray-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                                className="flex-1 cursor-pointer px-4 py-2 bg-gray-600/80 hover:bg-gray-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => navigate(-1)}
                             >
@@ -184,7 +188,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                     {t("specifications_and_features")}
                 </h2>
                 <div className="flex flex-col items-center max-w-3xl">
-                    <p className="text-gray-800 text-base leading-relaxed mb-6 whitespace-pre-line">
+                    <p className="text-gray-800 text-base leading-relaxed whitespace-pre-line">
                         {getDescription()}
                     </p>
                     {/* Divider */}

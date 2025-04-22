@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../contexts/ToastContext";
 import { updateCartItemQuantity, removeCartItem } from "../../endpoints/cart";
+import { useCart } from "../../contexts/CartContext";
 
 interface CartItemProps {
     cartItem: any;
@@ -16,12 +17,15 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
     const [quantity, setQuantity] = React.useState(cartItem.quantity);
     const [isUpdating, setIsUpdating] = React.useState(false);
 
+    const { refreshCart } = useCart();
+
     const handleQuantityChange = async (newQuantity: number) => {
         if (newQuantity < 1) return;
         setIsUpdating(true);
         try {
             await updateCartItemQuantity(cartItem.id, newQuantity);
             setQuantity(newQuantity);
+            refreshCart();
             onUpdate();
         } catch (error) {
             addToast(t('cart.update_error'), "error");
@@ -35,6 +39,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
         try {
             await removeCartItem(cartItem.id);
             onUpdate();
+            refreshCart();
             addToast(t('cart.item_removed'), "success");
         } catch (error) {
             addToast(t('cart.remove_error'), "error");

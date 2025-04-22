@@ -6,6 +6,7 @@ import { addCartItem } from "../../endpoints/cart";
 import PriceTag from "../item-page/PriceTag";
 import ReviewStars from "../item-page/ReviewStars";
 import { useNavigate } from "react-router-dom";
+import { useCart } from "../../contexts/CartContext";
 
 interface ProductCardProps {
     product: any;
@@ -15,11 +16,13 @@ interface ProductCardProps {
 const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) => {
     const { t, i18n } = useTranslation();
     const { addToast } = useToast();
+    const { refreshCart } = useCart();
     const navigate = useNavigate();
 
     const handleAddToCart = async () => {
         try {
             await addCartItem(product);
+            refreshCart();
             addToast(t('catalog.added_to_cart'), "success");
         } catch (error) {
             addToast(t('catalog.add_to_cart_error'), "error");
