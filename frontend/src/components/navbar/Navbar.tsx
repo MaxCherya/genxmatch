@@ -66,17 +66,20 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                     </motion.div>
 
                     {/* Desktop Categories */}
-                    <div className="hidden lg:flex flex-1 justify-center gap-8 font-bold">
+                    <div className="hidden lg:flex flex-1 justify-center gap-8">
                         {categories.map((category) => (
                             <motion.button
                                 key={category.name}
                                 onClick={category.action}
-                                className="flex cursor-pointer items-center gap-2 text-gray-200 hover:text-white text-sm md:text-base font-light tracking-wide transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+                                className="group flex cursor-pointer items-center gap-2 text-sm md:text-base font-light tracking-wide transition-all duration-300"
                                 whileHover={{ y: -2 }}
                                 transition={{ duration: 0.1 }}
                             >
-                                <span className="text-lg">{category.icon}</span>
-                                <span>{category.name}</span>
+                                <span
+                                    className="font-[Rubik_Mono_One] uppercase text-gray-400/70 hover:text-white transition duration-300"
+                                >
+                                    {category.name}
+                                </span>
                             </motion.button>
                         ))}
                     </div>
@@ -103,7 +106,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                                 animate={{ height: "auto", opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
                                 transition={{ duration: 0.4, ease: "easeInOut" }}
-                                className="absolute top-[60px] left-0 right-0 bg-gradient-to-b from-gray-900/90 to-black/90 backdrop-blur-xl lg:hidden border-t border-gray-800/50"
+                                className="absolute top-[60px] left-0 right-0 bg-gradient-to-b from-gray-900/95 to-black/95 backdrop-blur-xl lg:hidden border-t border-gray-800/80"
                             >
                                 <div className="flex flex-col p-6 gap-5">
                                     {categories.map((category) => (
@@ -113,12 +116,15 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                                                 category.action();
                                                 setIsMobileMenuOpen(false);
                                             }}
-                                            className="flex items-center justify-start gap-3 w-full py-2 text-gray-200 hover:text-white text-base font-light tracking-wide transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
+                                            className="flex items-center justify-start gap-3 w-full py-2 text-gray-200 hover:text-white transition-all duration-300 hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]"
                                             whileHover={{ x: 5 }}
                                             transition={{ duration: 0.3 }}
                                         >
-                                            <span className="text-lg">{category.icon}</span>
-                                            <span>{category.name}</span>
+                                            <span
+                                                className="font-[Rubik_Mono_One] uppercase font-light text-gray-400 transition duration-300"
+                                            >
+                                                {category.name}
+                                            </span>
                                         </motion.button>
                                     ))}
                                     <div className="border-t border-gray-800/50 pt-4">

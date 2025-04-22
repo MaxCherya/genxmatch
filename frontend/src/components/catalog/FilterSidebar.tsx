@@ -16,10 +16,16 @@ const FilterSidebar: React.FC<FilterSidebarProps> = ({ isFilterOpen, setIsFilter
         <div className="lg:w-1/4 mt-12">
             {/* Filter Toggle Button (Mobile) */}
             <button
-                className="lg:hidden flex items-center gap-2 px-4 py-2 bg-gray-800/50 hover:bg-gray-700/50 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                 onClick={() => setIsFilterOpen(!isFilterOpen)}
+                className={`lg:hidden flex items-center gap-2 px-4 py-2 rounded-lg text-base font-light tracking-wide transition-all duration-200 
+    ${isFilterOpen ? 'bg-cyan-700/80 text-white ring-2 ring-cyan-400' : 'bg-gray-800/50 text-white hover:bg-gray-700/50'}`}
             >
-                <Filter size={20} />
+                <motion.div
+                    animate={{ rotate: isFilterOpen ? 90 : 0 }}
+                    transition={{ duration: 0.2 }}
+                >
+                    <Filter size={20} />
+                </motion.div>
                 <span>{t('catalog.filters')}</span>
             </button>
 
