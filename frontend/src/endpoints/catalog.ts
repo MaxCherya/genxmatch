@@ -134,3 +134,9 @@ export const fetchItemById = async (itemId: number): Promise<Item> => {
     if (!res.ok) throw new Error(`Failed to fetch item with id ${itemId}`);
     return await res.json();
 };
+
+export const fetchItemSuggestions = async (itemId: number): Promise<Item[]> => {
+    const res = await fetch(`/api/items/items/${itemId}/suggestions/`);
+    if (!res.ok) throw new Error("Failed to fetch suggestions");
+    return await res.json();
+};

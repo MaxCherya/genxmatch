@@ -4,8 +4,8 @@ import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../contexts/ToastContext";
 import { useCart } from "../../contexts/CartContext";
-import { fetchItemById, Item } from "../../endpoints/catalog";
-import { addCartItem } from "../../endpoints/cart"; // ✅ import correctly
+import { fetchItemById, fetchItemSuggestions, Item } from "../../endpoints/catalog";
+import { addCartItem } from "../../endpoints/cart";
 import FeatureSection from "../../components/item-page/FeaturesSection";
 import PriceTag from "../../components/item-page/PriceTag";
 import ReviewStars from "../../components/item-page/ReviewStars";
@@ -14,6 +14,7 @@ import VideoPlayer from "../../components/item-page/VideoPlayer";
 import HeroImagesCarousel from "../../components/imgs/HeroImagesCarousel/HeroImagesCarousel";
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
 import LoadingSpinner from "../../components/general/LoadingSpinner";
+import SuggestionsSection from "../../components/item-page/SuggestionSection";
 
 interface Props {
     setIsFullscreen?: (value: boolean) => void;
@@ -31,6 +32,9 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
 
+    const [suggestedProducts, setSuggestedProducts] = useState<Item[]>([]);
+    const [loadingSuggestions, setLoadingSuggestions] = useState(true);
+
     useEffect(() => {
         if (!id) return;
         const numericId = parseInt(id, 10);
@@ -39,11 +43,17 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 .then((data) => {
                     setProduct(data);
                     setLoading(false);
+                    return fetchItemSuggestions(numericId);
+                })
+                .then((suggestions) => {
+                    setSuggestedProducts(suggestions);
+                    setLoadingSuggestions(false);
                 })
                 .catch((err) => {
-                    console.error('Failed to fetch item', err);
+                    console.error('Failed to fetch item or suggestions', err);
                     setError(true);
                     setLoading(false);
+                    setLoadingSuggestions(false);
                 });
         }
     }, [id]);
@@ -134,10 +144,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
         <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white overflow-hidden">
             <ScrollProgressCircle isFullscreen={isFullscreen} />
 
-            <div
-                className={`min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'
-                    }`}
-            >
+            <div className={`min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'}`}>
                 {product.gallery && (
                     <div className="aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9] z-[9999]">
                         <HeroImagesCarousel
@@ -262,9 +269,9 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         <VideoPlayer
                             src={product.video}
                             poster={product.video_poster || undefined}
-                            loop={true}
-                            muted={true}
-                            autoplay={true}
+                            loop
+                            muted
+                            autoplay
                         />
                     </div>
                 </div>
@@ -279,6 +286,13 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
             >
                 <FeatureSection features={getFeatures()} theme="light" />
             </motion.div>
+
+            {/* Suggestions Section */}
+            {!loadingSuggestions && suggestedProducts.length > 0 && (
+                <div className="mx-auto pb-12 px-6 z-10 bg-gradient-to-b from-gray-900 to-white">
+                    <SuggestionsSection suggestions={suggestedProducts} />
+                </div>
+            )}
         </div>
     );
 };

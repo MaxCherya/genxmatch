@@ -152,5 +152,10 @@
         "fetch_error": "Failed to load cart items. Please try again later.",
         "update_error": "Failed to update quantity. Please try again.",
         "remove_error": "Failed to remove item. Please try again."
+    },
+    "suggestions": {
+        "header": "You may also like",
+        "next": "Next",
+        "previous": "Previous"
     }
 }
