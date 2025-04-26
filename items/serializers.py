@@ -30,8 +30,7 @@ class ItemSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'name_ua', 'name_eng', 'name_rus',
-            'artiqul_original', 'supplier',
-            'price_original_uah', 'price_uah', 'min_price_uah', 'old_price_uah',
+            'artiqul_original', 'price_uah', 'old_price_uah',
 
             'item_length', 'item_height', 'item_width', 'item_weight',
 
@@ -55,4 +54,19 @@ class ItemSerializer(serializers.ModelSerializer):
 
             'main_image', 'gallery', 'video', 'video_poster',
             'categories', 'characteristics',
+        ]
+
+class CatalogItemSerializer(serializers.ModelSerializer):
+    categories = CategorySerializer(many=True)
+
+    class Meta:
+        model = Item
+        fields = [
+            'id',
+            'name_ua', 'name_eng', 'name_rus', 'price_uah','old_price_uah',
+
+            'sold', 'rating',
+
+            'main_image',
+            'categories'
         ]

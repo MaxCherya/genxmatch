@@ -30,7 +30,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
     };
 
     const handleViewDetails = () => {
-        navigate("/product-page", { state: { product } });
+        navigate(`/product-page/${product.id}`);
     };
 
     return (

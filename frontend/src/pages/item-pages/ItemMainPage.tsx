@@ -1,18 +1,19 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../contexts/ToastContext";
-import { addCartItem } from "../../endpoints/cart";
+import { useCart } from "../../contexts/CartContext";
+import { fetchItemById, Item } from "../../endpoints/catalog";
+import { addCartItem } from "../../endpoints/cart"; // ✅ import correctly
 import FeatureSection from "../../components/item-page/FeaturesSection";
-// import PicturesSlider from "../../components/item-page/PicturesSlider";
 import PriceTag from "../../components/item-page/PriceTag";
 import ReviewStars from "../../components/item-page/ReviewStars";
 import SpecItem from "../../components/item-page/SpecItem";
 import VideoPlayer from "../../components/item-page/VideoPlayer";
 import HeroImagesCarousel from "../../components/imgs/HeroImagesCarousel/HeroImagesCarousel";
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
-import { useCart } from "../../contexts/CartContext";
+import LoadingSpinner from "../../components/general/LoadingSpinner";
 
 interface Props {
     setIsFullscreen?: (value: boolean) => void;
@@ -22,16 +23,43 @@ interface Props {
 const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }) => {
     const { t, i18n } = useTranslation();
     const { addToast } = useToast();
-    const location = useLocation();
-    const navigate = useNavigate();
-    const product = location.state?.product;
-
     const { refreshCart } = useCart();
+    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
 
-    if (!product) {
+    const [product, setProduct] = useState<Item | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(false);
+
+    useEffect(() => {
+        if (!id) return;
+        const numericId = parseInt(id, 10);
+        if (!isNaN(numericId)) {
+            fetchItemById(numericId)
+                .then((data) => {
+                    setProduct(data);
+                    setLoading(false);
+                })
+                .catch((err) => {
+                    console.error('Failed to fetch item', err);
+                    setError(true);
+                    setLoading(false);
+                });
+        }
+    }, [id]);
+
+    if (loading) {
         return (
-            <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white flex items-center justify-center p-10">
-                <p className="text-lg font-light">{t("catalog.no_product_data")}</p>
+            <div className="min-h-screen bg-black text-white flex items-center justify-center">
+                <LoadingSpinner />
+            </div>
+        );
+    }
+
+    if (error || !product) {
+        return (
+            <div className="min-h-screen bg-black text-white flex items-center justify-center">
+                <p className="text-lg">{t("catalog.no_product_data")}</p>
             </div>
         );
     }
@@ -70,23 +98,25 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
             default:
                 return `${product.short_description_eng}`;
         }
-    }
+    };
 
     const getFeatures = () => {
         const featureKeys = ["feature_1", "feature_2", "feature_3", "feature_4"];
+        const prod = product as { [key: string]: any };
+
         return featureKeys.map((key) => ({
             header:
                 i18n.language === "ukr"
-                    ? product[`${key}_header_ua`]
+                    ? prod[`${key}_header_ua`]
                     : i18n.language === "rus"
-                        ? product[`${key}_header_rus`]
-                        : product[`${key}_header_eng`],
+                        ? prod[`${key}_header_rus`]
+                        : prod[`${key}_header_eng`],
             description:
                 i18n.language === "ukr"
-                    ? product[key + "_ua"]
+                    ? prod[`${key}_ua`]
                     : i18n.language === "rus"
-                        ? product[key + "_rus"]
-                        : product[key + "_eng"],
+                        ? prod[`${key}_rus`]
+                        : prod[`${key}_eng`],
         }));
     };
 
@@ -101,22 +131,23 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white relative overflow-hidden">
-
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white overflow-hidden">
             <ScrollProgressCircle isFullscreen={isFullscreen} />
-            {/* Background Slider for subtle effect */}
-            {/* <PicturesSlider images={product.gallery} asBG={true} /> */}
 
             <div
-                className={`relative min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'
+                className={`min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'
                     }`}
             >
-                {/* Left Section Photos */}
-                <div className="aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9]">
-                    <HeroImagesCarousel images={product.gallery} setIsFullscreen={setIsFullscreen} />
-                </div>
+                {product.gallery && (
+                    <div className="aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9] z-[9999]">
+                        <HeroImagesCarousel
+                            images={product.gallery}
+                            setIsFullscreen={setIsFullscreen}
+                        />
+                    </div>
+                )}
 
-                {/* Right Section: Product Details */}
+                {/* Right Section */}
                 <div className="flex flex-col gap-6 xl:min-h-[500px] max-w-2xl">
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -191,7 +222,6 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                     <p className="text-gray-800 text-base leading-relaxed whitespace-pre-line">
                         {getDescription()}
                     </p>
-                    {/* Divider */}
                     <hr className="w-full max-w-3xl h-[3px] bg-black border-none rounded-full my-12" />
                     <div className="flex flex-col gap-2 w-full">
                         {product.characteristics.map((spec: any, index: number) => (
@@ -217,26 +247,21 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 </div>
             </motion.div>
 
+            {/* Video Section */}
             {product.video && (
                 <div className="relative w-full bg-black pt-12 z-10 flex flex-col items-center px-4 text-black">
-                    {/* Title */}
                     <motion.h2
-                        initial={{
-                            opacity: 0,
-                        }}
-                        whileInView={{
-                            opacity: 1,
-                        }}
-                        viewport={{
-                            margin: '-10%'
-                        }}
-                        className="text-3xl text-gray-400 sm:text-4xl font-bold text-center mb-12">
+                        initial={{ opacity: 0 }}
+                        whileInView={{ opacity: 1 }}
+                        viewport={{ margin: '-10%' }}
+                        className="text-3xl text-gray-400 sm:text-4xl font-bold text-center mb-12"
+                    >
                         {t('video_demo')}
                     </motion.h2>
                     <div className="w-full max-w-3xl">
                         <VideoPlayer
                             src={product.video}
-                            poster={product.video_poster}
+                            poster={product.video_poster || undefined}
                             loop={true}
                             muted={true}
                             autoplay={true}
@@ -244,8 +269,6 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                     </div>
                 </div>
             )}
-
-
 
             {/* Features Section */}
             <motion.div

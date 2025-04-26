@@ -3,12 +3,13 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Max
 from .models import Item, Category
-from .serializers import ItemSerializer, CategorySerializer
+from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer
 from .paginator import CatalogPagination
+from django.utils.translation import gettext as _
 
 
 class ItemListView(generics.ListAPIView):
-    serializer_class = ItemSerializer
+    serializer_class = CatalogItemSerializer
     pagination_class = CatalogPagination
 
     def get_queryset(self):
@@ -37,6 +38,17 @@ class ItemListView(generics.ListAPIView):
             qs = qs.order_by("-sold")
 
         return qs
+
+
+class GetItem(APIView):
+    def get(self, request, item_id):
+        try:
+            item = Item.objects.get(id=item_id)
+        except Item.DoesNotExist:
+            return Response({'error': _('Item not found')}, status=404)
+
+        serializer = ItemSerializer(item)
+        return Response(serializer.data)
 
 
 class CatalogFiltersView(APIView):
