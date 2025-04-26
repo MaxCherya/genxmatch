@@ -42,9 +42,18 @@ class Item(models.Model):
     artiqul_original = models.CharField(max_length=255)
     supplier = models.ForeignKey(Supplier, on_delete=models.CASCADE, related_name='items')
 
+    item_length = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    item_height = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    item_weight = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    item_width = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
+    sold = models.IntegerField(default=0)
+    rating = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+
     price_original_uah = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     price_uah = models.DecimalField(max_digits=10, decimal_places=2)
     min_price_uah = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    old_price_uah = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
 
     short_description_ua = models.TextField(blank=True, null=True)
     short_description_eng = models.TextField(blank=True, null=True)

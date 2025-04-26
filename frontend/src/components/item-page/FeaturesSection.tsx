@@ -9,11 +9,11 @@ type Feature = {
 
 type Props = {
     features: Feature[];
+    theme?: 'light' | 'dark';
 };
 
-const FeatureSection: React.FC<Props> = ({ features }) => {
+const FeatureSection: React.FC<Props> = ({ features, theme = 'light' }) => {
     const [activeIndex, setActiveIndex] = useState<number | null>(null);
-
     const refs = useRef<(HTMLDivElement | null)[]>([]);
 
     useEffect(() => {
@@ -46,6 +46,10 @@ const FeatureSection: React.FC<Props> = ({ features }) => {
         };
     }, []);
 
+    const textHeaderColor = theme === 'dark' ? 'text-gray-100' : 'text-gray-400';
+    const textDescColor = theme === 'dark' ? 'text-gray-300' : 'text-gray-500';
+    const barColor = theme === 'dark' ? 'bg-orange-500' : 'bg-cyan-400';
+
     return (
         <div className="flex flex-col gap-8 w-full items-center py-8 md:gap-12 md:py-12">
             {features.map((feature, index) => {
@@ -74,15 +78,16 @@ const FeatureSection: React.FC<Props> = ({ features }) => {
                                 : 'items-end text-right'
                         )}
                     >
-                        <h2 className="text-xl font-bold text-gray-800 mb-2 md:text-2xl">
+                        <h2 className={clsx('text-xl font-bold mb-2 md:text-2xl', textHeaderColor)}>
                             {feature.header}
                         </h2>
-                        <p className="text-gray-600 text-sm leading-relaxed md:text-base">
+                        <p className={clsx('text-sm leading-relaxed md:text-base', textDescColor)}>
                             {feature.description}
                         </p>
                         <div
                             className={clsx(
-                                'w-12 h-1 mt-3 bg-orange-400 rounded-full md:w-16 md:mt-4',
+                                'w-12 h-1 mt-3 rounded-full md:w-16 md:mt-4',
+                                barColor,
                                 index % 2 === 0 ? 'mr-auto' : 'ml-auto'
                             )}
                         />

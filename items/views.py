@@ -14,20 +14,27 @@ class ItemListView(generics.ListAPIView):
     def get_queryset(self):
         qs = Item.objects.all()
 
-        # Filtering by price
         min_price = self.request.query_params.get("min_price")
         max_price = self.request.query_params.get("max_price")
-
         if min_price:
             qs = qs.filter(price_uah__gte=min_price)
         if max_price:
             qs = qs.filter(price_uah__lte=max_price)
 
-        # Filtering by category IDs
         categories = self.request.query_params.get("categories")
         if categories:
             category_ids = [int(cid) for cid in categories.split(",") if cid.isdigit()]
             qs = qs.filter(categories__id__in=category_ids).distinct()
+
+        sort = self.request.query_params.get("sort")
+        if sort == "price_asc":
+            qs = qs.order_by("price_uah")
+        elif sort == "price_desc":
+            qs = qs.order_by("-price_uah")
+        elif sort == "rating":
+            qs = qs.order_by("-rating")
+        elif sort == "popularity":
+            qs = qs.order_by("-sold")
 
         return qs
 

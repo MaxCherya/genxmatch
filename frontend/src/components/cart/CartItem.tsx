@@ -1,9 +1,9 @@
-// src/components/CartItem.tsx
 import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useToast } from "../../contexts/ToastContext";
 import { updateCartItemQuantity, removeCartItem } from "../../endpoints/cart";
+import { useCart } from "../../contexts/CartContext";
 
 interface CartItemProps {
     cartItem: any;
@@ -12,10 +12,12 @@ interface CartItemProps {
 }
 
 const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { addToast } = useToast();
     const [quantity, setQuantity] = React.useState(cartItem.quantity);
     const [isUpdating, setIsUpdating] = React.useState(false);
+
+    const { refreshCart } = useCart();
 
     const handleQuantityChange = async (newQuantity: number) => {
         if (newQuantity < 1) return;
@@ -23,6 +25,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
         try {
             await updateCartItemQuantity(cartItem.id, newQuantity);
             setQuantity(newQuantity);
+            refreshCart();
             onUpdate();
         } catch (error) {
             addToast(t('cart.update_error'), "error");
@@ -36,6 +39,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
         try {
             await removeCartItem(cartItem.id);
             onUpdate();
+            refreshCart();
             addToast(t('cart.item_removed'), "success");
         } catch (error) {
             addToast(t('cart.remove_error'), "error");
@@ -58,7 +62,17 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
             <div className="flex-1 text-center sm:text-left">
                 <h3 className="text-lg font-light tracking-wide mb-2">{getProductName(cartItem.item)}</h3>
                 <p className="text-gray-400 text-sm mb-2">
-                    {cartItem.item.categories.map((cat: any) => cat.name).join(", ")}
+                    {cartItem.item.categories
+                        .map((cat: any) => {
+                            switch (i18n.language) {
+                                case "ukr": return cat.name_ua;
+                                case "rus": return cat.name_rus;
+                                case "eng":
+                                default: return cat.name_eng;
+                            }
+                        })
+                        .join(", ")
+                    }
                 </p>
                 <p className="text-xl font-light mb-2">₴{cartItem.item.price_uah}</p>
             </div>

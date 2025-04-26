@@ -130,7 +130,15 @@
         "fetch_error": "Failed to load products. Please try again later.",
         "add_to_cart": "Add to Cart",
         "added_to_cart": "Item added to cart successfully!",
-        "add_to_cart_error": "Failed to add item to cart. Please try again."
+        "add_to_cart_error": "Failed to add item to cart. Please try again.",
+        "items_sold": "items sold",
+        "sort": {
+            "popularity": "Most Popular",
+            "rating": "Highest Rated",
+            "price_asc": "Price: Low to High",
+            "price_desc": "Price: High to Low"
+        },
+        "back_to_catalog": "Back to Catalog"
     },
     "cart": {
         "empty": "Your cart is empty.",

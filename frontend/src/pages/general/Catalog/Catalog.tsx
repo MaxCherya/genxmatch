@@ -26,6 +26,7 @@ const Catalog: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [sortOption, setSortOption] = useState<"popularity" | "rating" | "price_asc" | "price_desc">("popularity");
 
     const getCategoryName = (cat: Category) => {
         switch (i18n.language) {
@@ -68,6 +69,7 @@ const Catalog: React.FC = () => {
                     minPrice: priceRange[0],
                     maxPrice: priceRange[1],
                     categories: selectedCategories,
+                    sort: sortOption,
                 });
                 setProducts(res.results);
                 const pageSize = res.results.length > 0 ? res.results.length : 1;
@@ -79,7 +81,7 @@ const Catalog: React.FC = () => {
             }
         };
         loadItems();
-    }, [selectedCategories, priceRange, currentPage]);
+    }, [selectedCategories, priceRange, currentPage, sortOption]);
 
     const handleCategoryChange = (categoryId: number) => {
         setSelectedCategories((prev) =>
@@ -180,7 +182,24 @@ const Catalog: React.FC = () => {
                 </FilterSidebar>
 
                 <div className="flex-1 mt-0 lg:mt-12">
-                    <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-6">{t('navbar.catalog')}</h2>
+                    <div className="flex flex-row justify-between w-full mb-6">
+                        <h2 className="text-2xl md:text-3xl font-light tracking-wide">{t('navbar.catalog')}</h2>
+                        <div className="flex justify-end">
+                            <select
+                                value={sortOption}
+                                onChange={(e) => {
+                                    setSortOption(e.target.value as any);
+                                    setCurrentPage(1);
+                                }}
+                                className="bg-gray-800 text-white border border-gray-700 rounded px-3 py-1 text-sm"
+                            >
+                                <option value="popularity">{t("catalog.sort.popularity", "Most Popular")}</option>
+                                <option value="rating">{t("catalog.sort.rating", "Highest Rated")}</option>
+                                <option value="price_asc">{t("catalog.sort.price_asc", "Price: Low to High")}</option>
+                                <option value="price_desc">{t("catalog.sort.price_desc", "Price: High to Low")}</option>
+                            </select>
+                        </div>
+                    </div>
                     {products.length === 0 && !loading ? (
                         <p className="text-gray-400 text-lg font-light">{t('catalog.no_products')}</p>
                     ) : (

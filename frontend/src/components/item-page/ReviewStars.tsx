@@ -4,7 +4,7 @@ import clsx from 'clsx';
 
 type Props = {
     rating: number; // 0–5 (can be float like 4.5)
-    size?: 'sm' | 'md' | 'lg';
+    size?: 'xs' | 'sm' | 'md' | 'lg';
     readOnly?: boolean;
     onChange?: (value: number) => void;
 };
@@ -16,6 +16,7 @@ const ReviewStars: React.FC<Props> = ({
     onChange,
 }) => {
     const sizeClasses = {
+        xs: 'w-3 h-3',
         sm: 'w-4 h-4',
         md: 'w-5 h-5',
         lg: 'w-6 h-6',
@@ -33,13 +34,13 @@ const ReviewStars: React.FC<Props> = ({
                         onClick={() => !readOnly && onChange?.(i + 1)}
                         className={clsx(
                             sizeClasses[size],
-                            'cursor-pointer transition',
+                            'transition',
                             filled
                                 ? 'text-yellow-400 fill-yellow-400'
                                 : half
                                     ? 'text-yellow-400 fill-yellow-200'
                                     : 'text-gray-300 fill-none',
-                            readOnly && 'cursor-default'
+                            readOnly ? 'cursor-default' : 'cursor-pointer'
                         )}
                     />
                 );

@@ -49,17 +49,20 @@ export const fetchItemsPaginated = async ({
     minPrice,
     maxPrice,
     categories,
+    sort,
 }: {
     page?: number;
     minPrice?: number;
     maxPrice?: number;
     categories?: number[];
+    sort?: "popularity" | "rating" | "price_asc" | "price_desc";
 }) => {
     const params = new URLSearchParams();
     params.append("page", page.toString());
     if (minPrice !== undefined) params.append("min_price", minPrice.toString());
     if (maxPrice !== undefined) params.append("max_price", maxPrice.toString());
     if (categories?.length) params.append("categories", categories.join(","));
+    if (sort) params.append("sort", sort);
 
     const res = await fetch(`/api/items/items/?${params.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch items");
