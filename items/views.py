@@ -6,12 +6,14 @@ from .models import Item, Category
 from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer
 from .paginator import CatalogPagination
 from django.utils.translation import gettext as _
+from ratelimit.decorators import ratelimit
 
 
 class ItemListView(generics.ListAPIView):
     serializer_class = CatalogItemSerializer
     pagination_class = CatalogPagination
 
+    @ratelimit(key='ip', rate='5/s', method='GET', block=True)
     def get_queryset(self):
         qs = Item.objects.all()
 
@@ -41,6 +43,7 @@ class ItemListView(generics.ListAPIView):
 
 
 class GetItem(APIView):
+    @ratelimit(key='ip', rate='10/s', method='GET', block=True)
     def get(self, request, item_id):
         try:
             item = Item.objects.get(id=item_id)
@@ -52,6 +55,7 @@ class GetItem(APIView):
 
 
 class CatalogFiltersView(APIView):
+    @ratelimit(key='ip', rate='2/s', method='GET', block=True)
     def get(self, request):
         categories = Category.objects.all()
         max_price = Item.objects.aggregate(max_price=Max("price_uah"))["max_price"] or 1000
@@ -62,6 +66,7 @@ class CatalogFiltersView(APIView):
 
 
 class ItemSuggestionsView(APIView):
+    @ratelimit(key='ip', rate='3/s', method='GET', block=True)
     def get(self, request, item_id):
         try:
             item = Item.objects.get(id=item_id)

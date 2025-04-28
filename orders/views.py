@@ -14,6 +14,7 @@ from .models import Order, DeliveryCompany
 from django.utils.translation import gettext as _
 
 @require_POST
+@ratelimit(key='ip', rate='20/m', block=True)
 def sign_order(request):
     try:
         data = json.loads(request.body)
