@@ -2,6 +2,7 @@ import json
 import hashlib
 import hmac
 import time
+from django.db.models import F
 
 from django.conf import settings
 from django.http import JsonResponse
@@ -140,6 +141,7 @@ def place_an_order(request):
                 quantity=quantity
             )
 
+            Item.objects.filter(id=item.id).update(sold=F('sold') + quantity)
             total_price += item.price_uah * quantity
 
         order.total_price_uah = total_price
