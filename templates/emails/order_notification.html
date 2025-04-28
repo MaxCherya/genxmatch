@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <meta charset="UTF-8">
+    <title>New Order Notification</title>
     <style>
         body {
             font-family: sans-serif;
@@ -29,31 +31,59 @@
             margin: 20px 0;
         }
 
+        .item-block {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
         .footer {
             font-size: 12px;
             text-align: center;
             color: #aaa;
+            margin-top: 20px;
         }
     </style>
 </head>
 
 <body>
+
     <div class="container">
         <div class="header">
             <h2>📦 New Order Received</h2>
         </div>
+
         <div class="content">
-            <p><strong>Item:</strong> {{ order.item.name_eng }}</p>
-            <p><strong>Supplier:</strong> {{ order.item.supplier.name }}</p>
-            <p><strong>Artiquel:</strong> {{ order.item.artiqul_original }}</p>
-            <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+            <h3>Order Details</h3>
+
+            {% for order_item in order.items.all %}
+            <div class="item-block">
+                <p><strong>Item:</strong> {{ order_item.item.name_eng }}</p>
+                {% if order_item.item.supplier %}
+                <p><strong>Supplier:</strong> {{ order_item.item.supplier.name }}</p>
+                {% endif %}
+                {% if order_item.item.artiqul_original %}
+                <p><strong>Article:</strong> {{ order_item.item.artiqul_original }}</p>
+                {% endif %}
+                <p><strong>Quantity:</strong> {{ order_item.quantity }}</p>
+                <p><strong>Price per pcs:</strong> ₴{{ order_item.item.price_uah }}</p>
+                <p><strong>Subtotal:</strong> ₴{{
+                    order_item.item.price_uah|floatformat:2|add:"0"|add:order_item.quantity|floatformat:2 }}</p>
+            </div>
+            {% endfor %}
+
+            <hr>
+
+            <h3>Customer Information</h3>
             <p><strong>Name:</strong> {{ order.name }}</p>
             <p><strong>Surname:</strong> {{ order.surname }}</p>
             {% if order.patronymic %}
             <p><strong>Patronymic:</strong> {{ order.patronymic }}</p>
             {% endif %}
             <p><strong>Phone:</strong> {{ order.phone_number }}</p>
-            <p><strong>Delivery:</strong> {{ order.delivery_company.name }}</p>
+
+            <h3>Delivery Information</h3>
+            <p><strong>Delivery Company:</strong> {{ order.delivery_company.name }}</p>
             {% if order.oblast %}
             <p><strong>Oblast:</strong> {{ order.oblast }}</p>
             {% endif %}
@@ -64,16 +94,24 @@
             {% if order.zipcode %}
             <p><strong>Zip Code:</strong> {{ order.zipcode }}</p>
             {% endif %}
+
             {% if order.customer_notes %}
-            <p><strong>Customer Notes:</strong> {{ order.customer_notes }}</p>
+            <h3>Customer Notes</h3>
+            <p>{{ order.customer_notes }}</p>
             {% endif %}
-            <p><strong>Price per one pcs:</strong> ₴{{ order.item.price_uah }}</p>
-            <p><strong>Total:</strong> ₴{{ order.total_price_uah }}</p>
+
+            <hr>
+
+            <h3>Total</h3>
+            <p><strong>Total Price:</strong> ₴{{ order.total_price_uah }}</p>
+
         </div>
+
         <div class="footer">
-            <p>This is an automated notification from your order system.</p>
+            <p>This is an automated message from your store system.</p>
         </div>
     </div>
+
 </body>
 
 </html>

@@ -1,83 +1,82 @@
-import React, { useState, ReactNode } from 'react'
-import PriceTag from '../item-page/PriceTag'
-import NovaPoshtaSelector from './NovaPoshtaSelector'
-import clsx from 'clsx'
-import UkrainianPhoneInput from './UkrainianPhoneInput'
-import { useTranslation, Trans } from 'react-i18next'
-import { isValidPhoneNumber } from 'react-phone-number-input'
-import { placeAnOrder, signOrder } from '../../endpoints/orders'
-import { useToast } from '../../contexts/ToastContext'
-import UkrPoshtaSelector from './UkrPoshtaSelector'
-import { useNavigate } from "react-router-dom";
-import LoadingSpinner from '../general/LoadingSpinner'
+import React, { useState, ReactNode } from 'react';
+import PriceTag from '../item-page/PriceTag';
+import NovaPoshtaSelector from './NovaPoshtaSelector';
+import clsx from 'clsx';
+import UkrainianPhoneInput from './UkrainianPhoneInput';
+import { useTranslation, Trans } from 'react-i18next';
+import { isValidPhoneNumber } from 'react-phone-number-input';
+import { placeAnOrder, signOrder } from '../../endpoints/orders';
+import { useToast } from '../../contexts/ToastContext';
+import UkrPoshtaSelector from './UkrPoshtaSelector';
+import { useNavigate } from 'react-router-dom';
+import LoadingSpinner from '../general/LoadingSpinner';
+
+type OrderItem = {
+    item_id: number;
+    name: string | ReactNode;
+    alt?: string;
+    image: string;
+    currentPrice: number;
+    oldPrice?: number;
+    itemLength?: number; // in cm
+    itemWidth?: number; // in cm
+    itemHeight?: number; // in cm
+    itemWeight?: number; // in kg
+};
 
 type OrderFormProps = {
-    productId: number
-    productName: string | ReactNode
-    productAlt?: string
-    productImage: string
-    currentPrice: number
-    oldPrice?: number
-    theme?: 'light' | 'dark'
-    itemAntopometryWarning?: boolean
-    itemLength?: number // in cm
-    itemWidth?: number // in cm
-    itemHeight?: number // in cm
-    itemWeight?: number // in kg
-}
+    items: OrderItem[];
+    theme?: 'light' | 'dark';
+    itemAnthropometryWarning?: boolean;
+};
 
 const OrderForm: React.FC<OrderFormProps> = ({
-    productId,
-    productName,
-    productAlt,
-    productImage,
-    currentPrice,
-    oldPrice,
+    items,
     theme = 'light',
-    itemAntopometryWarning = false,
-    itemLength,
-    itemWidth,
-    itemHeight,
-    itemWeight
+    itemAnthropometryWarning = false,
 }) => {
-
     const navigate = useNavigate();
-
-    const [quantity, setQuantity] = useState(1)
-    const [name, setName] = useState('')
-    const [surname, setSurname] = useState('')
-    const [phone, setPhone] = useState<string | undefined>()
-    const [submitted, setSubmitted] = useState(false)
-    const [username, setUsername] = useState('')
-    const [note, setNote] = useState('');
-
-    const [isLoading, setIsLoading] = useState(false)
-
-    const [deliveryCompany, setDeliveryCompany] = useState<'nova_poshta' | 'ukr_poshta'>('nova_poshta')
-
-    // Nova Poshta
-    const [selectedOblast, setSelectedOblast] = useState<any | null>(null)
-    const [selectedCity, setSelectedCity] = useState<any | null>(null)
-    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null)
-
-    // Ukrposhta
-    const [index, setSelectedIndex] = useState('')
-    const [patronymic, setPatronymic] = useState('')
-
-    const total = currentPrice * quantity
-    const { t } = useTranslation()
-    const isDark = theme === 'dark'
-
+    const { t } = useTranslation();
     const { addToast } = useToast();
+    const isDark = theme === 'dark';
+
+    // State for form inputs
+    const [quantities, setQuantities] = useState<{ [itemId: number]: number }>(
+        items.reduce((acc, item) => ({ ...acc, [item.item_id]: 1 }), {})
+    );
+    const [name, setName] = useState('');
+    const [surname, setSurname] = useState('');
+    const [phone, setPhone] = useState<string | undefined>();
+    const [submitted, setSubmitted] = useState(false);
+    const [username, setUsername] = useState('');
+    const [note, setNote] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [deliveryCompany, setDeliveryCompany] = useState<'nova_poshta' | 'ukr_poshta'>('nova_poshta');
+
+    // Nova Poshta state
+    const [selectedOblast, setSelectedOblast] = useState<any | null>(null);
+    const [selectedCity, setSelectedCity] = useState<any | null>(null);
+    const [selectedWarehouse, setSelectedWarehouse] = useState<any | null>(null);
+
+    // UkrPoshta state
+    const [index, setSelectedIndex] = useState('');
+    const [patronymic, setPatronymic] = useState('');
+
+    // Calculate total
+    const total = items.reduce(
+        (sum, item) => sum + item.currentPrice * (quantities[item.item_id] || 1),
+        0
+    );
 
     const isUkrPoshta = deliveryCompany === 'ukr_poshta';
     const isNovaPoshta = deliveryCompany === 'nova_poshta';
 
+    // Validation
     const isValid = {
         name: name.trim() !== '' && name.length < 255,
         surname: surname.trim() !== '' && surname.length < 255,
         phone: typeof phone === 'string' && phone.trim() !== '' && isValidPhoneNumber(phone, 'UA'),
-        quantity: quantity > 0,
+        quantities: Object.values(quantities).every((q) => q > 0),
         ...(isUkrPoshta && {
             patronymic: patronymic.trim() !== '' && patronymic.length < 255,
             index: index.trim() !== '' && index.length < 15,
@@ -90,34 +89,35 @@ const OrderForm: React.FC<OrderFormProps> = ({
         }),
     };
 
-    const allValid = Object.values(isValid).every(Boolean)
+    const allValid = Object.values(isValid).every(Boolean);
 
     const handleSubmit = async () => {
         if (username) {
-            console.warn("Bot detected")
-            return
+            console.warn('Bot detected');
+            return;
         }
-        setSubmitted(true)
-        const allValid = Object.values(isValid).every(Boolean)
-        if (!allValid) return
+        setSubmitted(true);
+        if (!allValid) return;
 
         const timestamp = Math.floor(Date.now() / 1000);
-
-        const { signature } = await signOrder({
-            item_id: productId,
-            quantity,
-            timestamp,
-        });
+        const orderItems = items.map((item) => ({
+            item_id: item.item_id,
+            quantity: quantities[item.item_id] || 1,
+        }));
 
         try {
-            setIsLoading(true)
+            setIsLoading(true);
+            const { signature } = await signOrder({
+                items: orderItems,
+                timestamp,
+            });
+
             const response = await placeAnOrder({
-                item_id: productId,
-                quantity,
+                items: orderItems,
                 name,
                 surname,
-                patronymic,
-                zipcode: index as string,
+                patronymic: isUkrPoshta ? patronymic : undefined,
+                zipcode: isUkrPoshta ? index : undefined,
                 phone: phone as string,
                 oblast: isNovaPoshta ? selectedOblast.Description : '',
                 city: isNovaPoshta ? selectedCity.Description : selectedCity,
@@ -126,34 +126,81 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 username,
                 timestamp,
                 signature,
-                customer_notes: note as string
+                customer_notes: note || undefined,
             });
-            navigate("/order-confirmation", { state: { orderId: response.order_id, orderTotal: response.order_total, currency: response.currency } });
-        } catch (err: any) {
-            addToast("❌ " + (err.message || "Something went wrong"), 'error');
-        } finally {
-            setIsLoading(false)
-        }
-    }
 
-    const errorBorder = 'border-red-500'
+            navigate('/order-confirmation', {
+                state: {
+                    orderId: response.order_id,
+                    orderTotal: response.order_total,
+                    currency: response.currency,
+                },
+            });
+        } catch (err: any) {
+            addToast('❌ ' + (err.message || 'Something went wrong'), 'error');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    const errorBorder = 'border-red-500';
 
     return (
-        <div className={clsx(
-            'rounded-xl shadow p-4 space-y-4 max-w-xl mx-auto',
-            isDark ? 'bg-[#111] text-white' : 'bg-white text-black'
-        )}>
+        <div
+            className={clsx(
+                'rounded-xl shadow p-4 space-y-4 max-w-xl mx-auto',
+                isDark ? 'bg-[#111] text-white' : 'bg-white text-black'
+            )}
+        >
             <h2 className="text-xl font-semibold text-center mb-4">{t('checkout')}</h2>
 
-            {/* Product */}
+            {/* Products */}
             <div className="flex flex-col items-center gap-4">
-                <img src={productImage} alt={productAlt} className="w-[30%] rounded-lg object-cover" />
-                <div>
-                    <h3 className="font-medium text-base mb-4">{productName}</h3>
-                    <PriceTag current={currentPrice} old={oldPrice} currency="₴" size="sm" />
-                </div>
+                {items.map((item) => (
+                    <div key={item.item_id} className="flex flex-col items-center gap-4 w-full">
+                        <img
+                            src={item.image}
+                            alt={item.alt}
+                            className="w-[30%] rounded-lg object-cover"
+                        />
+                        <div className="text-center">
+                            <h3 className="font-medium text-base mb-4">{item.name}</h3>
+                            <PriceTag current={item.currentPrice} old={item.oldPrice} currency="₴" size="sm" />
+                        </div>
+                        {/* Quantity */}
+                        <input
+                            type="number"
+                            min={1}
+                            step={1}
+                            inputMode="numeric"
+                            value={quantities[item.item_id] === 0 ? '' : quantities[item.item_id]}
+                            onChange={(e) => {
+                                const val = e.target.value;
+                                if (val === '') {
+                                    setQuantities({ ...quantities, [item.item_id]: 0 });
+                                    return;
+                                }
+                                const num = parseInt(val, 10);
+                                if (!isNaN(num)) {
+                                    setQuantities({ ...quantities, [item.item_id]: num });
+                                }
+                            }}
+                            onBlur={() => {
+                                if (quantities[item.item_id] < 1) {
+                                    setQuantities({ ...quantities, [item.item_id]: 1 });
+                                }
+                            }}
+                            className={clsx(
+                                'w-full border px-3 rounded',
+                                isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
+                                submitted && !isValid.quantities && errorBorder
+                            )}
+                        />
+                    </div>
+                ))}
             </div>
 
+            {/* Honeypot */}
             <input
                 type="text"
                 name="nickname"
@@ -164,40 +211,11 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 className="absolute left-[-9999px] opacity-0 h-0 w-0"
             />
 
-            {/* Quantity */}
-            <input
-                type="number"
-                min={1}
-                step={1}
-                inputMode="numeric"
-                value={quantity === 0 ? '' : quantity}
-                onChange={(e) => {
-                    const val = e.target.value;
-
-                    if (val === '') {
-                        setQuantity(0);
-                        return;
-                    }
-
-                    const num = parseInt(val, 10);
-
-                    if (!isNaN(num)) {
-                        setQuantity(num);
-                    }
-                }}
-                onBlur={() => {
-                    if (quantity < 1) setQuantity(1);
-                }}
-                className={clsx(
-                    'w-full border px-3 rounded',
-                    isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
-                    submitted && !isValid.quantity && errorBorder
-                )}
-            />
-
             {/* Name */}
             <div>
-                <label className="block mb-1 font-medium">{t('name')} <span className="text-red-500">*</span></label>
+                <label className="block mb-1 font-medium">
+                    {t('name')} <span className="text-red-500">*</span>
+                </label>
                 <input
                     type="text"
                     value={name}
@@ -213,7 +231,9 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
             {/* Surname */}
             <div>
-                <label className="block mb-1 font-medium">{t('surname')} <span className="text-red-500">*</span></label>
+                <label className="block mb-1 font-medium">
+                    {t('surname')} <span className="text-red-500">*</span>
+                </label>
                 <input
                     type="text"
                     value={surname}
@@ -244,12 +264,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             value="nova_poshta"
                             checked={deliveryCompany === 'nova_poshta'}
                             onChange={() => {
-                                setDeliveryCompany('nova_poshta')
-                                setPatronymic('')
-                                setSelectedIndex('')
-                                setSelectedOblast(null)
-                                setSelectedCity(null)
-                                setSelectedWarehouse(null)
+                                setDeliveryCompany('nova_poshta');
+                                setPatronymic('');
+                                setSelectedIndex('');
+                                setSelectedOblast(null);
+                                setSelectedCity(null);
+                                setSelectedWarehouse(null);
                             }}
                             className={clsx(
                                 'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300',
@@ -266,7 +286,6 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             {t('nova_poshta')}
                         </label>
                     </div>
-
                     <div className="flex items-center">
                         <input
                             type="radio"
@@ -275,12 +294,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
                             value="ukr_poshta"
                             checked={deliveryCompany === 'ukr_poshta'}
                             onChange={() => {
-                                setDeliveryCompany('ukr_poshta')
-                                setPatronymic('')
-                                setSelectedIndex('')
-                                setSelectedOblast(null)
-                                setSelectedCity(null)
-                                setSelectedWarehouse(null)
+                                setDeliveryCompany('ukr_poshta');
+                                setPatronymic('');
+                                setSelectedIndex('');
+                                setSelectedOblast(null);
+                                setSelectedCity(null);
+                                setSelectedWarehouse(null);
                             }}
                             className={clsx(
                                 'h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300',
@@ -300,23 +319,28 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 </div>
             </div>
 
-            {/* Ukrposhta */}
-            {
-                deliveryCompany === 'ukr_poshta' && (
-                    <UkrPoshtaSelector patronymic={patronymic} setPatronymic={setPatronymic} city={selectedCity} setCity={setSelectedCity} index={index} setIndex={setSelectedIndex} theme='dark' />
-                )
-            }
+            {/* UkrPoshta */}
+            {isUkrPoshta && (
+                <UkrPoshtaSelector
+                    patronymic={patronymic}
+                    setPatronymic={setPatronymic}
+                    city={selectedCity}
+                    setCity={setSelectedCity}
+                    index={index}
+                    setIndex={setSelectedIndex}
+                    theme={theme}
+                />
+            )}
 
-            {itemAntopometryWarning && deliveryCompany === 'nova_poshta' ?
+            {/* Anthropometry Warning */}
+            {itemAnthropometryWarning && isNovaPoshta && (
                 <div className="w-full p-4 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 rounded-md shadow-sm mb-4 text-sm">
-                    <p>
-                        {t('too_big_or_heavy_item_warning')}
-                    </p>
+                    <p>{t('too_big_or_heavy_item_warning')}</p>
                 </div>
-                : null}
+            )}
 
             {/* Nova Poshta */}
-            {deliveryCompany === 'nova_poshta' && (
+            {isNovaPoshta && (
                 <NovaPoshtaSelector
                     excludePoshtomats={true}
                     excludePunkts={true}
@@ -327,18 +351,29 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     setSelectedCity={setSelectedCity}
                     selectedWarehouse={selectedWarehouse}
                     setSelectedWarehouse={setSelectedWarehouse}
-                    itemLength={itemLength}
-                    itemHeight={itemHeight}
-                    itemWidth={itemWidth}
-                    itemWeight={itemWeight}
+                    itemLength={items[0]?.itemLength} // Use first item's dimensions (or adjust logic)
+                    itemHeight={items[0]?.itemHeight}
+                    itemWidth={items[0]?.itemWidth}
+                    itemWeight={items[0]?.itemWeight}
                 />
             )}
 
-            {submitted && deliveryCompany === 'ukr_poshta' && !isValid.patronymic && <p className="text-sm text-red-500 mt-1">{t('enter_patronymic')}</p>}
-            {submitted && deliveryCompany === 'ukr_poshta' && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_zip_code')}</p>}
-            {submitted && deliveryCompany === 'nova_poshta' && !isValid.oblast && <p className="text-sm text-red-500 mt-1">{t('select_oblast')}</p>}
-            {submitted && !isValid.city && <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>}
-            {submitted && deliveryCompany === 'nova_poshta' && !isValid.warehouse && <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>}
+            {/* Validation Errors */}
+            {submitted && isUkrPoshta && !isValid.patronymic && (
+                <p className="text-sm text-red-500 mt-1">{t('enter_patronymic')}</p>
+            )}
+            {submitted && isUkrPoshta && !isValid.city && (
+                <p className="text-sm text-red-500 mt-1">{t('enter_zip_code')}</p>
+            )}
+            {submitted && isNovaPoshta && !isValid.oblast && (
+                <p className="text-sm text-red-500 mt-1">{t('select_oblast')}</p>
+            )}
+            {submitted && !isValid.city && (
+                <p className="text-sm text-red-500 mt-1">{t('enter_city_name')}</p>
+            )}
+            {submitted && isNovaPoshta && !isValid.warehouse && (
+                <p className="text-sm text-red-500 mt-1">{t('select_facility')}</p>
+            )}
 
             {/* Order Notes */}
             <div>
@@ -352,19 +387,23 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     onChange={(e) => setNote(e.target.value)}
                     className={clsx(
                         'w-full border rounded-lg px-4 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-orange-500',
-                        isDark ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-black placeholder-gray-500'
+                        isDark
+                            ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400'
+                            : 'bg-white border-gray-300 text-black placeholder-gray-500'
                     )}
                 />
             </div>
 
-            {/* Delivery note */}
+            {/* Delivery Note */}
             <p className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-600')}>
                 <Trans i18nKey="deliveryNovaPoshtaInfo" components={{ 1: <strong /> }} />
             </p>
 
             {/* Total */}
             <div className="text-center">
-                <div className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-500')}>{t('amount_due')}:</div>
+                <div className={clsx('text-sm', isDark ? 'text-gray-400' : 'text-gray-500')}>
+                    {t('amount_due')}:
+                </div>
                 <PriceTag current={total} currency="₴" size="md" />
             </div>
 
@@ -375,16 +414,16 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 onClick={handleSubmit}
                 disabled={!allValid || isLoading}
                 className={clsx(
-                    "w-full rounded py-1 font-medium transition",
+                    'w-full rounded py-1 font-medium transition',
                     allValid && !isLoading
-                        ? "bg-green-600 text-white hover:bg-green-700 cursor-pointer"
-                        : "bg-gray-400 text-white cursor-not-allowed"
+                        ? 'bg-green-600 text-white hover:bg-green-700 cursor-pointer'
+                        : 'bg-gray-400 text-white cursor-not-allowed'
                 )}
             >
                 {t('confirm_order')}
             </button>
         </div>
-    )
-}
+    );
+};
 
-export default OrderForm
+export default OrderForm;

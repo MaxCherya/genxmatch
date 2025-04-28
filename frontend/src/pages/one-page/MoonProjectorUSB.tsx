@@ -355,16 +355,22 @@ const MoonProjectorUSB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = fal
                     <div className="w-full max-w-xl space-y-4">
                         <Element name="orderFormSection">
                             <OrderForm
-                                itemLength={0}
-                                itemHeight={0}
-                                itemWeight={0}
-                                itemWidth={0}
-                                productId={34}
-                                productName={t('moon_projector_usb.name')}
-                                productImage={productImagesHero[0].src}
-                                oldPrice={productOldPrice}
-                                currentPrice={productNewPrice}
+                                items={[
+                                    {
+                                        item_id: 34,
+                                        name: t('moon_projector_usb.name'),
+                                        alt: 'Moon Projector USB', // Add alt text for accessibility
+                                        image: productImagesHero[0].src,
+                                        currentPrice: productNewPrice,
+                                        oldPrice: productOldPrice,
+                                        itemLength: 0, // in cm
+                                        itemWidth: 0, // in cm
+                                        itemHeight: 0, // in cm
+                                        itemWeight: 0, // in kg
+                                    },
+                                ]}
                                 theme="dark"
+                                itemAnthropometryWarning={false} // Explicitly set since not provided
                             />
                         </Element>
                     </div>

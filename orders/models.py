@@ -18,7 +18,6 @@ class Order(models.Model):
         ('cancelled', 'Cancelled'),
     ]
 
-    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='orders')
     quantity = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
     name = TextPGPSymmetricKeyField(max_length=255)
@@ -45,4 +44,10 @@ class Order(models.Model):
             super().save(update_fields=['order_special_id'])
 
     def __str__(self):
-        return f'{self.name} {self.surname} | {self.item.name_eng} | {self.date}'
+        return f"Order #{self.order_special_id or self.id} by {self.name} {self.surname} ({self.date.strftime('%Y-%m-%d')})"
+    
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField()

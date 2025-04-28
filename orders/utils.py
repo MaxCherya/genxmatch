@@ -6,21 +6,27 @@ import hashlib
 import hmac
 import time
 
-def verify_signature(item_id, quantity, timestamp, provided_signature, max_age_seconds=60):
+def verify_signature(items, timestamp, provided_signature, max_age_seconds=60):
     try:
-        # Convert timestamp to int and check expiration
+        # Validate timestamp
         timestamp = int(timestamp)
         current_time = int(time.time())
         if abs(current_time - timestamp) > max_age_seconds:
             return False
 
-        # Build HMAC
-        message = f"{item_id}:{quantity}:{timestamp}".encode("utf-8")
+        # Build message
+        items_string = ";".join(
+            f"{str(item['item_id'])}:{str(item['quantity'])}" for item in items
+        )
+        message = f"{items_string}:{timestamp}".encode("utf-8")
+
         secret = settings.HMAC_SECRET_KEY.encode("utf-8")
         expected_signature = hmac.new(secret, message, hashlib.sha256).hexdigest()
 
         return hmac.compare_digest(expected_signature, provided_signature)
-    except Exception:
+
+    except Exception as e:
+        print('[ERROR in verify_signature]', e)
         return False
     
 def send_notification_email(order):

@@ -84,6 +84,17 @@ REST_FRAMEWORK = {
 
     # No built-in DRF authentication
     'DEFAULT_AUTHENTICATION_CLASSES': [],
+    
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day',  # Global default (adjust as needed)
+        'catalog_filters': '2/second',
+        'item_list': '5/second',
+        'get_item': '10/second',
+        'item_suggestions': '3/second',
+    }
 }
 
 MIDDLEWARE = [

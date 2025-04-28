@@ -1,16 +1,11 @@
 from django.contrib import admin
-from .models import Order, DeliveryCompany
-
-@admin.register(DeliveryCompany)
-class DeliveryCompanyAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name')
-    search_fields = ('name',)
+from .models import Order, OrderItem
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     list_display = (
         'id',
-        'item',
+        'get_items',
         'quantity',
         'name',
         'surname',
@@ -22,10 +17,17 @@ class OrderAdmin(admin.ModelAdmin):
         'warehouse',
         'zipcode',
         'date',
+        'status',
+        'total_price_uah',
     )
-    list_filter = ('date', 'oblast', 'city', 'item')
+    list_filter = ('date', 'oblast', 'city', 'status', 'delivery_company')
     search_fields = ('name', 'surname', 'patronymic', 'phone_number', 'oblast', 'city', 'warehouse')
     ordering = ('-date',)
+
+    @admin.display(description='Items')
+    def get_items(self, obj):
+        items = obj.items.all()
+        return ", ".join(item.item.name_eng for item in items) if items.exists() else "-"
 
     @admin.display(description='Delivery Company')
     def get_delivery_company_name(self, obj):

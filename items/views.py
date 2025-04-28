@@ -1,27 +1,31 @@
-from rest_framework import generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.db.models import Max
+from django.utils.translation import gettext as _
+from django.utils.decorators import method_decorator
+from django_ratelimit.decorators import ratelimit
 from .models import Item, Category
 from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer
 from .paginator import CatalogPagination
-from django.utils.translation import gettext as _
-from ratelimit.decorators import ratelimit
+from rest_framework import generics
 
 
 class ItemListView(generics.ListAPIView):
     serializer_class = CatalogItemSerializer
     pagination_class = CatalogPagination
 
-    @ratelimit(key='ip', rate='5/s', method='GET', block=True)
+    @method_decorator(ratelimit(key='ip', rate='5/s', method='GET', block=True))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get_queryset(self):
         qs = Item.objects.all()
 
         min_price = self.request.query_params.get("min_price")
         max_price = self.request.query_params.get("max_price")
-        if min_price:
+        if min_price is not None:
             qs = qs.filter(price_uah__gte=min_price)
-        if max_price:
+        if max_price is not None:
             qs = qs.filter(price_uah__lte=max_price)
 
         categories = self.request.query_params.get("categories")
@@ -43,19 +47,25 @@ class ItemListView(generics.ListAPIView):
 
 
 class GetItem(APIView):
-    @ratelimit(key='ip', rate='10/s', method='GET', block=True)
+    @method_decorator(ratelimit(key='ip', rate='10/s', method='GET', block=True))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request, item_id):
         try:
             item = Item.objects.get(id=item_id)
         except Item.DoesNotExist:
-            return Response({'error': _('Item not found')}, status=404)
+            return Response({'error': _('Item not found.')}, status=404)
 
         serializer = ItemSerializer(item)
         return Response(serializer.data)
 
 
 class CatalogFiltersView(APIView):
-    @ratelimit(key='ip', rate='2/s', method='GET', block=True)
+    @method_decorator(ratelimit(key='ip', rate='2/s', method='GET', block=True))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request):
         categories = Category.objects.all()
         max_price = Item.objects.aggregate(max_price=Max("price_uah"))["max_price"] or 1000
@@ -66,24 +76,26 @@ class CatalogFiltersView(APIView):
 
 
 class ItemSuggestionsView(APIView):
-    @ratelimit(key='ip', rate='3/s', method='GET', block=True)
+    @method_decorator(ratelimit(key='ip', rate='3/s', method='GET', block=True))
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
     def get(self, request, item_id):
         try:
             item = Item.objects.get(id=item_id)
         except Item.DoesNotExist:
-            return Response({'error': _('Item not found')}, status=404)
+            return Response({'error': _('Item not found.')}, status=404)
 
-        # Get all categories related to this item
         categories = item.categories.all()
-
         if not categories.exists():
             return Response([], status=200)
 
-        # Find other items that share at least one category
-        suggestions = Item.objects.filter(categories__in=categories).exclude(id=item.id).distinct()
-
-        # Optional: you can order suggestions randomly or by popularity
-        suggestions = suggestions.order_by('-sold')[:8]  # pick 8 most sold from same category
+        suggestions = (
+            Item.objects.filter(categories__in=categories)
+            .exclude(id=item.id)
+            .distinct()
+            .order_by('-sold')[:8]
+        )
 
         serializer = CatalogItemSerializer(suggestions, many=True)
         return Response(serializer.data)

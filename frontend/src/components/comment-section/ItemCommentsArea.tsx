@@ -16,6 +16,8 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
     const [loadingMore, setLoadingMore] = useState(false);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
     const [_submitting, setSubmitting] = useState(false);
+    const [showCommentForm, setShowCommentForm] = useState(false);
+
     const { addToast } = useToast();
     const { t } = useTranslation();
 
@@ -54,6 +56,7 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
             setSubmitting(true);
             await submitItemComment(itemId, commentData);
             await loadComments();
+            setShowCommentForm(false); // hide form after submitting
         } catch (error) {
             console.error('Failed to submit comment:', error);
             addToast(t('comments.failed_to_submit'), 'error');
@@ -68,8 +71,32 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto space-y-12">
-            {/* Form to submit a new comment */}
-            <CommentSection onSubmit={handleCommentSubmit} />
+            {/* Button to open comment form */}
+            {!showCommentForm && (
+                <div className="text-center">
+                    <button
+                        onClick={() => setShowCommentForm(true)}
+                        className="px-6 cursor-pointer py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition"
+                    >
+                        {t('comments.add_comment')}
+                    </button>
+                </div>
+            )}
+
+            {/* Comment Form + Cancel Button */}
+            {showCommentForm && (
+                <div className="space-y-6">
+                    <CommentSection onSubmit={handleCommentSubmit} />
+                    <div className="text-center">
+                        <button
+                            onClick={() => setShowCommentForm(false)}
+                            className="px-6 cursor-pointer py-2 bg-gray-300 hover:bg-gray-400 text-black rounded-lg transition"
+                        >
+                            {t('comments.cancel')}
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {/* Separator */}
             <hr className="w-full border-gray-300 my-8" />
@@ -98,7 +125,7 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
                         <button
                             onClick={loadMoreComments}
                             disabled={loadingMore}
-                            className="mx-auto px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="mx-auto cursor-pointer px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loadingMore ? t('comments.loading') : t('comments.load_more_comments')}
                         </button>

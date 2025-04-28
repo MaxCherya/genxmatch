@@ -177,6 +177,8 @@
         "customer_reviews": "Customer Reviews",
         "no_comments_yet": "No comments yet. Be the first to review this product!",
         "load_more_comments": "Load More Comments",
-        "loading": "Loading..."
+        "loading": "Loading...",
+        "add_comment": "Add Comment",
+        "cancel": "Cancel"
     }
 }

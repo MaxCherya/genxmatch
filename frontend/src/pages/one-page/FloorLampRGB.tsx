@@ -281,17 +281,22 @@ const FloorLampRGB: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                     <div className="w-full max-w-xl space-y-4">
                         <Element name="orderFormSection">
                             <OrderForm
-                                itemLength={120}
-                                itemHeight={10}
-                                itemWeight={3}
-                                itemWidth={10}
-                                itemAntopometryWarning
-                                productId={1}
-                                productName={<Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />}
-                                productImage={productImagesHero[0].src}
-                                oldPrice={productOldPrice}
-                                currentPrice={productNewPrice}
+                                items={[
+                                    {
+                                        item_id: 1,
+                                        name: <Trans i18nKey="corner_floor_light_lamp_name" components={{ br: <br /> }} />,
+                                        alt: 'Corner Floor Light Lamp', // Provide an alt text for accessibility
+                                        image: productImagesHero[0].src,
+                                        currentPrice: productNewPrice,
+                                        oldPrice: productOldPrice,
+                                        itemLength: 120, // in cm
+                                        itemWidth: 10, // in cm
+                                        itemHeight: 10, // in cm
+                                        itemWeight: 3, // in kg
+                                    },
+                                ]}
                                 theme="dark"
+                                itemAnthropometryWarning={true} // Matches your itemAntopometryWarning
                             />
                         </Element>
                     </div>

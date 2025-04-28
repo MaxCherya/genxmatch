@@ -173,7 +173,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
 
                 <button
                     onClick={validateAndSubmit}
-                    className="mt-4 bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg transition-all"
+                    className="mt-4 cursor-pointer bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-lg transition-all"
                 >
                     {t('comments.submit_button')}
                 </button>

@@ -1,23 +1,27 @@
-import { getCSRFToken } from "../utils/csrf"
-import i18n from "../utils/i18n"
+import { getCSRFToken } from "../utils/csrf";
+import i18n from "../utils/i18n";
 
-type OrderPayload = {
-    item_id: number
-    quantity: number
-    name: string
-    surname: string
-    patronymic?: string
-    phone: string
-    oblast?: string
-    city: string
-    zipcode?: string
-    warehouse?: string
-    delivery_company_id: number
-    username: any
-    customer_notes?: string
+export type OrderItemPayload = {
+    item_id: number;
+    quantity: number;
+};
+
+export type OrderPayload = {
+    items: OrderItemPayload[]; // 🆕 multiple items
+    name: string;
+    surname: string;
+    patronymic?: string;
+    phone: string;
+    oblast?: string;
+    city: string;
+    zipcode?: string;
+    warehouse?: string;
+    delivery_company_id: number;
+    username: any;
+    customer_notes?: string;
     timestamp: number;
-    signature: any;
-}
+    signature: string;
+};
 
 export const placeAnOrder = async (orderData: OrderPayload) => {
     const res = await fetch('/orders/place-an-order/', {
@@ -28,19 +32,18 @@ export const placeAnOrder = async (orderData: OrderPayload) => {
             'X-Language': i18n.language,
         },
         body: JSON.stringify(orderData),
-    })
-    const data = await res.json()
-    if (!res.ok) throw new Error(data.error || 'Order failed')
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Order failed');
     return data;
-}
+};
 
 export const signOrder = async ({
-    item_id,
-    quantity,
+    items,
     timestamp,
 }: {
-    item_id: number;
-    quantity: number;
+    items: OrderItemPayload[];
     timestamp: number;
 }) => {
     const res = await fetch('/orders/sign-order/', {
@@ -50,7 +53,7 @@ export const signOrder = async ({
             'X-CSRFToken': getCSRFToken(),
             'X-Language': i18n.language,
         },
-        body: JSON.stringify({ item_id, quantity, timestamp }),
+        body: JSON.stringify({ items, timestamp }),
     });
 
     if (!res.ok) {
