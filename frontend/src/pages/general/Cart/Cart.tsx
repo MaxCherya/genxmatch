@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { fetchCartItems } from "../../../endpoints/cart";
 import CartItem from "../../../components/cart/CartItem";
 import CartSummary from "../../../components/cart/CartSummary";
@@ -10,6 +11,7 @@ import { useCart } from "../../../contexts/CartContext";
 const Cart: React.FC = () => {
     const { t, i18n } = useTranslation();
     const { addToast } = useToast();
+    const navigate = useNavigate();
     const [cartItems, setCartItems] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -20,6 +22,17 @@ const Cart: React.FC = () => {
         (total, cartItem) => total + Number(cartItem.item.price_uah) * cartItem.quantity,
         0
     );
+
+    // Check if any item has dimensions or weight
+    const itemAnthropometryWarning = cartItems.some(cartItem => {
+        const { item } = cartItem;
+        return (
+            (item.item_height && item.item_height > 0) ||
+            (item.item_length && item.item_length > 0) ||
+            (item.item_width && item.item_width > 0) ||
+            (item.item_weight && item.item_weight > 0)
+        );
+    });
 
     // Fetch cart items
     const loadCartItems = async () => {
@@ -52,6 +65,16 @@ const Cart: React.FC = () => {
         }
     };
 
+    // Handle checkout button click
+    const handleCheckout = () => {
+        navigate('/checkout', {
+            state: {
+                cartItems: cartItems,
+                itemAnthropometryWarning: itemAnthropometryWarning,
+            }
+        });
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white relative">
             {/* Loading Spinner */}
@@ -60,6 +83,7 @@ const Cart: React.FC = () => {
             {/* Main Content */}
             <div className="p-6 md:p-8 lg:p-12">
                 <h2 className="text-2xl md:text-3xl font-light tracking-wide mb-6 mt-0 lg:mt-12">{t('navbar.cart')}</h2>
+
                 {cartItems.length === 0 && !loading ? (
                     <p className="text-gray-400 text-lg font-light">{t('cart.empty')}</p>
                 ) : (
@@ -75,9 +99,14 @@ const Cart: React.FC = () => {
                                 />
                             ))}
                         </div>
+
                         {/* Cart Summary */}
                         <div className="lg:w-1/3">
-                            <CartSummary totalPrice={totalPrice} />
+                            <CartSummary
+                                totalPrice={totalPrice}
+                                itemAnthropometryWarning={itemAnthropometryWarning}
+                                onCheckout={handleCheckout} // Pass checkout handler
+                            />
                         </div>
                     </div>
                 )}

@@ -12,6 +12,7 @@ import MoonProjectorUSB from "./pages/one-page/MoonProjectorUSB";
 import Catalog from "./pages/general/Catalog/Catalog";
 import Cart from "./pages/general/Cart/Cart";
 import ItemMainPage from "./pages/item-pages/ItemMainPage";
+import Checkout from "./pages/general/Checkout/Checkout";
 
 const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -24,6 +25,7 @@ const App: React.FC = () => {
         <Route path="/one-page/floor-lamp-rgb" element={<FloorLampRGB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/one-page/moon-projector-usb" element={<MoonProjectorUSB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/catalog" element={<Catalog />} />
+        <Route path="/checkout" element={<Checkout />} />
         <Route path="/product-page/:id" element={<ItemMainPage setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />

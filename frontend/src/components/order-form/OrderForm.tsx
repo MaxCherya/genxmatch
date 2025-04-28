@@ -39,6 +39,12 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const { t } = useTranslation();
     const { addToast } = useToast();
     const isDark = theme === 'dark';
+    const itemWithMaxDimensions = items.reduce((maxItem, currentItem) => {
+        const maxSum = (maxItem.itemHeight || 0) + (maxItem.itemLength || 0) + (maxItem.itemWidth || 0) + (maxItem.itemWeight || 0);
+        const currentSum = (currentItem.itemHeight || 0) + (currentItem.itemLength || 0) + (currentItem.itemWidth || 0) + (currentItem.itemWeight || 0);
+
+        return currentSum > maxSum ? currentItem : maxItem;
+    }, items[0]);
 
     // State for form inputs
     const [quantities, setQuantities] = useState<{ [itemId: number]: number }>(
@@ -155,49 +161,69 @@ const OrderForm: React.FC<OrderFormProps> = ({
             <h2 className="text-xl font-semibold text-center mb-4">{t('checkout')}</h2>
 
             {/* Products */}
-            <div className="flex flex-col items-center gap-4">
-                {items.map((item) => (
-                    <div key={item.item_id} className="flex flex-col items-center gap-4 w-full">
-                        <img
-                            src={item.image}
-                            alt={item.alt}
-                            className="w-[30%] rounded-lg object-cover"
-                        />
-                        <div className="text-center">
-                            <h3 className="font-medium text-base mb-4">{item.name}</h3>
-                            <PriceTag current={item.currentPrice} old={item.oldPrice} currency="₴" size="sm" />
-                        </div>
-                        {/* Quantity */}
-                        <input
-                            type="number"
-                            min={1}
-                            step={1}
-                            inputMode="numeric"
-                            value={quantities[item.item_id] === 0 ? '' : quantities[item.item_id]}
-                            onChange={(e) => {
-                                const val = e.target.value;
-                                if (val === '') {
-                                    setQuantities({ ...quantities, [item.item_id]: 0 });
-                                    return;
-                                }
-                                const num = parseInt(val, 10);
-                                if (!isNaN(num)) {
-                                    setQuantities({ ...quantities, [item.item_id]: num });
-                                }
-                            }}
-                            onBlur={() => {
-                                if (quantities[item.item_id] < 1) {
-                                    setQuantities({ ...quantities, [item.item_id]: 1 });
-                                }
-                            }}
+            <div className="space-y-4">
+                <h3 className="text-lg font-semibold">{t('your_items')}</h3>
+                <ul className="divide-y divide-gray-200">
+                    {items.map((item) => (
+                        <li
+                            key={item.item_id}
                             className={clsx(
-                                'w-full border px-3 rounded',
-                                isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
-                                submitted && !isValid.quantities && errorBorder
+                                'flex items-center gap-4 py-4 transition-all duration-200',
+                                isDark ? 'hover:bg-gray-800' : 'hover:bg-gray-50'
                             )}
-                        />
-                    </div>
-                ))}
+                        >
+                            {/* Item Image */}
+                            <img
+                                src={item.image}
+                                alt={item.alt}
+                                className="w-16 h-16 rounded-lg object-cover"
+                            />
+
+                            {/* Item Details */}
+                            <div className="flex-1">
+                                <h4 className="font-medium text-sm">{item.name}</h4>
+                                <PriceTag
+                                    current={item.currentPrice}
+                                    old={item.oldPrice}
+                                    currency="₴"
+                                    size="sm"
+                                />
+                            </div>
+
+                            {/* Quantity Input */}
+                            <div className="w-24">
+                                <input
+                                    type="number"
+                                    min={1}
+                                    step={1}
+                                    inputMode="numeric"
+                                    value={quantities[item.item_id] === 0 ? '' : quantities[item.item_id]}
+                                    onChange={(e) => {
+                                        const val = e.target.value;
+                                        if (val === '') {
+                                            setQuantities({ ...quantities, [item.item_id]: 0 });
+                                            return;
+                                        }
+                                        const num = parseInt(val, 10);
+                                        if (!isNaN(num)) {
+                                            setQuantities({ ...quantities, [item.item_id]: num });
+                                        }
+                                    }}
+                                    onBlur={() => {
+                                        if (quantities[item.item_id] < 1) {
+                                            setQuantities({ ...quantities, [item.item_id]: 1 });
+                                        }
+                                    }}
+                                    className={clsx(
+                                        'w-full border px-2 py-1 rounded text-sm',
+                                        isDark ? 'bg-gray-800 border-gray-700 text-white' : 'bg-white border-gray-300 text-black',
+                                        submitted && !isValid.quantities && errorBorder
+                                    )}
+                                />
+                            </div>
+                        </li>
+                    ))}
+                </ul>
             </div>
 
             {/* Honeypot */}
@@ -351,10 +377,10 @@ const OrderForm: React.FC<OrderFormProps> = ({
                     setSelectedCity={setSelectedCity}
                     selectedWarehouse={selectedWarehouse}
                     setSelectedWarehouse={setSelectedWarehouse}
-                    itemLength={items[0]?.itemLength} // Use first item's dimensions (or adjust logic)
-                    itemHeight={items[0]?.itemHeight}
-                    itemWidth={items[0]?.itemWidth}
-                    itemWeight={items[0]?.itemWeight}
+                    itemLength={itemWithMaxDimensions?.itemLength}
+                    itemHeight={itemWithMaxDimensions?.itemHeight}
+                    itemWidth={itemWithMaxDimensions?.itemWidth}
+                    itemWeight={itemWithMaxDimensions?.itemWeight}
                 />
             )}
 

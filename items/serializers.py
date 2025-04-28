@@ -65,6 +65,8 @@ class CatalogItemSerializer(serializers.ModelSerializer):
             'id',
             'name_ua', 'name_eng', 'name_rus', 'price_uah','old_price_uah',
 
+            'item_length', 'item_height', 'item_width', 'item_weight',
+
             'sold', 'rating',
 
             'main_image',
