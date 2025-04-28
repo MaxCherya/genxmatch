@@ -10,6 +10,7 @@ import { useToast } from '../../contexts/ToastContext';
 import UkrPoshtaSelector from './UkrPoshtaSelector';
 import { useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../general/LoadingSpinner';
+import { useCart } from '../../contexts/CartContext';
 
 type OrderItem = {
     item_id: number;
@@ -22,6 +23,7 @@ type OrderItem = {
     itemWidth?: number; // in cm
     itemHeight?: number; // in cm
     itemWeight?: number; // in kg
+    quantity?: number;
 };
 
 type OrderFormProps = {
@@ -38,6 +40,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
     const navigate = useNavigate();
     const { t } = useTranslation();
     const { addToast } = useToast();
+    const { clearCart } = useCart();
     const isDark = theme === 'dark';
     const itemWithMaxDimensions = items.reduce((maxItem, currentItem) => {
         const maxSum = (maxItem.itemHeight || 0) + (maxItem.itemLength || 0) + (maxItem.itemWidth || 0) + (maxItem.itemWeight || 0);
@@ -47,9 +50,16 @@ const OrderForm: React.FC<OrderFormProps> = ({
     }, items[0]);
 
     // State for form inputs
-    const [quantities, setQuantities] = useState<{ [itemId: number]: number }>(
-        items.reduce((acc, item) => ({ ...acc, [item.item_id]: 1 }), {})
+    const [quantities, setQuantities] = useState<Record<number, number>>(() =>
+        items.reduce(
+            (acc, item) => ({
+                ...acc,
+                [item.item_id]: item.quantity ?? 1
+            }),
+            {}
+        )
     );
+
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [phone, setPhone] = useState<string | undefined>();
@@ -134,6 +144,8 @@ const OrderForm: React.FC<OrderFormProps> = ({
                 signature,
                 customer_notes: note || undefined,
             });
+
+            clearCart();
 
             navigate('/order-confirmation', {
                 state: {

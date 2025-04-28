@@ -30,25 +30,53 @@ def verify_signature(items, timestamp, provided_signature, max_age_seconds=60):
         return False
     
 def send_notification_email(order):
+    # 1) Find the “Orders Dep” group
     try:
         orders_dep_group = Group.objects.get(name="Orders Dep")
     except Group.DoesNotExist:
         return
 
-    recipient_emails = [user.email for user in orders_dep_group.user_set.all() if user.email]
+    # 2) Collect recipient addresses
+    recipient_emails = [
+        user.email
+        for user in orders_dep_group.user_set.all()
+        if user.email
+    ]
     if not recipient_emails:
         return
 
-    if not recipient_emails:
-        return
+    # 3) Build a list of item dicts with per-line subtotal strings
+    items_context = []
+    for oi in order.items.select_related('item'):
+        price = oi.item.price_uah
+        qty = oi.quantity
+        subtotal = price * qty
+        items_context.append({
+            'name_eng': oi.item.name_eng,
+            'supplier_name': oi.item.supplier.name if oi.item.supplier else '',
+            'artiqul_original': oi.item.artiqul_original or '',
+            'quantity': qty,
+            'price_uah': f"{price:.2f}",
+            'subtotal': f"{subtotal:.2f}",
+        })
 
+    # 4) Compute grand total as a formatted string
+    grand_total = sum(float(item['subtotal']) for item in items_context)
+    total_str = f"{grand_total:.2f}"
+
+    # 5) Render the HTML template with the new context
+    html_message = render_to_string("emails/order_notification.html", {
+        'order': order,
+        'items': items_context,
+        'total_price': total_str,
+    })
+
+    # 6) Send the email
     subject = f"🛒 New Order #{order.order_special_id} Received"
-    html_message = render_to_string("emails/order_notification.html", {"order": order})
-
     email = EmailMessage(
         subject=subject,
         body=html_message,
-        from_email=None,
+        from_email=settings.DEFAULT_FROM_EMAIL,
         to=recipient_emails,
     )
     email.content_subtype = "html"

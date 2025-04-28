@@ -40,6 +40,7 @@ const Checkout: React.FC = () => {
         itemWidth: cartItem.item.item_width,
         itemHeight: cartItem.item.item_height,
         itemWeight: cartItem.item.item_weight,
+        quantity: cartItem.quantity
     }));
 
     return (

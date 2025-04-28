@@ -56,19 +56,18 @@
         <div class="content">
             <h3>Order Details</h3>
 
-            {% for order_item in order.items.all %}
+            {% for item in items %}
             <div class="item-block">
-                <p><strong>Item:</strong> {{ order_item.item.name_eng }}</p>
-                {% if order_item.item.supplier %}
-                <p><strong>Supplier:</strong> {{ order_item.item.supplier.name }}</p>
+                <p><strong>Item:</strong> {{ item.name_eng }}</p>
+                {% if item.supplier_name %}
+                <p><strong>Supplier:</strong> {{ item.supplier_name }}</p>
                 {% endif %}
-                {% if order_item.item.artiqul_original %}
-                <p><strong>Article:</strong> {{ order_item.item.artiqul_original }}</p>
+                {% if item.artiqul_original %}
+                <p><strong>Article:</strong> {{ item.artiqul_original }}</p>
                 {% endif %}
-                <p><strong>Quantity:</strong> {{ order_item.quantity }}</p>
-                <p><strong>Price per pcs:</strong> ₴{{ order_item.item.price_uah }}</p>
-                <p><strong>Subtotal:</strong> ₴{{
-                    order_item.item.price_uah|floatformat:2|add:"0"|add:order_item.quantity|floatformat:2 }}</p>
+                <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                <p><strong>Price per pcs:</strong> ₴{{ item.price_uah }}</p>
+                <p><strong>Subtotal:</strong> ₴{{ item.subtotal }}</p>
             </div>
             {% endfor %}
 
@@ -81,6 +80,8 @@
             <p><strong>Patronymic:</strong> {{ order.patronymic }}</p>
             {% endif %}
             <p><strong>Phone:</strong> {{ order.phone_number }}</p>
+
+            <hr>
 
             <h3>Delivery Information</h3>
             <p><strong>Delivery Company:</strong> {{ order.delivery_company.name }}</p>
@@ -103,8 +104,7 @@
             <hr>
 
             <h3>Total</h3>
-            <p><strong>Total Price:</strong> ₴{{ order.total_price_uah }}</p>
-
+            <p><strong>Total Price:</strong> ₴{{ total_price }}</p>
         </div>
 
         <div class="footer">

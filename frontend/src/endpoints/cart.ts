@@ -73,3 +73,7 @@ export const removeCartItem = async (cartItemId: string): Promise<void> => {
         throw error;
     }
 };
+
+export function removeCartItems() {
+    localStorage.removeItem("cart");
+}
