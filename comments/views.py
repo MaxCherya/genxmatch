@@ -4,9 +4,11 @@ from .serializers import ItemCommentSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from items.utils import update_item_rating
+from .pagination import CommentPagination
 
 class ItemCommentListCreateView(generics.ListCreateAPIView):
     serializer_class = ItemCommentSerializer
+    pagination_class = CommentPagination
 
     def get_queryset(self):
         item_id = self.kwargs.get('item_id')
@@ -24,5 +26,5 @@ class ItemCommentListCreateView(generics.ListCreateAPIView):
             serializer.save(item=item)
             update_item_rating(item)
             return Response(serializer.data, status=201)
-        
+
         return Response(serializer.errors, status=400)

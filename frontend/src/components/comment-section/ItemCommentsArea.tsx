@@ -12,19 +12,41 @@ interface Props {
 const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
     const [comments, setComments] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
+    const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
     const [_submitting, setSubmitting] = useState(false);
     const { addToast } = useToast();
 
-    const loadComments = async () => {
+    const loadComments = async (page: number = 1) => {
         try {
             setLoading(true);
-            const fetched = await getItemComments(itemId);
-            setComments(fetched);
+            const fetched = await getItemComments(itemId, page);
+            setComments(fetched.results);
+            setNextPageUrl(fetched.next);
         } catch (error) {
             console.error('Failed to load comments:', error);
             addToast('Failed to load comments.', 'error');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const loadMoreComments = async () => {
+        if (!nextPageUrl) return;
+
+        try {
+            setLoadingMore(true);
+
+            const pageParam = new URL(nextPageUrl, window.location.origin).searchParams.get('page') || '1';
+            const fetched = await getItemComments(itemId, parseInt(pageParam));
+
+            setComments((prev) => [...prev, ...fetched.results]);
+            setNextPageUrl(fetched.next);
+        } catch (error) {
+            console.error('Failed to load more comments:', error);
+            addToast('Failed to load more comments.', 'error');
+        } finally {
+            setLoadingMore(false);
         }
     };
 
@@ -72,6 +94,17 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
                             createdAt={comment.created_at}
                         />
                     ))}
+
+                    {/* Load More button */}
+                    {nextPageUrl && (
+                        <button
+                            onClick={loadMoreComments}
+                            disabled={loadingMore}
+                            className="mx-auto px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {loadingMore ? 'Loading...' : 'Load More Comments'}
+                        </button>
+                    )}
                 </div>
             ) : (
                 <p className="text-gray-600 text-center">No comments yet. Be the first to review this product!</p>

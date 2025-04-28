@@ -27,8 +27,8 @@ export const submitItemComment = async (itemId: number, commentData: CommentPayl
     return data;
 };
 
-export const getItemComments = async (itemId: number) => {
-    const res = await fetch(`/api/comments/${itemId}/comments/`, {
+export const getItemComments = async (itemId: number, page: number = 1) => {
+    const res = await fetch(`/api/comments/${itemId}/comments/?page=${page}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

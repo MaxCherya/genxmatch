@@ -225,7 +225,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
                     <LoadingSpinner />
                 </div>
             }
-            <div className="w-full max-w-4xl mx-auto p-4 bg-white rounded-xl shadow-lg my-8 space-y-8">
+            <div className="w-full max-w-4xl mx-auto p-4 text-black bg-white rounded-xl shadow-lg my-8 space-y-8">
                 <h2 className="text-2xl font-semibold mb-4 text-black">Leave a Comment</h2>
 
                 {/* Form Inputs */}
