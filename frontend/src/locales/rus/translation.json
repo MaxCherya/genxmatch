@@ -180,5 +180,8 @@
         "loading": "Загрузка...",
         "add_comment": "Добавить отзыв",
         "cancel": "Отмена"
+    },
+    "checkout_menu": {
+        "your_items": "Ваши товары"
     }
 }

@@ -180,5 +180,8 @@
         "loading": "Loading...",
         "add_comment": "Add Comment",
         "cancel": "Cancel"
+    },
+    "checkout_menu": {
+        "your_items": "Your items"
     }
 }

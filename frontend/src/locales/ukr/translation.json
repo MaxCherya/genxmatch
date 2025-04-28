@@ -180,5 +180,8 @@
         "loading": "Завантаження...",
         "add_comment": "Додати відгук",
         "cancel": "Скасувати"
+    },
+    "checkout-menu": {
+        "your_items": "Ваші товари"
     }
 }

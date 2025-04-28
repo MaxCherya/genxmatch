@@ -174,7 +174,7 @@ const OrderForm: React.FC<OrderFormProps> = ({
 
             {/* Products */}
             <div className="space-y-4">
-                <h3 className="text-lg font-semibold">{t('your_items')}</h3>
+                <h3 className="text-lg font-semibold">{t('checkout-menu.your_items')}</h3>
                 <ul className="divide-y divide-gray-200">
                     {items.map((item) => (
                         <li
