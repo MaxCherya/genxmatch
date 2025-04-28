@@ -25,12 +25,14 @@ const CommentDisplay: React.FC<CommentDisplayProps> = ({ content, name, surname,
     };
 
     // Optional: Format createdAt nicely
-    const formatDate = (timestamp?: string) => {
-        if (!timestamp) return '';
+    const formatDate = (timestamp: string) => {
         const date = new Date(timestamp);
-        return date.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) +
-            ' at ' +
-            date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        const day = String(date.getDate()).padStart(2, '0');
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // month is 0-based
+        const year = date.getFullYear();
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        return `${day}.${month}.${year} ${hours}:${minutes}`;
     };
 
     return (
@@ -50,7 +52,7 @@ const CommentDisplay: React.FC<CommentDisplayProps> = ({ content, name, surname,
                 </div>
                 {createdAt && (
                     <div className="text-sm text-gray-500">
-                        Posted on {formatDate(createdAt)}
+                        {formatDate(createdAt)}
                     </div>
                 )}
             </div>

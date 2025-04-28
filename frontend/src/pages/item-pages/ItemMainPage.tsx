@@ -15,6 +15,7 @@ import HeroImagesCarousel from "../../components/imgs/HeroImagesCarousel/HeroIma
 import ScrollProgressCircle from "../../components/general/ScrollProgressCircle";
 import LoadingSpinner from "../../components/general/LoadingSpinner";
 import SuggestionsSection from "../../components/item-page/SuggestionSection";
+import ItemCommentsArea from "../../components/comment-section/ItemCommentsArea";
 
 interface Props {
     setIsFullscreen?: (value: boolean) => void;
@@ -76,37 +77,28 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
 
     const getProductName = () => {
         switch (i18n.language) {
-            case "ukr":
-                return product.name_ua;
-            case "rus":
-                return product.name_rus;
+            case "ukr": return product.name_ua;
+            case "rus": return product.name_rus;
             case "eng":
-            default:
-                return product.name_eng;
+            default: return product.name_eng;
         }
     };
 
     const getDescription = () => {
         switch (i18n.language) {
-            case "ukr":
-                return `${product.description_p1_ua}\n\n${product.description_p2_ua}`;
-            case "rus":
-                return `${product.description_p1_rus}\n\n${product.description_p2_rus}`;
+            case "ukr": return `${product.description_p1_ua}\n\n${product.description_p2_ua}`;
+            case "rus": return `${product.description_p1_rus}\n\n${product.description_p2_rus}`;
             case "eng":
-            default:
-                return `${product.description_p1_eng}\n\n${product.description_p2_eng}`;
+            default: return `${product.description_p1_eng}\n\n${product.description_p2_eng}`;
         }
     };
 
     const getShortDescription = () => {
         switch (i18n.language) {
-            case "ukr":
-                return `${product.short_description_ua}`;
-            case "rus":
-                return `${product.short_description_rus}`;
+            case "ukr": return product.short_description_ua;
+            case "rus": return product.short_description_rus;
             case "eng":
-            default:
-                return `${product.short_description_eng}`;
+            default: return product.short_description_eng;
         }
     };
 
@@ -146,7 +138,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
 
             <div className={`min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'}`}>
                 {product.gallery && (
-                    <div className="aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9] z-[9999]">
+                    <div className="aspect-[4/3] sm:aspect-[5/3] md:aspect-[16/9]">
                         <HeroImagesCarousel
                             images={product.gallery}
                             setIsFullscreen={setIsFullscreen}
@@ -179,11 +171,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                         <PriceTag
                             size="lg"
                             current={parseFloat(product.price_uah)}
-                            old={
-                                product.old_price_uah
-                                    ? parseFloat(product.old_price_uah)
-                                    : undefined
-                            }
+                            old={product.old_price_uah ? parseFloat(product.old_price_uah) : undefined}
                             currency="₴"
                         />
                         <p className="text-gray-300 text-base leading-relaxed mt-4 mb-6 whitespace-pre-line">
@@ -289,10 +277,17 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
 
             {/* Suggestions Section */}
             {!loadingSuggestions && suggestedProducts.length > 0 && (
-                <div className="mx-auto pb-12 px-6 z-10 bg-gradient-to-b from-gray-900 to-white">
+                <div className="mx-auto px-6 z-10 bg-gradient-to-b from-gray-900 to-white">
                     <SuggestionsSection suggestions={suggestedProducts} />
                 </div>
             )}
+
+            {/* Comments Section */}
+            <div className="mx-auto px-6 z-10 bg-white pt-12 pb-24">
+                {product.id && (
+                    <ItemCommentsArea itemId={product.id} />
+                )}
+            </div>
         </div>
     );
 };

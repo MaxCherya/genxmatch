@@ -5,6 +5,7 @@ import ReviewStars from '../item-page/ReviewStars';
 import imageCompression from 'browser-image-compression';
 import LoadingSpinner from '../general/LoadingSpinner';
 import AttachmentsCarousel from './AttachmentCarousel';
+import { useToast } from '../../contexts/ToastContext';
 
 interface CommentData {
     name: string;
@@ -19,6 +20,8 @@ interface CommentSectionProps {
 }
 
 const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
+    const { addToast } = useToast(); // 🆕 Toast hook
+
     const [name, setName] = useState('');
     const [surname, setSurname] = useState('');
     const [rating, setRating] = useState(0);
@@ -29,15 +32,15 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
 
     const handleSubmit = () => {
         if (!name.trim()) {
-            alert('Name is required.');
+            addToast('Name is required.', 'error');
             return;
         }
         if (rating === 0) {
-            alert('Rating is required.');
+            addToast('Rating is required.', 'error');
             return;
         }
         if (content.trim() === '') {
-            alert('Comment cannot be empty.');
+            addToast('Comment cannot be empty.', 'error');
             return;
         }
 
@@ -49,17 +52,17 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
             images,
         });
 
-        // Clear after submit
         setName('');
         setSurname('');
         setRating(0);
         setContent('');
         setImages([]);
+        addToast('Thank you for your review!', 'success'); // 🆕 Success toast after submit
     };
 
     const imageHandler = () => {
         if (images.length >= 5) {
-            alert('You can upload up to 5 attachments only.');
+            addToast('You can upload up to 5 attachments only.', 'error');
             return;
         }
 
@@ -73,12 +76,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
             if (!input.files) return;
 
             const selectedFiles = Array.from(input.files);
-
             const availableSlots = 5 - images.length;
             const filesToProcess = selectedFiles.slice(0, availableSlots);
 
             if (filesToProcess.length < selectedFiles.length) {
-                alert(`You can only upload ${availableSlots} more image(s).`);
+                addToast(`You can only upload ${availableSlots} more image(s).`, 'error');
             }
 
             try {
@@ -113,11 +115,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
                 });
 
                 const compressedImages = await Promise.all(compressedImagesPromises);
-                const updatedImages = [...images, ...compressedImages];
-                setImages(updatedImages);
+                setImages((prev) => [...prev, ...compressedImages]);
             } catch (error: any) {
                 console.error('Image compression error:', error);
-                alert(error.message || 'Failed to compress images.');
+                addToast(error.message || 'Failed to compress images.', 'error');
             } finally {
                 setIsCompressing(false);
             }
@@ -131,12 +132,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
         if (isCompressing) return;
 
         const droppedFiles = Array.from(e.dataTransfer.files);
-
         const availableSlots = 5 - images.length;
         const filesToProcess = droppedFiles.slice(0, availableSlots);
 
         if (filesToProcess.length < droppedFiles.length) {
-            alert(`You can only upload ${availableSlots} more image(s).`);
+            addToast(`You can only upload ${availableSlots} more image(s).`, 'error');
         }
 
         try {
@@ -171,11 +171,10 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
             });
 
             const compressedImages = await Promise.all(compressedImagesPromises);
-            const updatedImages = [...images, ...compressedImages];
-            setImages(updatedImages);
+            setImages((prev) => [...prev, ...compressedImages]);
         } catch (error: any) {
             console.error('Image compression error:', error);
-            alert(error.message || 'Failed to compress images.');
+            addToast(error.message || 'Failed to compress images.', 'error');
         } finally {
             setIsCompressing(false);
         }
@@ -199,7 +198,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
     const formats = [
         'header',
         'bold', 'italic', 'underline', 'strike',
-        'list', 'bullet',
+        'list',
         'link', 'image'
     ];
 
@@ -221,7 +220,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
 
     return (
         <>
-            {isCompressing && <LoadingSpinner />}
+            {isCompressing &&
+                <div className='w-screen h-screen overflow-hidden'>
+                    <LoadingSpinner />
+                </div>
+            }
             <div className="w-full max-w-4xl mx-auto p-4 bg-white rounded-xl shadow-lg my-8 space-y-8">
                 <h2 className="text-2xl font-semibold mb-4 text-black">Leave a Comment</h2>
 
@@ -262,7 +265,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ onSubmit }) => {
                     placeholder="Write your comment here..."
                 />
 
-                {/* Attachments Drop Zone + Carousel */}
+                {/* Attachments */}
                 {images.length >= 0 && (
                     <div
                         className={`w-full pt-6 space-y-2 border-2 rounded-xl p-4 transition cursor-pointer ${isDraggingOver ? 'border-green-500 bg-green-50 animate-pulse' : 'border-gray-400 border-dashed hover:bg-gray-100'

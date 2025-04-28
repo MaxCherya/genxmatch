@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'orders',
     'custom_auth',
     'pgcrypto',
+    'comments',
 ]
 
 REST_FRAMEWORK = {

@@ -31,6 +31,7 @@ urlpatterns = [
     path("account/login/", CustomLoginView.as_view(), name="login"),
     path("", include(two_factor_urls.urlpatterns)),
     path("api/items/", include("items.urls")),
+    path("api/comments/", include("comments.urls")),
     path('orders/', include('orders.urls')),
 
     # ✅ Serve Static Files (JS, CSS, Images)

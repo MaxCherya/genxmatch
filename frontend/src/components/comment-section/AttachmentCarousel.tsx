@@ -30,13 +30,12 @@ const DraggableImage: React.FC<{
         <div
             ref={setNodeRef}
             style={style}
-            {...attributes}
-            {...listeners}
-            className="relative flex justify-center items-center bg-gray-100 rounded-lg p-2 mx-2 cursor-move"
+            className="relative flex justify-center items-center bg-gray-100 rounded-lg p-2 mx-2"
         >
             {/* Delete button */}
             <button
                 onClick={(e) => {
+                    e.preventDefault();
                     e.stopPropagation();
                     onDelete(index);
                 }}
@@ -50,7 +49,9 @@ const DraggableImage: React.FC<{
             <img
                 src={src}
                 alt={`attachment-${index}`}
-                className="object-contain max-h-[400px] cursor-pointer"
+                className="object-contain max-h-[400px] cursor-move"
+                {...attributes}
+                {...listeners}
                 onClick={() => onClick(index)}
             />
         </div>
