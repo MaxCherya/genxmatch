@@ -157,5 +157,26 @@
         "header": "Вам также может понравиться",
         "next": "Следующая",
         "previous": "Предыдущая"
+    },
+    "comments": {
+        "leave_a_comment": "Оставьте отзыв",
+        "your_name": "Ваше имя *",
+        "your_surname": "Ваша фамилия (необязательно)",
+        "rating_required": "Оценка *",
+        "write_comment_placeholder": "Напишите ваш отзыв здесь...",
+        "attachments_label": "Вложения (перетаскивайте для изменения порядка):",
+        "submit_button": "Отправить",
+        "name_required": "Имя обязательно.",
+        "rating_required_error": "Оценка обязательна.",
+        "comment_empty_error": "Комментарий не может быть пустым.",
+        "thank_you_review": "Спасибо за ваш отзыв!",
+        "upload_limit_reached": "Вы можете загрузить не более 5 изображений.",
+        "only_images_allowed": "Допускаются только изображения!",
+        "image_too_large": "Изображение слишком большое. Максимум 1 МБ.",
+        "compression_error": "Не удалось сжать изображение.",
+        "customer_reviews": "Отзывы покупателей",
+        "no_comments_yet": "Пока нет отзывов. Будьте первым, кто оставит отзыв!",
+        "load_more_comments": "Показать больше отзывов",
+        "loading": "Загрузка..."
     }
 }

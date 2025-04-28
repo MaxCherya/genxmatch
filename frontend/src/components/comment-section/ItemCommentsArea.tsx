@@ -4,6 +4,7 @@ import CommentDisplay from './CommentDisplay';
 import { getItemComments, submitItemComment, CommentPayload } from '../../endpoints/comments';
 import LoadingSpinner from '../../components/general/LoadingSpinner';
 import { useToast } from '../../contexts/ToastContext';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
     itemId: number;
@@ -16,8 +17,9 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
     const [_submitting, setSubmitting] = useState(false);
     const { addToast } = useToast();
+    const { t } = useTranslation();
 
-    const loadComments = async (page: number = 1) => {
+    const loadComments = async (page = 1) => {
         try {
             setLoading(true);
             const fetched = await getItemComments(itemId, page);
@@ -25,7 +27,7 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
             setNextPageUrl(fetched.next);
         } catch (error) {
             console.error('Failed to load comments:', error);
-            addToast('Failed to load comments.', 'error');
+            addToast(t('comments.failed_to_load'), 'error');
         } finally {
             setLoading(false);
         }
@@ -33,18 +35,15 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
 
     const loadMoreComments = async () => {
         if (!nextPageUrl) return;
-
         try {
             setLoadingMore(true);
-
             const pageParam = new URL(nextPageUrl, window.location.origin).searchParams.get('page') || '1';
             const fetched = await getItemComments(itemId, parseInt(pageParam));
-
-            setComments((prev) => [...prev, ...fetched.results]);
+            setComments(prev => [...prev, ...fetched.results]);
             setNextPageUrl(fetched.next);
         } catch (error) {
             console.error('Failed to load more comments:', error);
-            addToast('Failed to load more comments.', 'error');
+            addToast(t('comments.failed_to_load_more'), 'error');
         } finally {
             setLoadingMore(false);
         }
@@ -54,10 +53,10 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
         try {
             setSubmitting(true);
             await submitItemComment(itemId, commentData);
-            await loadComments(); // Refresh list after submitting
+            await loadComments();
         } catch (error) {
             console.error('Failed to submit comment:', error);
-            addToast('Failed to submit comment.', 'error');
+            addToast(t('comments.failed_to_submit'), 'error');
         } finally {
             setSubmitting(false);
         }
@@ -69,21 +68,21 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
 
     return (
         <div className="w-full max-w-5xl mx-auto space-y-12">
-            {/* Comment Form */}
+            {/* Form to submit a new comment */}
             <CommentSection onSubmit={handleCommentSubmit} />
 
             {/* Separator */}
             <hr className="w-full border-gray-300 my-8" />
 
-            {/* Comments Title */}
-            <h2 className="text-2xl font-bold text-black">Customer Reviews</h2>
+            {/* Title */}
+            <h2 className="text-2xl font-bold text-black">{t('comments.customer_reviews')}</h2>
 
             {/* Comments List */}
             {loading ? (
                 <LoadingSpinner />
             ) : comments.length > 0 ? (
                 <div className="flex flex-col gap-8">
-                    {comments.map((comment) => (
+                    {comments.map(comment => (
                         <CommentDisplay
                             key={comment.id}
                             name={comment.name}
@@ -95,19 +94,18 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
                         />
                     ))}
 
-                    {/* Load More button */}
                     {nextPageUrl && (
                         <button
                             onClick={loadMoreComments}
                             disabled={loadingMore}
                             className="mx-auto px-6 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loadingMore ? 'Loading...' : 'Load More Comments'}
+                            {loadingMore ? t('comments.loading') : t('comments.load_more_comments')}
                         </button>
                     )}
                 </div>
             ) : (
-                <p className="text-gray-600 text-center">No comments yet. Be the first to review this product!</p>
+                <p className="text-gray-600 text-center">{t('comments.no_comments_yet')}</p>
             )}
         </div>
     );

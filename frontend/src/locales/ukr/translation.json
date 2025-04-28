@@ -157,5 +157,26 @@
         "header": "Вам також може сподобатися",
         "next": "Наступна",
         "previous": "Попередня"
+    },
+    "comments": {
+        "leave_a_comment": "Залиште відгук",
+        "your_name": "Ваше ім'я *",
+        "your_surname": "Ваше прізвище (необов'язково)",
+        "rating_required": "Оцінка *",
+        "write_comment_placeholder": "Напишіть свій відгук тут...",
+        "attachments_label": "Додатки (перетягуйте для зміни порядку):",
+        "submit_button": "Надіслати",
+        "name_required": "Ім'я обов'язкове.",
+        "rating_required_error": "Оцінка обов'язкова.",
+        "comment_empty_error": "Коментар не може бути порожнім.",
+        "thank_you_review": "Дякуємо за ваш відгук!",
+        "upload_limit_reached": "Ви можете завантажити не більше 5 зображень.",
+        "only_images_allowed": "Дозволено лише зображення!",
+        "image_too_large": "Зображення занадто велике. Максимум 1 МБ.",
+        "compression_error": "Не вдалося стиснути зображення.",
+        "customer_reviews": "Відгуки покупців",
+        "no_comments_yet": "Поки що немає відгуків. Будьте першим, хто залишить відгук!",
+        "load_more_comments": "Завантажити більше відгуків",
+        "loading": "Завантаження..."
     }
 }

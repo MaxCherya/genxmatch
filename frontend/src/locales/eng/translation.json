@@ -157,5 +157,26 @@
         "header": "You may also like",
         "next": "Next",
         "previous": "Previous"
+    },
+    "comments": {
+        "leave_a_comment": "Leave a Comment",
+        "your_name": "Your Name *",
+        "your_surname": "Your Surname (optional)",
+        "rating_required": "Rating *",
+        "write_comment_placeholder": "Write your comment here...",
+        "attachments_label": "Attachments (drag to reorder):",
+        "submit_button": "Submit",
+        "name_required": "Name is required.",
+        "rating_required_error": "Rating is required.",
+        "comment_empty_error": "Comment cannot be empty.",
+        "thank_you_review": "Thank you for your review!",
+        "upload_limit_reached": "You can upload up to 5 attachments only.",
+        "only_images_allowed": "Only images are allowed!",
+        "image_too_large": "Image too large. Max 1MB.",
+        "compression_error": "Failed to compress images.",
+        "customer_reviews": "Customer Reviews",
+        "no_comments_yet": "No comments yet. Be the first to review this product!",
+        "load_more_comments": "Load More Comments",
+        "loading": "Loading..."
     }
 }

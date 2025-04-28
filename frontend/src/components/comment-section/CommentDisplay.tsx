@@ -4,18 +4,25 @@ import ReviewStars from '../item-page/ReviewStars';
 import Lightbox from "yet-another-react-lightbox";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
-import { motion } from 'framer-motion'; // 👈 for smooth animations
+import { motion } from 'framer-motion';
 
 interface CommentDisplayProps {
-    content: string; // HTML content
+    content: string;
     name: string;
     surname?: string;
-    rating: number; // 0–5
+    rating: number;
     images: string[];
-    createdAt?: string; // Optional createdAt field
+    createdAt?: string;
 }
 
-const CommentDisplay: React.FC<CommentDisplayProps> = ({ content, name, surname, rating, images, createdAt }) => {
+const CommentDisplay: React.FC<CommentDisplayProps> = ({
+    content,
+    name,
+    surname,
+    rating,
+    images,
+    createdAt
+}) => {
     const [lightboxOpen, setLightboxOpen] = useState(false);
     const [lightboxIndex, setLightboxIndex] = useState(0);
 
@@ -24,11 +31,10 @@ const CommentDisplay: React.FC<CommentDisplayProps> = ({ content, name, surname,
         setLightboxOpen(true);
     };
 
-    // Optional: Format createdAt nicely
     const formatDate = (timestamp: string) => {
         const date = new Date(timestamp);
         const day = String(date.getDate()).padStart(2, '0');
-        const month = String(date.getMonth() + 1).padStart(2, '0'); // month is 0-based
+        const month = String(date.getMonth() + 1).padStart(2, '0'); // Month is 0-indexed
         const year = date.getFullYear();
         const hours = String(date.getHours()).padStart(2, '0');
         const minutes = String(date.getMinutes()).padStart(2, '0');
@@ -42,7 +48,7 @@ const CommentDisplay: React.FC<CommentDisplayProps> = ({ content, name, surname,
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
         >
-            {/* Top: Name, Rating and Date */}
+            {/* Top: Name, Rating, Date */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                 <div className="flex items-center gap-4">
                     <div className="text-lg font-semibold text-black">
