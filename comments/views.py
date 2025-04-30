@@ -6,6 +6,7 @@ from django_ratelimit.decorators import ratelimit
 from .models import ItemComment, Item
 from .serializers import ItemCommentSerializer
 from items.utils import update_item_rating
+from django.utils.timezone import now
 from .pagination import CommentPagination
 
 class ItemCommentListCreateView(generics.ListCreateAPIView):
@@ -27,7 +28,10 @@ class ItemCommentListCreateView(generics.ListCreateAPIView):
         except Item.DoesNotExist:
             return Response({"error": "Item not found."}, status=404)
 
-        serializer = self.get_serializer(data=request.data)
+        data = request.data.copy()
+        data['created_at'] = now()
+
+        serializer = self.get_serializer(data=data)
         if serializer.is_valid():
             serializer.save(item=item)
             update_item_rating(item)

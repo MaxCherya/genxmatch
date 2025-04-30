@@ -8,7 +8,7 @@ class ItemComment(models.Model):
     rating = models.DecimalField(max_digits=3, decimal_places=2)
     content = models.TextField()
     images = models.JSONField(blank=True, null=True, default=list)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
 
     def __str__(self):
         return f"Comment by {self.name} on {self.item.name_eng}"
