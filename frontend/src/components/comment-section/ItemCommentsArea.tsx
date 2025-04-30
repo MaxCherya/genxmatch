@@ -108,7 +108,7 @@ const ItemCommentsArea: React.FC<Props> = ({ itemId }) => {
             {loading ? (
                 <LoadingSpinner />
             ) : comments.length > 0 ? (
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-3">
                     {comments.map(comment => (
                         <CommentDisplay
                             key={comment.id}
