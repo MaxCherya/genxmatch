@@ -43,9 +43,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
                 src={product.main_image || "https://via.placeholder.com/300x192?text=No+Image"}
                 alt={getProductName(product)}
                 className="w-48 h-48 object-cover rounded-lg mb-4 self-center"
+                onClick={handleViewDetails}
             />
-            <h3 className="text-lg font-light tracking-wide">{getProductName(product)}</h3>
-            <p className="text-gray-400 text-sm mb-4">
+            <h3 onClick={handleViewDetails} className="text-lg font-light tracking-wide">{getProductName(product)}</h3>
+            <p onClick={handleViewDetails} className="text-gray-400 text-sm mb-4">
                 {product.categories.map((cat: any) => {
                     switch (i18n.language) {
                         case "ukr": return cat.name_ua;
@@ -57,8 +58,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, getProductName }) =>
             </p>
             <div className="flex flex-col">
                 <PriceTag size="sm" current={product.price_uah} old={product.old_price_uah ? product.old_price_uah : null} currency="₴" />
-                <div className="my-3 h-px w-full bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 opacity-40 rounded-full" />
-                <div className="self-center flex flex-col items-center mb-4">
+                <div onClick={handleViewDetails} className="my-3 h-px w-full bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 opacity-40 rounded-full" />
+                <div onClick={handleViewDetails} className="self-center flex flex-col items-center mb-4">
                     <ReviewStars rating={product.rating} readOnly={true} size="xs" />
                     <p className="text-gray-400 text-[10px] mt-0.5">{product.sold} {t('catalog.items_sold')}</p>
                 </div>

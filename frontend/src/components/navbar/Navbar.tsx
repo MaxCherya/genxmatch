@@ -107,11 +107,16 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
 
                     {/* Hamburger Menu Button (Mobile) */}
                     <motion.button
-                        className="lg:hidden text-gray-200 p-2 rounded-full hover:bg-gray-700/30 transition-all duration-200"
+                        className="relative lg:hidden text-gray-200 p-2 rounded-full hover:bg-gray-700/30 transition-all duration-200"
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                         whileTap={{ scale: 0.95 }}
                     >
                         {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+
+                        {/* Cart indicator on hamburger */}
+                        {!isMobileMenuOpen && cartCount > 0 && (
+                            <span className="absolute top-1 right-1 bg-red-500 w-2.5 h-2.5 rounded-full animate-pulse" />
+                        )}
                     </motion.button>
 
                     {/* Mobile Menu */}
@@ -128,7 +133,10 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                                     {categories.map((category) => (
                                         <motion.button
                                             key={category.name}
-                                            onClick={category.action}
+                                            onClick={() => {
+                                                category.action();
+                                                setIsMobileMenuOpen(false);
+                                            }}
                                             className={clsx(
                                                 "group flex cursor-pointer items-center gap-2 text-sm md:text-base font-light tracking-wide transition-all duration-300 relative",
                                                 category.highlight && "text-green-400"
