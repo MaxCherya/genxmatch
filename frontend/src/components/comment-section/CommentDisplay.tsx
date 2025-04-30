@@ -43,7 +43,7 @@ const CommentDisplay: React.FC<CommentDisplayProps> = ({
 
     return (
         <motion.div
-            className="w-full bg-white rounded-xl shadow-md p-6 mb-8 space-y-6"
+            className="w-full bg-white rounded-xl shadow-md p-6 mb-2 space-y-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
