@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMail, AiOutlineLock } from "react-icons/ai";
+import { login, register } from "../../endpoints/auth";
 
 interface NavbarUserMenuProps {
     onClose?: () => void;
@@ -7,18 +8,39 @@ interface NavbarUserMenuProps {
 
 const NavbarUserMenu: React.FC<NavbarUserMenuProps> = ({ onClose }) => {
     const [mode, setMode] = useState<"login" | "register">("login");
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (mode === "register" && password !== confirmPassword) {
             alert("Passwords do not match");
             return;
         }
-        console.log(`${mode === "login" ? "Login" : "Register"} with:`, { email, password, confirmPassword });
-        // Add your logic here
+
+        if (mode === 'login') {
+            try {
+                const res = await login({ username, password });
+                console.log(res.message);
+                onClose?.();
+            } catch (err: any) {
+                alert(err.error || "Login failed");
+            }
+        } else {
+            try {
+                const res = await register({
+                    username,
+                    email,
+                    password,
+                });
+                console.log(res.message);
+                onClose?.();
+            } catch (err: any) {
+                alert(err.error || "Registration failed");
+            }
+        }
     };
 
     return (
@@ -42,14 +64,28 @@ const NavbarUserMenu: React.FC<NavbarUserMenuProps> = ({ onClose }) => {
                         <div className="relative">
                             <AiOutlineMail className="absolute top-3 left-3 text-gray-400" size={20} />
                             <input
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="Email"
+                                type="text"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                placeholder="Username"
                                 className="w-full pl-10 pr-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200"
                                 required
                             />
                         </div>
+
+                        {mode === "register" && (
+                            <div className="relative">
+                                <AiOutlineMail className="absolute top-3 left-3 text-gray-400" size={20} />
+                                <input
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="Email"
+                                    className="w-full pl-10 pr-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 transition-all duration-200"
+                                    required
+                                />
+                            </div>
+                        )}
 
                         <div className="relative">
                             <AiOutlineLock className="absolute top-3 left-3 text-gray-400" size={20} />

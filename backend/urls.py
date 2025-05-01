@@ -33,6 +33,7 @@ urlpatterns = [
     path("api/items/", include("items.urls")),
     path("api/comments/", include("comments.urls")),
     path('orders/', include('orders.urls')),
+    path('api/auth/', include('accounts.urls')),
 
     # ✅ Serve Static Files (JS, CSS, Images)
     re_path(r"^assets/(?P<path>.*)$", serve, {"document_root": settings.STATICFILES_DIRS[1]}),

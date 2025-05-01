@@ -1,5 +1,6 @@
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
 import os
 
 from django.utils.translation import gettext_lazy as _
@@ -65,11 +66,14 @@ INSTALLED_APPS = [
     'django_otp.plugins.otp_totp',
     'two_factor',
     'rest_framework',
+    'rest_framework_simplejwt',
+    'rest_framework_simplejwt.token_blacklist',
     'items',
     'orders',
     'custom_auth',
     'pgcrypto',
     'comments',
+    'accounts',
 ]
 
 REST_FRAMEWORK = {
@@ -82,19 +86,18 @@ REST_FRAMEWORK = {
         (['rest_framework.renderers.BrowsableAPIRenderer'] if IS_DEV else [])
     ),
 
-    # No built-in DRF authentication
-    'DEFAULT_AUTHENTICATION_CLASSES': [],
-    
-    'DEFAULT_THROTTLE_CLASSES': [
-        'rest_framework.throttling.AnonRateThrottle',
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    'DEFAULT_THROTTLE_RATES': {
-        'anon': '100/day',  # Global default (adjust as needed)
-        'catalog_filters': '2/second',
-        'item_list': '5/second',
-        'get_item': '10/second',
-        'item_suggestions': '3/second',
-    }
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS': True,            # Issue new refresh token each time
+    'BLACKLIST_AFTER_ROTATION': True,         # Blacklist old refresh token
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_BLACKLIST_ENABLED': True,
 }
 
 MIDDLEWARE = [
