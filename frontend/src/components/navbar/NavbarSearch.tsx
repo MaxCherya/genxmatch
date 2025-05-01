@@ -37,7 +37,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
                 placeholder={t("navbar.search_placeholder")}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-4 py-1.5 rounded-xl bg-gray-800/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+                className="w-full px-4 py-0.5 text-sm rounded-xl bg-gray-800/70 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
             />
             {searchTerm && (
                 <button
@@ -51,7 +51,7 @@ const NavbarSearch: React.FC<NavbarSearchProps> = ({
                 <div
                     role="listbox"
                     aria-label={t('navbar.search_results')}
-                    className="absolute top-full mt-2 w-full bg-gray-900/95 backdrop-blur-md rounded-xl shadow-2xl z-50 max-h-[400px] overflow-y-auto border border-gray-700/50"
+                    className="absolute top-full mt-2 w-[150%] bg-gray-900/95 backdrop-blur-md rounded-xl shadow-2xl z-50 max-h-[400px] overflow-y-auto border border-gray-700/50"
                 >
                     {loadingSearch ? (
                         <div className="flex justify-center items-center py-6">

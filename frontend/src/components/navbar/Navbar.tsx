@@ -121,11 +121,11 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
 
                         {/* Center: Search + Profile + Links */}
                         <div className="flex items-center gap-2 flex-grow justify-center">
-                            <FaCircleUser className="w-8 h-8 text-gray-400 cursor-pointer" onClick={() => setShowUserMenu(!showUserMenu)} />
+                            <FaCircleUser className="w-6 h-6 text-gray-400 cursor-pointer" onClick={() => setShowUserMenu(!showUserMenu)} />
                             {showUserMenu && (
                                 <NavbarUserMenu onClose={() => setShowUserMenu(!showUserMenu)} />
                             )}
-                            <div className="relative w-full max-w-[20svw]">
+                            <div className="relative w-full max-w-[23svw]">
                                 <NavbarSearch
                                     searchTerm={searchTerm}
                                     setSearchTerm={setSearchTerm}
@@ -156,7 +156,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                                 />
                             </div>
 
-                            <div className="flex items-center ml-8">
+                            <div className="flex items-center ml-2">
                                 <NavbarCategoryLinks categories={categories} cartCount={cartCount} />
                             </div>
                         </div>

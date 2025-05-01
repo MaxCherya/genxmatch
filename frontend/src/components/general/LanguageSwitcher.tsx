@@ -28,7 +28,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isMobile = false })
             {/* Toggle Button */}
             <button
                 onClick={() => setIsOpen(!isOpen)}
-                className="flex items-center justify-between w-full lg:w-36 px-3 py-1.5 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-lg text-white text-sm md:text-base font-medium transition-all duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex items-center justify-between cursor-pointer w-full lg:w-36 px-3 py-0.5 bg-gray-800/50 hover:bg-gray-700/50 border border-gray-700/50 rounded-lg text-white text-xs md:text-sm font-medium transition-all duration-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
                 <span className="flex items-center gap-2 truncate">
                     <span>{currentLanguage.flag}</span>
@@ -62,7 +62,7 @@ const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({ isMobile = false })
                             <button
                                 key={lang.code}
                                 onClick={() => handleSelect(lang.code)}
-                                className="flex items-center gap-2 w-full px-3 py-2 text-white/90 hover:text-white text-sm md:text-base bg-gray-800/50 hover:bg-gray-700/50 transition-all duration-150 truncate"
+                                className="flex cursor-pointer items-center gap-2 w-full px-3 py-2 text-white/90 hover:text-white text-xs md:text-sm bg-gray-800/50 hover:bg-gray-700/50 transition-all duration-150 truncate"
                             >
                                 <span>{lang.flag}</span>
                                 <span>{lang.label}</span>
