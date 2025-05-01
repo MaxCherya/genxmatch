@@ -117,8 +117,13 @@
     },
     "navbar": {
         "catalog": "Каталог",
-        "contact_us": "Связаться",
-        "cart": "Корзина"
+        "contact_us": "Связаться с нами",
+        "cart": "Корзина",
+        "search_placeholder": "Поиск товаров...",
+        "search_results": "Результаты поиска",
+        "sold": "Продано: {{count}}",
+        "no_results": "Ничего не найдено",
+        "load_more": "Показать ещё"
     },
     "catalog": {
         "filters": "Фильтры",

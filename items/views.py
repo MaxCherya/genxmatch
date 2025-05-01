@@ -5,9 +5,12 @@ from django.utils.translation import gettext as _
 from django.utils.decorators import method_decorator
 from django_ratelimit.decorators import ratelimit
 from .models import Item, Category
-from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer
+from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer, ItemMiniSerializer
 from .paginator import CatalogPagination
+from rest_framework.decorators import api_view
+from django.db.models import Q
 from rest_framework import generics
+from .utils import SearchPagination
 
 
 class ItemListView(generics.ListAPIView):
@@ -99,3 +102,29 @@ class ItemSuggestionsView(APIView):
 
         serializer = CatalogItemSerializer(suggestions, many=True)
         return Response(serializer.data)
+    
+
+@api_view(['GET'])
+def search_items(request):
+    query = request.GET.get('q', '').strip()
+
+    if len(query) < 2:
+        return Response({'results': [], 'count': 0})
+
+    filters = (
+        Q(name_ua__icontains=query) |
+        Q(name_eng__icontains=query) |
+        Q(name_rus__icontains=query) |
+        Q(short_description_ua__icontains=query) |
+        Q(short_description_eng__icontains=query) |
+        Q(short_description_rus__icontains=query) |
+        Q(artiqul_original__icontains=query)
+    )
+
+    queryset = Item.objects.filter(filters).order_by('-rating')
+
+    paginator = SearchPagination()
+    paginated_qs = paginator.paginate_queryset(queryset, request)
+
+    serializer = ItemMiniSerializer(paginated_qs, many=True)
+    return paginator.get_paginated_response(serializer.data)

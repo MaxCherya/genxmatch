@@ -140,3 +140,17 @@ export const fetchItemSuggestions = async (itemId: number): Promise<Item[]> => {
     if (!res.ok) throw new Error("Failed to fetch suggestions");
     return await res.json();
 };
+
+export const searchItems = async (query: string, page = 1): Promise<PaginatedResponse<Item>> => {
+    if (query.trim().length < 2) {
+        return { count: 0, next: null, previous: null, results: [] };
+    }
+
+    const params = new URLSearchParams();
+    params.append("q", query);
+    params.append("page", page.toString());
+
+    const res = await fetch(`/api/items/catalog/search/?${params.toString()}`);
+    if (!res.ok) throw new Error("Failed to search items");
+    return await res.json();
+};

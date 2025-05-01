@@ -72,3 +72,14 @@ class CatalogItemSerializer(serializers.ModelSerializer):
             'main_image',
             'categories'
         ]
+
+class ItemMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = [
+            'id',
+            'name_ua', 'name_eng', 'name_rus',
+            'short_description_ua', 'short_description_eng', 'short_description_rus',
+            'artiqul_original',
+            'main_image', 'price_uah', 'rating', 'sold'
+        ]

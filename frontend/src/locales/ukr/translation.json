@@ -117,8 +117,13 @@
     },
     "navbar": {
         "catalog": "Каталог",
-        "contact_us": "Зв’язатися",
-        "cart": "Кошик"
+        "contact_us": "Зв'язатися з нами",
+        "cart": "Кошик",
+        "search_placeholder": "Пошук товарів...",
+        "search_results": "Результати пошуку",
+        "sold": "Продано: {{count}}",
+        "no_results": "Нічого не знайдено",
+        "load_more": "Показати більше"
     },
     "catalog": {
         "filters": "Фільтри",
