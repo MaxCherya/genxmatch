@@ -7,7 +7,7 @@ export type OrderItemPayload = {
 };
 
 export type OrderPayload = {
-    items: OrderItemPayload[]; // 🆕 multiple items
+    items: OrderItemPayload[];
     name: string;
     surname: string;
     patronymic?: string;

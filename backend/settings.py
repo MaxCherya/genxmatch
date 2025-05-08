@@ -11,6 +11,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 LOGIN_URL = '/account/login/'
 LOGIN_REDIRECT_URL = '/'
 
+AUTH_USER_MODEL = 'accounts.CustomUser'
+
 # ==================== i18n
 LANGUAGE_CODE = 'uk'  # Default fallback
 
@@ -87,8 +89,14 @@ REST_FRAMEWORK = {
     ),
 
     'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'custom_auth.authentication.CookieJWTAuthentication',
     ],
+}
+
+COOKIE_SETTINGS = {
+    'httponly': False,
+    'secure': not IS_DEV,
+    'samesite': 'Lax',
 }
 
 SIMPLE_JWT = {

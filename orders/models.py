@@ -1,6 +1,6 @@
 from django.db import models
 from items.models import Item
-from django.contrib.auth.models import User
+from accounts.models import CustomUser
 from pgcrypto.fields import TextPGPSymmetricKeyField
 
 class DeliveryCompany(models.Model):
@@ -32,7 +32,7 @@ class Order(models.Model):
     delivery_company = models.ForeignKey(DeliveryCompany, on_delete=models.CASCADE, related_name='orders', null=True, blank=True)
     order_special_id = models.IntegerField(null=True, blank=True, editable=False)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='new')
-    assigned_to = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_orders')
+    assigned_to = models.ForeignKey(CustomUser, on_delete=models.SET_NULL, null=True, blank=True, related_name='assigned_orders')
     total_price_uah = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
 
     def save(self, *args, **kwargs):

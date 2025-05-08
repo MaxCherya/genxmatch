@@ -13,6 +13,7 @@ import Catalog from "./pages/general/Catalog/Catalog";
 import Cart from "./pages/general/Cart/Cart";
 import ItemMainPage from "./pages/item-pages/ItemMainPage";
 import Checkout from "./pages/general/Checkout/Checkout";
+import Profile from "./pages/general/Profile/Profile";
 
 const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -29,6 +30,7 @@ const App: React.FC = () => {
         <Route path="/product-page/:id" element={<ItemMainPage setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/user/:userId" element={<Profile />} />
       </Routes>
     </Router>
   );
