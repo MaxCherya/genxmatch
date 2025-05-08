@@ -1,5 +1,8 @@
+import { BasicUserInfo } from "./user";
+
 export interface AuthResponse {
   message: string;
+  user: BasicUserInfo;
 }
 
 export interface AuthError {

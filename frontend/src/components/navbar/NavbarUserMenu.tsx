@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AiOutlineClose, AiOutlineMail, AiOutlineLock } from "react-icons/ai";
 import { login, register } from "../../endpoints/auth";
+import { useAuth } from "../../contexts/authContext";
 
 interface NavbarUserMenuProps {
     onClose?: () => void;
@@ -13,6 +14,8 @@ const NavbarUserMenu: React.FC<NavbarUserMenuProps> = ({ onClose }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
+    const { setUser } = useAuth()
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (mode === "register" && password !== confirmPassword) {
@@ -24,6 +27,7 @@ const NavbarUserMenu: React.FC<NavbarUserMenuProps> = ({ onClose }) => {
             try {
                 const res = await login({ username, password });
                 console.log(res.message);
+                setUser(res.user)
                 onClose?.();
             } catch (err: any) {
                 alert(err.error || "Login failed");

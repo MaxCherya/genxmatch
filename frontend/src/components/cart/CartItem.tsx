@@ -78,7 +78,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
             </div>
             <div className="flex items-center gap-2">
                 <motion.button
-                    className="px-3 py-1 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg text-white disabled:opacity-50"
+                    className="px-3 cursor-pointer py-1 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg text-white disabled:opacity-50"
                     onClick={() => handleQuantityChange(quantity - 1)}
                     disabled={quantity <= 1 || isUpdating}
                     whileTap={{ scale: 0.95 }}
@@ -87,7 +87,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
                 </motion.button>
                 <span className="text-lg font-light">{quantity}</span>
                 <motion.button
-                    className="px-3 py-1 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg text-white disabled:opacity-50"
+                    className="px-3 cursor-pointer py-1 bg-gray-700/50 hover:bg-gray-600/50 rounded-lg text-white disabled:opacity-50"
                     onClick={() => handleQuantityChange(quantity + 1)}
                     disabled={isUpdating}
                     whileTap={{ scale: 0.95 }}
@@ -96,7 +96,7 @@ const CartItem: React.FC<CartItemProps> = ({ cartItem, getProductName, onUpdate 
                 </motion.button>
             </div>
             <motion.button
-                className="px-4 py-2 bg-red-600/80 hover:bg-red-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200 disabled:opacity-50"
+                className="px-4 py-2 cursor-pointer bg-red-600/80 hover:bg-red-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200 disabled:opacity-50"
                 onClick={handleRemove}
                 disabled={isUpdating}
                 whileTap={{ scale: 0.95 }}

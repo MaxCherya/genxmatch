@@ -2,12 +2,13 @@ import { getCSRFToken } from "../utils/csrf";
 import i18n from "../utils/i18n";
 
 export type BasicUserInfo = {
-    username: string | null;
-    email: string | null;
+    id: number;
+    username: string;
+    email: string;
 }
 
 export type BasicUserInfoPayload = {
-    userId: number | 'me' | null;
+    userId: number | 'me';
 }
 
 export const getUser = async (userId: BasicUserInfoPayload) => {

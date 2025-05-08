@@ -21,7 +21,7 @@ const CartSummary: React.FC<CartSummaryProps> = ({ totalPrice, onCheckout }) => 
             </div>
 
             <motion.button
-                className="w-full px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
+                className="w-full cursor-pointer px-4 py-2 bg-blue-600/80 hover:bg-blue-500/80 rounded-lg text-white text-base font-light tracking-wide transition-all duration-200"
                 onClick={onCheckout}
                 whileTap={{ scale: 0.95 }}
             >

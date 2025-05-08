@@ -5,6 +5,8 @@ import { Menu, X } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import logo from '/assets/logo.png';
 
+import { useAuth } from "../../contexts/authContext";
+
 import { FaCircleUser } from "react-icons/fa6";
 
 import LanguageSwitcher from "../general/LanguageSwitcher";
@@ -16,6 +18,8 @@ import NavbarSearch from "./NavbarSearch";
 import NavbarCategoryLinks from "./NavbarCategoryLinks";
 import NavbarMobileMenu from "./NavbarMobileMenu";
 import NavbarUserMenu from "./NavbarUserMenu";
+import { getUser } from "../../endpoints/user";
+import EmptyProfilePicture from "../user/EmptyProfilePicture";
 
 interface NavbarProps {
     isFullscreen?: boolean;
@@ -30,6 +34,8 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
     const [loadingSearch, setLoadingSearch] = useState(false);
     const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
     const [showUserMenu, setShowUserMenu] = useState(false);
+
+    const { user } = useAuth();
 
     const { cartCount } = useCart();
     const { t, i18n } = useTranslation();
@@ -91,8 +97,17 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
     const categories = [
         { name: t('navbar.catalog'), icon: "📚", action: () => navigate('/catalog'), path: "/catalog" },
         { name: t('navbar.contact_us'), icon: "✉️", action: () => console.log("Contact Us clicked") },
-        { name: t('navbar.cart'), icon: "🛒", action: () => navigate('/cart'), path: "/cart", highlight: cartCount > 0 },
+        { name: t('navbar.cart'), icon: "🛒", action: () => navigate('/cart'), path: "/cart" },
     ];
+
+    const handleOpenUser = async () => {
+        try {
+            await getUser({ userId: 'me' });
+            navigate('/user/me');
+        } catch (err) {
+            setShowUserMenu(!showUserMenu);
+        }
+    }
 
     return (
         <AnimatePresence>
@@ -121,7 +136,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
 
                         {/* Center: Search + Profile + Links */}
                         <div className="flex items-center gap-2 flex-grow justify-center">
-                            <FaCircleUser className="w-6 h-6 text-gray-400 cursor-pointer" onClick={() => setShowUserMenu(!showUserMenu)} />
+                            {user ? <EmptyProfilePicture username={user.username} size="nav" pointer onClick={handleOpenUser} /> : <FaCircleUser className="w-6 h-6 text-gray-400 cursor-pointer" onClick={handleOpenUser} />}
                             {showUserMenu && (
                                 <NavbarUserMenu onClose={() => setShowUserMenu(!showUserMenu)} />
                             )}
@@ -171,7 +186,7 @@ const Navbar: React.FC<NavbarProps> = ({ isFullscreen = false }) => {
                     <div className="flex lg:hidden w-full items-center justify-between">
                         <img className="w-18 drop-shadow-md" src={logo} alt="Logo" />
                         <div className="flex flex-row items-center gap-2">
-                            <FaCircleUser className="w-5 h-5 text-gray-400 cursor-pointer" onClick={() => setShowUserMenu(!showUserMenu)} />
+                            {user ? <EmptyProfilePicture username={user.username} pointer onClick={handleOpenUser} size="nav" /> : <FaCircleUser className="w-5 h-5 text-gray-400 cursor-pointer" onClick={handleOpenUser} />}
                             {showUserMenu && (
                                 <NavbarUserMenu onClose={() => setShowUserMenu(!showUserMenu)} />
                             )}

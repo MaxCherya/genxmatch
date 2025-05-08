@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { BasicUserInfo, getUser } from "../../../endpoints/user";
 import { useParams } from "react-router-dom";
 import EmptyProfilePicture from "../../../components/user/EmptyProfilePicture";
+import CTAButton from "../../../components/btns/CTAButton";
+import { logout } from "../../../endpoints/auth";
+
+import { useAuth } from "../../../contexts/authContext";
 
 interface Params {
     userId?: string | number | null;
@@ -11,6 +16,10 @@ interface Params {
 const Profile: React.FC<Params> = () => {
 
     const { userId } = useParams<{ userId: string }>();
+
+    const navigate = useNavigate();
+
+    const { setUser: makeUser } = useAuth();
 
     const [user, setUser] = useState<BasicUserInfo | null>(null);
     const [_loading, setLoading] = useState(true);
@@ -40,14 +49,25 @@ const Profile: React.FC<Params> = () => {
         fetchUser();
     }, [])
 
+    const handleLogout = async () => {
+        try {
+            logout()
+            navigate('/catalog')
+            makeUser(null)
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
     return (
         <div className="w-screen max-w-screen min-h-screen p-5 bg-black flex flex-col items-center">
             <div className="w-[95%] lg:w-[55%] max-w-[95%] min-h-screen flex flex-col items-center align-middle text-white mt-20">
-                <EmptyProfilePicture username='user' />
-                <div className="flex flex-col items-center mt-2">
-                    <h1 className="text-2xl font-bold">Username</h1>
-                    <p className="text-gray-400 text-sm">email</p>
+                <EmptyProfilePicture username={user?.username} />
+                <div className="flex flex-col items-center mt-2 mb-4">
+                    <h1 className="text-2xl font-bold">{user?.username}</h1>
+                    <p className="text-gray-400 text-sm">{user?.email}</p>
                 </div>
+                <CTAButton label="Logout" onClick={handleLogout} />
             </div>
         </div>
     )

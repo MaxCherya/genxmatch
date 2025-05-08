@@ -49,10 +49,17 @@ def login(request):
     user = authenticate(username=username, password=password)
     if user is not None:
         tokens = get_tokens_for_user(user)
-        res = Response({'message': _('Login successful')}, status=status.HTTP_200_OK)
+        serializer = UserInformationSerializer(user)
+
+        res = Response({
+            'message': _('Login successful'),
+            'user': serializer.data
+        }, status=status.HTTP_200_OK)
+
         res.set_cookie('access', tokens['access'], **settings.COOKIE_SETTINGS)
         res.set_cookie('refresh', tokens['refresh'], **settings.COOKIE_SETTINGS)
         return res
+
     return Response({'error': _('Invalid credentials')}, status=status.HTTP_401_UNAUTHORIZED)
 
 
