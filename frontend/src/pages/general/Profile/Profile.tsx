@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { BasicUserInfo, getUser } from "../../../endpoints/user";
+import { BasicUserInfo, getLastViewed, getUser } from "../../../endpoints/user";
 import { useParams } from "react-router-dom";
 import EmptyProfilePicture from "../../../components/user/EmptyProfilePicture";
 import CTAButton from "../../../components/btns/CTAButton";
 import { logout } from "../../../endpoints/auth";
 
 import { useAuth } from "../../../contexts/authContext";
+import LastViewed from "../../../components/user/LastViewed";
 
 interface Params {
     userId?: string | number | null;
@@ -19,11 +20,13 @@ const Profile: React.FC<Params> = () => {
 
     const navigate = useNavigate();
 
-    const { setUser: makeUser } = useAuth();
+    const { setUser: makeUser, user: cUser } = useAuth();
 
     const [user, setUser] = useState<BasicUserInfo | null>(null);
     const [_loading, setLoading] = useState(true);
     const [_error, setError] = useState<string | null>(null);
+
+    const [lastViewed, setLastViewed] = useState<any>(null)
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -49,6 +52,14 @@ const Profile: React.FC<Params> = () => {
         fetchUser();
     }, [])
 
+    console.log(lastViewed)
+
+    useEffect(() => {
+        if (userId === 'me') {
+            getLastViewed().then((data) => setLastViewed(data)).catch((err) => console.error(err))
+        }
+    }, [])
+
     const handleLogout = async () => {
         try {
             logout()
@@ -67,7 +78,11 @@ const Profile: React.FC<Params> = () => {
                     <h1 className="text-2xl font-bold">{user?.username}</h1>
                     <p className="text-gray-400 text-sm">{user?.email}</p>
                 </div>
+
                 <CTAButton label="Logout" onClick={handleLogout} />
+
+                {cUser && lastViewed && <LastViewed products={lastViewed} />}
+
             </div>
         </div>
     )

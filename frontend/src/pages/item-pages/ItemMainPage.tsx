@@ -16,6 +16,8 @@ import ScrollProgressCircle from "../../components/general/ScrollProgressCircle"
 import LoadingSpinner from "../../components/general/LoadingSpinner";
 import SuggestionsSection from "../../components/item-page/SuggestionSection";
 import ItemCommentsArea from "../../components/comment-section/ItemCommentsArea";
+import { addToLastViewed } from "../../endpoints/user";
+import { useAuth } from "../../contexts/authContext";
 
 interface Props {
     setIsFullscreen?: (value: boolean) => void;
@@ -32,6 +34,8 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
     const [product, setProduct] = useState<Item | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
+    const { user } = useAuth()
 
     const [suggestedProducts, setSuggestedProducts] = useState<Item[]>([]);
     const [loadingSuggestions, setLoadingSuggestions] = useState(true);
@@ -58,6 +62,13 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 });
         }
     }, [id]);
+
+    useEffect(() => {
+        if (user && id) {
+            const numericId = parseInt(id, 10);
+            addToLastViewed(numericId).catch((err) => console.error(err))
+        }
+    }, [id])
 
     if (loading) {
         return (

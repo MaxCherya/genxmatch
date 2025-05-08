@@ -188,5 +188,8 @@
     },
     "checkout_menu": {
         "your_items": "Your items"
+    },
+    "last_viewed": {
+        "title": "Last viewed items"
     }
 }

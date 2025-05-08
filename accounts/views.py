@@ -6,8 +6,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.utils.translation import gettext as _
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django_ratelimit.decorators import ratelimit
-from .models import CustomUser
+from .models import CustomUser, RecentlyViewedItem
 from django.conf import settings
+from django.utils import timezone
+from items.models import Item
+from items.serializers import ItemMiniSerializer
 
 from .serializers import RegisterSerializer, UserInformationSerializer
 from .utils import get_tokens_for_user
@@ -120,3 +123,48 @@ def get_user(request):
     
     serializer = UserInformationSerializer(user)
     return Response(serializer.data)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@ratelimit(key='ip', rate='10/m', method='POST', block=True)
+def add_to_last_viewed(request):
+    item_id = request.data.get('itemId')
+
+    if not item_id:
+        return Response({'error': _('itemId is required.')}, status=status.HTTP_400_BAD_REQUEST)
+
+    try:
+        item = Item.objects.get(id=item_id)
+    except Item.DoesNotExist:
+        return Response({'error': _('Item not found.')}, status=status.HTTP_404_NOT_FOUND)
+
+    user = request.user
+
+    # Create or update the recently viewed record
+    RecentlyViewedItem.objects.update_or_create(
+        user=user,
+        item=item,
+        defaults={'viewed_at': timezone.now()}
+    )
+
+    # Trim to last 10 viewed items
+    recent_items = RecentlyViewedItem.objects.filter(user=user).order_by('-viewed_at')
+    if recent_items.count() > 10:
+        for excess in recent_items[10:]:
+            excess.delete()
+
+    return Response({'message': _('Item added to last viewed.')}, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+@ratelimit(key='ip', rate='10/m', method='GET', block=True)
+def get_last_viewed_items(request):
+    user = request.user
+    recently_viewed = RecentlyViewedItem.objects.filter(user=user).order_by('-viewed_at')[:10]
+    items = [entry.item for entry in recently_viewed]
+
+    # serialize items
+    serialized = ItemMiniSerializer(items, many=True)
+    return Response(serialized.data, status=status.HTTP_200_OK)

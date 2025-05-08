@@ -188,5 +188,8 @@
     },
     "checkout-menu": {
         "your_items": "Ваші товари"
+    },
+    "last_viewed": {
+        "title": "Останні переглянуті товари" 
     }
 }
