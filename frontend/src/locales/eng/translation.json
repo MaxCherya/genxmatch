@@ -227,5 +227,8 @@
         "enter_2fa_code": "🔐 Enter your 2FA code",
         "enter_6_digit_code": "Open your authenticator app and enter the 6-digit code",
         "enter_valid_otp": "Please, enter valid OTP"
+    },
+    "potato": {
+        "add_product": "Add product"
     }
 }

@@ -17,6 +17,7 @@ import Cart from "./pages/general/Cart/Cart";
 import ItemMainPage from "./pages/item-pages/ItemMainPage";
 import Checkout from "./pages/general/Checkout/Checkout";
 import Profile from "./pages/general/Profile/Profile";
+import AddProduct from "./pages/potato/AddProduct";
 
 const App: React.FC = () => {
   const [isFullscreen, setIsFullscreen] = useState(false);
@@ -26,14 +27,18 @@ const App: React.FC = () => {
       <Navbar isFullscreen={isFullscreen} />
       <Routes>
         <Route path="*" element={<NotFound />} />
+
         <Route path="/one-page/floor-lamp-rgb" element={<FloorLampRGB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/one-page/moon-projector-usb" element={<MoonProjectorUSB setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
+
         <Route path="/catalog" element={<Catalog />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/product-page/:id" element={<ItemMainPage setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
+
         <Route path="/user/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+        <Route path="/add-product" element={<AddProduct />} />
       </Routes>
     </Router>
   );

@@ -12,6 +12,9 @@ import PriceFilter from "../../../components/catalog/PriceFilter";
 import ProductCard from "../../../components/catalog/ProductCard";
 import LoadingSpinner from "../../../components/general/LoadingSpinner";
 import { useToast } from "../../../contexts/ToastContext";
+import Cookies from 'js-cookie';
+import { checkIsPotato } from "../../../endpoints/routing";
+import { useNavigate } from "react-router-dom";
 
 const Catalog: React.FC = () => {
     const { t, i18n } = useTranslation();
@@ -27,6 +30,9 @@ const Catalog: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [sortOption, setSortOption] = useState<"popularity" | "rating" | "price_asc" | "price_desc">("popularity");
+    const [isPotato, setIsPotato] = useState<boolean>(true)
+
+    const navigate = useNavigate();
 
     const getCategoryName = (cat: Category) => {
         switch (i18n.language) {
@@ -45,6 +51,24 @@ const Catalog: React.FC = () => {
             default: return product.name_eng;
         }
     };
+
+    useEffect(() => {
+        const addButton = async () => {
+            const access = Cookies.get('access');
+            const refresh = Cookies.get('refresh');
+
+            if (access && refresh) {
+                const res = await checkIsPotato();
+                if (res.success) {
+                    setIsPotato(true)
+                }
+            } else {
+                return
+            }
+        }
+
+        addButton()
+    }, [])
 
     useEffect(() => {
         const loadFilters = async () => {
@@ -180,6 +204,12 @@ const Catalog: React.FC = () => {
                         onRangeChange={handleRangeChange}
                     />
                 </FilterSidebar>
+
+                {isPotato && (
+                    <div className="fixed bg-white rounded-4xl p-3 bottom-4 right-4">
+                        <button onClick={() => navigate('/add-product')} className="text-black">{t('potato.add_product')}</button>
+                    </div>
+                )}
 
                 <div className="flex-1 mt-0 lg:mt-12">
                     <div className="flex flex-row justify-between w-full mb-6">

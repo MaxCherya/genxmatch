@@ -2,7 +2,7 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from django.contrib.auth import authenticate, get_user_model
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.utils.translation import gettext as _
 from rest_framework_simplejwt.tokens import RefreshToken, TokenError
 from django_ratelimit.decorators import ratelimit
@@ -138,6 +138,13 @@ def get_user(request):
 @permission_classes([IsAuthenticated])
 @ratelimit(key='ip', rate='30/m', method='GET', block=True)
 def is_authenticated(request):
+    return Response({'success': True})
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+@ratelimit(key='ip', rate='30/m', method='GET', block=True)
+def is_admin(request):
     return Response({'success': True})
 
 
