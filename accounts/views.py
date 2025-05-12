@@ -13,7 +13,7 @@ from items.models import Item
 from items.serializers import ItemMiniSerializer
 
 from .serializers import RegisterSerializer, UserInformationSerializer
-from .utils import get_tokens_for_user
+from .utils import get_tokens_for_user, generate_qr_code_uri, generate_qr_image_base64, generate_totp_secret, verify_otp
 
 
 @api_view(['POST'])
@@ -50,7 +50,16 @@ def login(request):
     password = request.data.get("password")
 
     user = authenticate(username=username, password=password)
+
     if user is not None:
+
+        if user.is_2fa_enabled:
+            otp = request.data.get("otp")
+            if not otp:
+                return Response({'error': _('2FA OTP required.'), 'error_id': 'OTP_Enabled'}, status=403)
+            if not verify_otp(user.totp_secret, otp):
+                return Response({'error': _('Invalid OTP')}, status=status.HTTP_401_UNAUTHORIZED)
+
         tokens = get_tokens_for_user(user)
         serializer = UserInformationSerializer(user)
 
@@ -168,3 +177,65 @@ def get_last_viewed_items(request):
     # serialize items
     serialized = ItemMiniSerializer(items, many=True)
     return Response(serialized.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def enable_2fa(request):
+    user = request.user
+
+    if user.is_2fa_enabled:
+        return Response({
+            "error": "2FA_ALREADY_ENABLED",
+            "message": _("Two-factor authentication is already enabled.")
+        }, status=400)
+
+    secret = generate_totp_secret()
+    uri = generate_qr_code_uri(user.username, secret)
+    qr_base64 = generate_qr_image_base64(uri)
+
+    user.totp_secret = secret
+    user.save()
+
+    return Response({
+        'message': _('Scan this QR code or enter the manual code. Then confirm with an OTP.'),
+        'qr_code': qr_base64,
+        'manual_code': secret,
+    }, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def confirm_2fa(request):
+    user = request.user
+    otp = request.data.get('otp')
+
+    if not user.totp_secret:
+        return Response({'error': _('2FA setup not initiated.')}, status=400)
+
+    if not otp or not verify_otp(user.totp_secret, otp):
+        return Response({'error': _('Invalid OTP.')}, status=400)
+
+    user.is_2fa_enabled = True
+    user.save()
+
+    return Response({'message': _('2FA has been enabled.')}, status=200)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def disable_2fa(request):
+    user = request.user
+    otp = request.data.get('otp')
+
+    if not user.is_2fa_enabled:
+        return Response({'error': _('2FA is not enabled.')}, status=400)
+
+    if not otp or not verify_otp(user.totp_secret, otp):
+        return Response({'error': _('Invalid OTP.')}, status=400)
+
+    user.is_2fa_enabled = False
+    user.totp_secret = None
+    user.save()
+
+    return Response({'message': _('2FA has been disabled.')}, status=200)

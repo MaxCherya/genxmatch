@@ -9,5 +9,9 @@ urlpatterns = [
     path('get-user/', views.get_user, name='get-user'),
 
     path('add-to-last-viewed/', views.add_to_last_viewed, name='add_to_last_viewed'),
-    path('get-last-viewed-items/', views.get_last_viewed_items, name='get_last_viewed_items')
+    path('get-last-viewed-items/', views.get_last_viewed_items, name='get_last_viewed_items'),
+
+    path('2fa/enable/', views.enable_2fa, name='enable_2fa'),
+    path('2fa/confirm/', views.confirm_2fa, name='confirm_2fa'),
+    path('2fa/disable/', views.disable_2fa, name='disable_2fa'),
 ]

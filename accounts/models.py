@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
-from django.contrib.postgres.fields import ArrayField 
+from django.contrib.postgres.fields import ArrayField
+from pgcrypto.fields import TextPGPSymmetricKeyField
 from items.models import Item
 from django.db import models
 
@@ -14,3 +15,5 @@ class RecentlyViewedItem(models.Model):
 
 class CustomUser(AbstractUser):
     last_viewed = ArrayField(base_field=models.IntegerField(), size=5, default=list, blank=True)
+    is_2fa_enabled = models.BooleanField(default=False)
+    totp_secret = TextPGPSymmetricKeyField(max_length=32, blank=True, null=True)

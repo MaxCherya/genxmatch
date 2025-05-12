@@ -61,7 +61,7 @@ const LastViewed: React.FC<LastViewedProps> = ({ products }) => {
 
     return (
         <div className="container mx-auto px-4 py-8">
-            <div className="bg-gray-900/90 rounded-xl p-4 mb-6">
+            <div className="bg-gray-900/90 rounded-xl p-4 mb-1">
                 <h2 className="text-2xl font-semibold text-white">{t('last_viewed.title')}</h2>
             </div>
 

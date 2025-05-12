@@ -21,6 +21,7 @@ export interface RegisterPayload {
 export interface LoginPayload {
   username: string;
   password: string;
+  otp?: string;
 }
 
 // Register user
@@ -65,6 +66,59 @@ export const refreshToken = async (): Promise<AuthResponse> => {
   const res = await fetch(`/api/auth/refresh/`, {
     method: 'POST',
     credentials: 'include',
+  });
+
+  if (!res.ok) throw await res.json();
+  return res.json();
+};
+
+
+// 2FA
+export interface Enable2FAResponse {
+  qr_code: string;
+  manual_code: string;
+}
+
+export interface StructuredError {
+  error: string;
+  message: string;
+}
+
+export interface GenericMessageResponse {
+  message: string;
+}
+
+// Enable 2FA: returns QR code and manual code
+export const enable2FA = async (): Promise<Enable2FAResponse> => {
+  const res = await fetch(`/api/auth/2fa/enable/`, {
+    method: 'POST',
+    credentials: 'include',
+  });
+
+  if (!res.ok) throw await res.json() as StructuredError;
+  return res.json();
+};
+
+// Confirm 2FA setup with OTP
+export const confirm2FA = async (otp: string): Promise<GenericMessageResponse> => {
+  const res = await fetch(`/api/auth/2fa/confirm/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ otp }),
+  });
+
+  if (!res.ok) throw await res.json();
+  return res.json();
+};
+
+// Disable 2FA with OTP
+export const disable2FA = async (otp: string): Promise<GenericMessageResponse> => {
+  const res = await fetch(`/api/auth/2fa/disable/`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
+    body: JSON.stringify({ otp }),
   });
 
   if (!res.ok) throw await res.json();
