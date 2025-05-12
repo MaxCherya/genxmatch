@@ -4,6 +4,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 // general
 import NotFound from "./pages/general/NotFound/NotFound";
 
+// routes
+import ProtectedRoute from "./endpoints/protected_routes/ProtectedRoute";
+
 // one-page stores
 import FloorLampRGB from "./pages/one-page/FloorLampRGB";
 import Navbar from "./components/navbar/Navbar";
@@ -30,7 +33,7 @@ const App: React.FC = () => {
         <Route path="/product-page/:id" element={<ItemMainPage setIsFullscreen={setIsFullscreen} isFullscreen={isFullscreen} />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/order-confirmation" element={<OrderConfirmation />} />
-        <Route path="/user/:userId" element={<Profile />} />
+        <Route path="/user/:userId" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

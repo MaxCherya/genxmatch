@@ -134,6 +134,13 @@ def get_user(request):
     return Response(serializer.data)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+@ratelimit(key='ip', rate='30/m', method='GET', block=True)
+def is_authenticated(request):
+    return Response({'success': True})
+
+
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 @ratelimit(key='ip', rate='10/m', method='POST', block=True)

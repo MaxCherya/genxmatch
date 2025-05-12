@@ -1,5 +1,6 @@
 import { getCSRFToken } from "../utils/csrf";
 import i18n from "../utils/i18n";
+import { authFetch } from "./fetchers/authFetch";
 
 export type BasicUserInfo = {
     id: number;
@@ -29,7 +30,7 @@ export const getUser = async (userId: BasicUserInfoPayload) => {
 };
 
 export const addToLastViewed = async (itemId: number): Promise<{ message: string }> => {
-    const res = await fetch('/api/auth/add-to-last-viewed/', {
+    const res = await authFetch('/api/auth/add-to-last-viewed/', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ export const addToLastViewed = async (itemId: number): Promise<{ message: string
 };
 
 export const getLastViewed = async (): Promise<any[]> => {
-    const res = await fetch('/api/auth/get-last-viewed-items/', {
+    const res = await authFetch('/api/auth/get-last-viewed-items/', {
         method: 'POST',
         headers: {
             'X-Language': i18n.language,

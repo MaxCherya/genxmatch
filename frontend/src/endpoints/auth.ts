@@ -1,3 +1,4 @@
+import { authFetch } from "./fetchers/authFetch";
 import { BasicUserInfo } from "./user";
 
 export interface AuthResponse {
@@ -90,7 +91,7 @@ export interface GenericMessageResponse {
 
 // Enable 2FA: returns QR code and manual code
 export const enable2FA = async (): Promise<Enable2FAResponse> => {
-  const res = await fetch(`/api/auth/2fa/enable/`, {
+  const res = await authFetch(`/api/auth/2fa/enable/`, {
     method: 'POST',
     credentials: 'include',
   });
@@ -101,7 +102,7 @@ export const enable2FA = async (): Promise<Enable2FAResponse> => {
 
 // Confirm 2FA setup with OTP
 export const confirm2FA = async (otp: string): Promise<GenericMessageResponse> => {
-  const res = await fetch(`/api/auth/2fa/confirm/`, {
+  const res = await authFetch(`/api/auth/2fa/confirm/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
@@ -114,7 +115,7 @@ export const confirm2FA = async (otp: string): Promise<GenericMessageResponse> =
 
 // Disable 2FA with OTP
 export const disable2FA = async (otp: string): Promise<GenericMessageResponse> => {
-  const res = await fetch(`/api/auth/2fa/disable/`, {
+  const res = await authFetch(`/api/auth/2fa/disable/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
