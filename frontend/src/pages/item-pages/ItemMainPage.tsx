@@ -144,7 +144,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white overflow-hidden">
+        <div className="min-h-screen bg-gradient-to-b from-[#0D1B2A] to-black text-white overflow-hidden">
             <ScrollProgressCircle isFullscreen={isFullscreen} />
 
             <div className={`min-h-screen z-10 gap-8 p-6 md:p-8 lg:p-12 max-w-7xl mx-auto mt-10 ${isFullscreen ? 'block' : 'flex flex-col items-center justify-center lg:flex-row'}`}>

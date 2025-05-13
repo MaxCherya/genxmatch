@@ -186,7 +186,7 @@ const Catalog: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white relative">
+        <div className="min-h-screen bg-gradient-to-b from-[#0D1B2A] to-black text-white relative">
             <LoadingSpinner isLoading={loading} />
 
             <div className="flex flex-col lg:flex-row gap-6 p-6 md:p-8 lg:p-12">

@@ -44,7 +44,7 @@ const Checkout: React.FC = () => {
     }));
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white p-6 md:p-8 lg:p-12">
+        <div className="min-h-screen bg-gradient-to-b from-[#0D1B2A] to-black text-white p-6 md:p-8 lg:p-12">
             <div className="max-w-5xl mx-auto p-6 md:p-8 lg:p-12">
 
                 <OrderForm

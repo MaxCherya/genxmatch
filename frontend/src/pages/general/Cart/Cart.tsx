@@ -76,7 +76,7 @@ const Cart: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 to-black text-white relative">
+        <div className="min-h-screen bg-gradient-to-b from-[#0D1B2A] to-black text-white relative">
             {/* Loading Spinner */}
             <LoadingSpinner isLoading={loading} />
 

@@ -28,7 +28,7 @@ const OrderConfirmation: React.FC = () => {
     }, [orderId, orderTotal, currency]);
 
     return (
-        <div className="w-screen p-5 bg-black h-screen flex flex-col items-center justify-center">
+        <div className="w-screen p-5 bg-[#0D1B2A] h-screen flex flex-col items-center justify-center">
             {orderId ? (
                 <OrderSuccess theme="dark" numberOfOrder={orderId} />
             ) : (

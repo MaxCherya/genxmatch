@@ -75,7 +75,7 @@ const Profile: React.FC<Params> = () => {
     }
 
     return (
-        <div className="w-[100%] max-w-[100%] min-h-screen p-5 bg-black flex flex-col items-center overflow-x-hidden">
+        <div className="w-[100%] max-w-[100%] min-h-screen p-5 bg-[#0D1B2A] flex flex-col items-center overflow-x-hidden">
             <div className="w-[95%] lg:w-[55%] max-w-[95%] min-h-screen flex flex-col items-center align-middle text-white mt-20 overflow-x-hidden">
                 <EmptyProfilePicture username={user?.username} />
                 <div className="flex flex-col items-center mt-2 mb-4 overflow-x-hidden">
