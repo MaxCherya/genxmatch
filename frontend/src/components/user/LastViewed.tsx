@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
 interface Product {
     id: number;
@@ -25,6 +26,8 @@ const LastViewed: React.FC<LastViewedProps> = ({ products }) => {
     const { t, i18n } = useTranslation();
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 3;
+
+    const navigate = useNavigate();
 
     const totalPages = Math.ceil(products.length / itemsPerPage);
     const indexOfLastItem = currentPage * itemsPerPage;
@@ -78,10 +81,11 @@ const LastViewed: React.FC<LastViewedProps> = ({ products }) => {
                     currentItems.map((product) => (
                         <motion.div
                             key={product.id}
-                            className="bg-gray-900/90 rounded-xl p-4 flex flex-col items-center min-h-[400px] border border-gray-800/50 shadow-lg"
+                            className="bg-gray-900/90 cursor-pointer rounded-xl p-4 flex flex-col items-center min-h-[400px] border border-gray-800/50 shadow-lg"
                             whileHover={{ y: -5, scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             transition={{ duration: 0.3 }}
+                            onClick={() => navigate(`/product-page/${product.id}`)}
                         >
                             <div className="w-48 h-48 mb-4">
                                 {product.main_image ? (

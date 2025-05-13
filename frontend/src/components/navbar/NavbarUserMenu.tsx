@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { AiOutlineClose, AiOutlineMail, AiOutlineLock } from "react-icons/ai";
+import { AiOutlineClose, AiOutlineMail, AiOutlineLock, AiOutlineUser } from "react-icons/ai";
 import { login, register } from "../../endpoints/auth";
 import { useAuth } from "../../contexts/authContext";
 import { useTranslation } from "react-i18next";
@@ -127,7 +127,7 @@ const NavbarUserMenu: React.FC<NavbarUserMenuProps> = ({ onClose }) => {
 
                     <form onSubmit={handleSubmit} className="space-y-4">
                         <div className="relative">
-                            <AiOutlineMail className="absolute top-3 left-3 text-gray-400" size={20} />
+                            <AiOutlineUser className="absolute top-3 left-3 text-gray-400" size={20} />
                             <input
                                 type="text"
                                 value={username}

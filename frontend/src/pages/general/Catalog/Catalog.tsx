@@ -206,7 +206,7 @@ const Catalog: React.FC = () => {
                 </FilterSidebar>
 
                 {isPotato && (
-                    <div className="fixed bg-white rounded-4xl p-3 bottom-4 right-4">
+                    <div className="fixed bg-white rounded-4xl p-3 bottom-4 right-4 cursor-pointer z-[9999]">
                         <button onClick={() => navigate('/add-product')} className="text-black">{t('potato.add_product')}</button>
                     </div>
                 )}
