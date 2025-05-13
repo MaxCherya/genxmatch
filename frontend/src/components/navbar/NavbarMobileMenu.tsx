@@ -165,7 +165,7 @@ const NavbarMobileMenu: React.FC<NavbarMobileMenuProps> = ({
                                     )}>
                                         {category.name}
                                     </span>
-                                    {category.name.toLowerCase().includes("cart") && cartCount > 0 && (
+                                    {category.icon === '🛒' && cartCount > 0 && (
                                         <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full font-bold">
                                             {cartCount}
                                         </span>

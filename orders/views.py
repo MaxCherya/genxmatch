@@ -72,7 +72,7 @@ def place_an_order(request):
 
         if not delivery_company_id:
             return JsonResponse({'error': _('Invalid delivering company.')}, status=400)
-
+        
         try:
             delivery_company = DeliveryCompany.objects.get(id=delivery_company_id)
         except DeliveryCompany.DoesNotExist:

@@ -4,10 +4,12 @@ from django.db.models import Max
 from django.utils.translation import gettext as _
 from django.utils.decorators import method_decorator
 from django_ratelimit.decorators import ratelimit
-from .models import Item, Category
-from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer, ItemMiniSerializer
+from .models import Item, Category, Supplier
+from rest_framework.permissions import IsAdminUser
+from .serializers import ItemSerializer, CategorySerializer, CatalogItemSerializer, ItemMiniSerializer, SupplierSerializer, ItemCreateSerializer
 from .paginator import CatalogPagination
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import status
 from django.db.models import Q
 from rest_framework import generics
 from .utils import SearchPagination
@@ -128,3 +130,29 @@ def search_items(request):
 
     serializer = ItemMiniSerializer(paginated_qs, many=True)
     return paginator.get_paginated_response(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_suppliers(request):
+    data = Supplier.objects.all()
+    serialized = SupplierSerializer(data, many=True)
+    return Response(serialized.data)
+
+
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def get_categories(request):
+    data = Category.objects.all()
+    serialized = CategorySerializer(data, many=True)
+    return Response(serialized.data)
+
+
+@api_view(["POST"])
+@permission_classes([IsAdminUser])
+def create_item(request):
+    serializer = ItemCreateSerializer(data=request.data)
+    if serializer.is_valid():
+        item = serializer.save()
+        return Response({"id": item.id}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

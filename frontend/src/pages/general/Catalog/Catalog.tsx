@@ -30,7 +30,7 @@ const Catalog: React.FC = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [sortOption, setSortOption] = useState<"popularity" | "rating" | "price_asc" | "price_desc">("popularity");
-    const [isPotato, setIsPotato] = useState<boolean>(true)
+    const [isPotato, setIsPotato] = useState<boolean>(false)
 
     const navigate = useNavigate();
 
