@@ -82,6 +82,25 @@ const AddProduct: React.FC = () => {
     const [useJsonMode, setUseJsonMode] = useState(false);
     const [jsonInput, setJsonInput] = useState("");
 
+    const renderCategoryList = (cats: CategoriesBackend[], indent: number = 0): React.ReactNode =>
+        cats.map((cat) => (
+            <div key={cat.id} style={{ paddingLeft: `${indent * 20}px` }}>
+                <span className="text-sm text-gray-700">{cat.name_ua} (ID: {cat.id})</span>
+                {cat.subcategories?.length > 0 && renderCategoryList(cat.subcategories, indent + 1)}
+            </div>
+        ));
+
+    const renderSupplierList = (): React.ReactNode => (
+        <div className="space-y-1">
+            {suppliers.map((s) => (
+                <div key={s.id}>
+                    <span className="text-sm text-gray-700">{s.name} (ID: {s.id})</span>
+                </div>
+            ))}
+        </div>
+    );
+
+
     const [productData, setProductData] = useState<ProductFormData>({
         name_ua: "",
         name_eng: "",
@@ -243,15 +262,15 @@ const AddProduct: React.FC = () => {
                 {useJsonMode ? (
                     <div className="w-full max-w-4xl space-y-4">
                         <p className="text-lg font-semibold">📥 Bulk JSON Format</p>
-                        <div className="bg-white p-3 rounded-xl shadow w-full max-w-3xl">
-                            <h3 className="text-lg font-semibold text-gray-800 mb-2">📋 Available Categories (use their IDs in JSON)</h3>
-                            <ul className="text-sm list-disc pl-4 space-y-1">
-                                {allCategories.map((cat) => (
-                                    <li key={cat.id}>
-                                        <strong>ID {cat.id}:</strong> {cat.name_ua}
-                                    </li>
-                                ))}
-                            </ul>
+                        <div className="w-full max-w-4xl">
+                            <h2 className="text-lg font-semibold">🧩 Available Categories</h2>
+                            <div className="bg-gray-100 rounded p-3 mb-4 text-sm">
+                                {renderCategoryList(allCategories)}
+                            </div>
+                            <h2 className="text-lg font-semibold">🏷️ Available Suppliers</h2>
+                            <div className="bg-gray-100 rounded p-3 mb-6 text-sm">
+                                {renderSupplierList()}
+                            </div>
                         </div>
                         <pre className="bg-gray-100 text-sm p-3 rounded-lg overflow-x-auto">
                             {`[
