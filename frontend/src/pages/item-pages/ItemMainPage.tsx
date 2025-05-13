@@ -219,7 +219,7 @@ const ItemMainPage: React.FC<Props> = ({ setIsFullscreen, isFullscreen = false }
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="relative flex flex-col items-center z-10 w-screen bg-[#F8F4F0] backdrop-blur-xl rounded-xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border border-gray-800/50"
+                className="relative flex flex-col items-center z-10 w-screen bg-[#FAFAFA] backdrop-blur-xl rounded-xl p-6 shadow-[0_4px_30px_rgba(0,0,0,0.3)] border border-gray-800/50"
             >
                 <h2 className="text-3xl text-gray-800 font-bold tracking-wide mb-12">
                     {t("specifications_and_features")}

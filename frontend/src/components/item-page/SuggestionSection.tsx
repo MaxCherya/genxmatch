@@ -70,7 +70,7 @@ const SuggestionsSection: React.FC<SuggestionsSectionProps> = ({ suggestions }) 
                     >
                         {t('suggestions.previous')}
                     </button>
-                    <span className="text-white text-sm">
+                    <span className="text-black text-sm">
                         {currentPage + 1} / {totalPages}
                     </span>
                     <button
