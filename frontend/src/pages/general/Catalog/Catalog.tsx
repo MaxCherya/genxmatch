@@ -92,8 +92,7 @@ const Catalog: React.FC = () => {
                     sort: sortOption,
                 });
                 setProducts(res.results);
-                const pageSize = res.results.length > 0 ? res.results.length : 1;
-                setTotalPages(Math.ceil(res.count / pageSize));
+                setTotalPages(res.total_pages);
             } catch (err) {
                 addToast(t("catalog.fetch_error"), "error");
             } finally {

@@ -19,13 +19,10 @@ class ItemListView(generics.ListAPIView):
     serializer_class = CatalogItemSerializer
     pagination_class = CatalogPagination
 
-    @method_decorator(ratelimit(key='ip', rate='5/s', method='GET', block=True))
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
     def get_queryset(self):
         qs = Item.objects.all()
 
+        # filters
         min_price = self.request.query_params.get("min_price")
         max_price = self.request.query_params.get("max_price")
         if min_price is not None:

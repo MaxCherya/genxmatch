@@ -93,6 +93,14 @@ export interface PaginatedResponse<T> {
     results: T[];
 }
 
+export interface PaginatedResponseCatalog<T> {
+    count: number;
+    total_pages: number;
+    next: string | null;
+    previous: string | null;
+    results: T[];
+}
+
 interface CatalogFiltersResponse {
     categories: Category[];
     max_price: number;
@@ -116,7 +124,7 @@ export const fetchItemsPaginated = async ({
     maxPrice?: number;
     categories?: number[];
     sort?: "popularity" | "rating" | "price_asc" | "price_desc";
-}) => {
+}): Promise<PaginatedResponseCatalog<Item>> => {
     const params = new URLSearchParams();
     params.append("page", page.toString());
     if (minPrice !== undefined) params.append("min_price", minPrice.toString());
@@ -126,7 +134,7 @@ export const fetchItemsPaginated = async ({
 
     const res = await fetch(`/api/items/items/?${params.toString()}`);
     if (!res.ok) throw new Error("Failed to fetch items");
-    return res.json();
+    return res.json(); // ✅ Now typed correctly
 };
 
 export const fetchItemById = async (itemId: number): Promise<Item> => {
