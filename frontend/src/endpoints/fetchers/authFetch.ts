@@ -10,7 +10,7 @@ export const authFetch = async (
         credentials: "include",
     });
 
-    if (res.status !== 401 || !retry) return res;
+    if (res.ok || !retry) return res;
 
     try {
         const refreshed = await refreshToken();
