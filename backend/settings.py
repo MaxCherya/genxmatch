@@ -94,7 +94,7 @@ REST_FRAMEWORK = {
 }
 
 COOKIE_SETTINGS = {
-    'httponly': False,
+    'httponly': True,
     'secure': not IS_DEV,
     'samesite': 'Lax',
 }
