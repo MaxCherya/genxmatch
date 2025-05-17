@@ -12,7 +12,6 @@ import PriceFilter from "../../../components/catalog/PriceFilter";
 import ProductCard from "../../../components/catalog/ProductCard";
 import LoadingSpinner from "../../../components/general/LoadingSpinner";
 import { useToast } from "../../../contexts/ToastContext";
-import Cookies from 'js-cookie';
 import { checkIsPotato } from "../../../endpoints/routing";
 import { useNavigate } from "react-router-dom";
 
@@ -54,21 +53,18 @@ const Catalog: React.FC = () => {
 
     useEffect(() => {
         const addButton = async () => {
-            const access = Cookies.get('access');
-            const refresh = Cookies.get('refresh');
-
-            if (access && refresh) {
+            try {
                 const res = await checkIsPotato();
                 if (res.success) {
-                    setIsPotato(true)
+                    setIsPotato(true);
                 }
-            } else {
-                return
+            } catch (err) {
+                console.error("Not authorized or token expired");
             }
-        }
+        };
 
-        addButton()
-    }, [])
+        addButton();
+    }, []);
 
     useEffect(() => {
         const loadFilters = async () => {
