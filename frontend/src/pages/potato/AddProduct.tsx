@@ -6,7 +6,6 @@ import CategoriesSelector from "../../components/potato/CategoriesSelector";
 import CTAButton from "../../components/btns/CTAButton";
 import { CategoriesBackend } from "../../endpoints/potato";
 import { checkIsPotato } from "../../endpoints/routing";
-import Cookies from 'js-cookie';
 import { useNavigate } from "react-router-dom";
 
 export type Photos = {
@@ -89,15 +88,11 @@ const AddProduct: React.FC = () => {
 
     useEffect(() => {
         const addButton = async () => {
-            const access = Cookies.get('access');
-            const refresh = Cookies.get('refresh');
-
-            if (access && refresh) {
-                const res = await checkIsPotato();
-                if (res.success) {
-                    return
-                }
-            } else {
+            const res = await checkIsPotato();
+            if (res.success) {
+                return
+            }
+            else {
                 navigate('/catalog')
             }
         }
